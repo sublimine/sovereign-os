@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/agent-charter.schema.json",
+  "title": "OmegaAgentCharter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "agent", "mission", "authority", "non_goals",
+    "immutable_rules", "activation", "workflow", "contracts", "delegation",
+    "evidence_policy", "context_policy", "memory_policy", "model_routing",
+    "quality_gates", "escalation", "failure_policy", "security",
+    "termination", "observability", "evaluations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "number", "name", "short_name", "class", "category", "tier", "position", "superior", "subordinates", "peers", "independence", "jurisdiction", "purpose", "absence_failure"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^omega_(0[1-9]|1[0-9]|2[0-4])$"},
+        "number": {"type": "integer", "minimum": 1, "maximum": 24},
+        "name": {"type": "string", "minLength": 4},
+        "short_name": {"type": "string"},
+        "class": {"type": "string"},
+        "category": {"enum": ["COMMAND", "INTELLIGENCE", "VERIFICATION", "ADVERSARIAL", "DECISION", "INSTITUTIONAL", "QUALITY"]},
+        "tier": {"const": "SOVEREIGN"},
+        "position": {"type": "string"},
+        "superior": {"type": ["string", "null"]},
+        "subordinates": {"type": "array", "items": {"type": "string"}},
+        "peers": {"type": "array", "items": {"type": "string"}},
+        "independence": {"type": "string"},
+        "jurisdiction": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "purpose": {"type": "string"},
+        "absence_failure": {"type": "string"}
+      }
+    },
+    "mission": {
+      "type": "object",
+      "required": ["primary", "secondary", "permanent_obligations", "exclusive", "shared", "in_scope", "out_of_scope", "conditional_scope"],
+      "properties": {
+        "primary": {"type": "string"},
+        "secondary": {"type": "array", "items": {"type": "string"}},
+        "permanent_obligations": {"type": "array", "items": {"type": "string"}},
+        "exclusive": {"type": "array", "items": {"type": "string"}},
+        "shared": {"type": "array", "items": {"type": "string"}},
+        "in_scope": {"type": "array", "items": {"type": "string"}},
+        "out_of_scope": {"type": "array", "items": {"type": "string"}},
+        "conditional_scope": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["permissions", "conditioned", "prohibited", "approval_required"],
+      "properties": {
+        "permissions": {"type": "array", "items": {"type": "string"}},
+        "conditioned": {"type": "array", "items": {"type": "string"}},
+        "prohibited": {"type": "array", "items": {"type": "string"}},
+        "approval_required": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "non_goals": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "immutable_rules": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+    "activation": {
+      "type": "object",
+      "required": ["events", "thresholds", "do_not_activate"],
+      "properties": {
+        "events": {"type": "array", "items": {"type": "string"}},
+        "thresholds": {"type": "array", "items": {"type": "string"}},
+        "do_not_activate": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "required": ["cognitive_model", "initial_state", "states", "transitions", "waiting", "timeout", "blocked", "escalated", "completed", "aborted", "failed"],
+      "properties": {
+        "cognitive_model": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "initial_state": {"type": "string"},
+        "states": {"type": "array", "minItems": 5, "items": {"type": "string"}},
+        "transitions": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+        "waiting": {"type": "string"},
+        "timeout": {"type": "string"},
+        "blocked": {"type": "string"},
+        "escalated": {"type": "string"},
+        "completed": {"type": "string"},
+        "aborted": {"type": "string"},
+        "failed": {"type": "string"}
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "required": ["inputs", "input_validation", "outputs", "output_required_fields"],
+      "properties": {
+        "inputs": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "input_validation": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+        "outputs": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "output_required_fields": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "required": ["specialist_types", "spawn_triggers", "context_scope", "context_exclusions", "tool_profile", "model_tier", "reasoning_effort", "budget_policy", "max_children", "max_depth", "deadline_policy", "output_schema", "verification_policy", "termination_condition", "memory_policy", "proliferation_controls"],
+      "properties": {
+        "specialist_types": {"type": "array", "items": {"type": "string"}},
+        "spawn_triggers": {"type": "array", "items": {"type": "string"}},
+        "context_scope": {"type": "array", "items": {"type": "string"}},
+        "context_exclusions": {"type": "array", "items": {"type": "string"}},
+        "tool_profile": {"type": "array", "items": {"type": "string"}},
+        "model_tier": {"type": "string"},
+        "reasoning_effort": {"type": "string"},
+        "budget_policy": {"type": "string"},
+        "max_children": {"type": "integer", "minimum": 0},
+        "max_depth": {"type": "integer", "minimum": 0, "maximum": 4},
+        "deadline_policy": {"type": "string"},
+        "output_schema": {"type": "string"},
+        "verification_policy": {"type": "string"},
+        "termination_condition": {"type": "string"},
+        "memory_policy": {"type": "string"},
+        "proliferation_controls": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence_policy": {"type": "object"},
+    "context_policy": {"type": "object"},
+    "memory_policy": {"type": "object"},
+    "model_routing": {"type": "object"},
+    "quality_gates": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "escalation": {"type": "object"},
+    "failure_policy": {"type": "object"},
+    "security": {"type": "object"},
+    "termination": {"type": "object"},
+    "observability": {"type": "object"},
+    "evaluations": {"type": "array", "minItems": 12, "items": {"type": "string"}}
+  }
+}
+

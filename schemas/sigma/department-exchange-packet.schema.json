@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/department-exchange-packet.schema.json",
+  "title": "DepartmentExchangePacket",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["exchange_id", "mission_id", "version", "producer", "consumer", "artifact_type", "purpose", "acceptance_criteria", "authority_ref", "classification", "status", "created_at", "integrity_hash"],
+  "properties": {
+    "exchange_id": {"type":"string", "minLength":1},
+    "mission_id": {"type":"string", "minLength":1},
+    "requirement_ids": {"type":"array", "items":{"type":"string"}, "uniqueItems":true},
+    "version": {"type":"string", "pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "producer": {"type":"string", "minLength":1},
+    "consumer": {"type":"string", "minLength":1},
+    "artifact_type": {"type":"string", "minLength":1},
+    "purpose": {"type":"string", "minLength":1},
+    "acceptance_criteria": {"type":"array", "minItems":1, "items":{"type":"string"}},
+    "authority_ref": {"type":"string", "minLength":1},
+    "classification": {"type":"string", "minLength":1},
+    "compartments": {"type":"array", "items":{"type":"string"}, "uniqueItems":true},
+    "deadline": {"type":"string", "format":"date-time"},
+    "fresh_until": {"type":"string", "format":"date-time"},
+    "artifact_ref": {"type":"string"},
+    "evidence_refs": {"type":"array", "items":{"type":"string"}, "uniqueItems":true},
+    "assumptions": {"type":"array", "items":{"type":"string"}},
+    "unknowns": {"type":"array", "items":{"type":"string"}},
+    "status": {"enum":["DRAFT", "VALIDATING", "ACCEPTED", "RETURNED", "REJECTED", "IN_PROGRESS", "DELIVERED", "ACKNOWLEDGED", "CLOSED", "BLOCKED", "EXPIRED", "RECALLED", "SUPERSEDED"]},
+    "rejection_reason": {"type":"string"},
+    "reentry_condition": {"type":"string"},
+    "created_at": {"type":"string", "format":"date-time"},
+    "integrity_hash": {"type":"string", "pattern":"^[a-f0-9]{64}$"}
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/outputs/sigma-05-output.schema.json",
+  "title": "outputs/sigma-05-output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_version",
+    "mission_id",
+    "producer",
+    "created_at",
+    "classification",
+    "content_hash",
+    "provenance_refs",
+    "dependency_refs",
+    "status",
+    "artifact_type",
+    "procedure",
+    "accountable_outcome",
+    "inputs_used",
+    "procedure_trace",
+    "gate_evidence",
+    "findings",
+    "limitations",
+    "reconsideration_triggers",
+    "reason_codes"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_version": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependency_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "ConsumerDecisionModel"
+    },
+    "procedure": {
+      "const": "consumer_decision_modeling"
+    },
+    "accountable_outcome": {
+      "const": "modelo verificable de la decisión, usuario, horizonte y coste del error"
+    },
+    "inputs_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_trace": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "identify actual decision owner and users",
+          "separate stated request from underlying decision",
+          "map options, status quo and constraints",
+          "define horizon, reversibility and error asymmetry",
+          "identify information that can change choice",
+          "record stakeholder conflicts and incentives",
+          "validate model with authorized consumer",
+          "version changes and notify requirement owners"
+        ]
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "DECISION_OWNER",
+        "OBJECTIVE_METHOD_SEPARATION",
+        "OPTION_SPACE",
+        "LOSS_ASYMMETRY",
+        "CONSUMER_VALIDATION",
+        "VERSION_NOTIFICATION"
+      ],
+      "properties": {
+        "DECISION_OWNER": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "OBJECTIVE_METHOD_SEPARATION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "OPTION_SPACE": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "LOSS_ASYMMETRY": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "CONSUMER_VALIDATION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "VERSION_NOTIFICATION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reconsideration_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

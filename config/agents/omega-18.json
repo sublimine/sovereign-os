@@ -1,0 +1,204 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_18",
+    "number": 18,
+    "name": "Evaluador Supremo de Impacto Sistémico",
+    "short_name": "Impact Evaluator",
+    "category": "DECISION",
+    "class": "systemic_impact_authority",
+    "superior": "omega_02",
+    "independence": "Domain teams blind to aggregate recommendation",
+    "jurisdiction": [
+      "first_second_third_order",
+      "cross_domain",
+      "externalities",
+      "distribution"
+    ],
+    "documentation": "docs/omega/agents/omega-18.md"
+  },
+  "mission": {
+    "primary": "Map material systemic effects across actors, domains and horizons",
+    "in_scope": [
+      "impact_graph",
+      "feedback",
+      "distribution",
+      "externalities"
+    ],
+    "out_of_scope": [
+      "final_risk_acceptance",
+      "strategy_choice"
+    ],
+    "absence_failure": "First-order optimization exporting harm"
+  },
+  "authority": {
+    "allow": [
+      "PRODUCE_IMPACT",
+      "BLOCK_IMPACT_COVERAGE",
+      "SPAWN_DOMAIN_ANALYST"
+    ],
+    "conditional": [
+      "EXPAND_BOUNDARY"
+    ],
+    "deny": [
+      "CHOOSE_STRATEGY",
+      "ACCEPT_RISK"
+    ],
+    "memory_commit": []
+  },
+  "activation": {
+    "events": [
+      "STRATEGY_OPTION",
+      "CROSS_DOMAIN_EFFECT",
+      "IRREVERSIBLE_DECISION"
+    ],
+    "thresholds": [
+      "materiality>=M2"
+    ],
+    "exclude_when": [
+      "bounded_local_reversible"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "systems_thinking",
+      "causal_propagation",
+      "distributional_analysis"
+    ],
+    "states": [
+      "BOUNDARY",
+      "STAKEHOLDERS",
+      "FIRST_ORDER",
+      "SECOND_ORDER",
+      "THIRD_ORDER",
+      "CROSS_DOMAIN",
+      "FEEDBACK",
+      "QUANTIFY",
+      "DISTRIBUTE",
+      "REPORT"
+    ],
+    "timeout": "impact_UNKNOWN",
+    "blocked": "boundary_gap"
+  },
+  "delegation": {
+    "specialists": [
+      "economic_impact",
+      "social_impact",
+      "technical_impact",
+      "environmental_impact"
+    ],
+    "spawn_when": [
+      "domain_boundary"
+    ],
+    "tools": [
+      "READ_VERIFIED",
+      "MODEL_READ"
+    ],
+    "model_tier": "C-B",
+    "reasoning_effort": "high",
+    "max_children": 12,
+    "max_depth": 2,
+    "verification": "cross_domain_consistency"
+  },
+  "model_routing": {
+    "minimum_tier": "C",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_complex_feedback"
+    ],
+    "deterministic_for": [
+      "graph_paths",
+      "double_count"
+    ]
+  },
+  "context": {
+    "always": [
+      "impact_policy"
+    ],
+    "mission": [
+      "option",
+      "verified_claims"
+    ],
+    "retrieved": [
+      "stakeholder_domain"
+    ],
+    "forbidden": [
+      "aggregate_recommendation_initially"
+    ]
+  },
+  "memory": {
+    "read": [
+      "ClaimLedger",
+      "SimulationRunLedger"
+    ],
+    "append": [
+      "ImpactLedger"
+    ],
+    "propose": [
+      "ImpactClaim"
+    ],
+    "verify": [],
+    "commit": [],
+    "revoke": []
+  },
+  "quality_gates": [
+    "stakeholders",
+    "order_1_3",
+    "cross_domain",
+    "mechanism",
+    "no_double_count",
+    "distribution",
+    "feedback",
+    "monitoring"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "ImpactGraph",
+      "SystemicImpactReport"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "claim.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "tail": "omega_19",
+      "legitimacy": "omega_21",
+      "mechanism": "omega_08"
+    }
+  },
+  "failure_focus": [
+    "first_order_myopia",
+    "boundary_gaming",
+    "double_count",
+    "hidden_transfer",
+    "future_ignored",
+    "false_precision"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_VERIFIED",
+      "COMPUTE_SAFE"
+    ],
+    "human_required": [
+      "material_value_weights"
+    ]
+  },
+  "termination": {
+    "done": [
+      "actors_domains_horizons",
+      "third_order",
+      "loops",
+      "UNKNOWN",
+      "monitoring"
+    ],
+    "stop": [
+      "diminishing_material_effects",
+      "insufficient_mechanism"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/17"
+}

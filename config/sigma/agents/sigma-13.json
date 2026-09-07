@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/12",
+  "agent": {
+    "id": "sigma_13",
+    "number": 13,
+    "name": "Custodio de Protección, Compartimentación y Handling de Fuentes",
+    "short_name": "Source Protection Custodian",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "COLLECTION",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "COLLECTION",
+    "superior": "sigma_06",
+    "direct_reports": [],
+    "peers": [
+      "sigma_07",
+      "sigma_08",
+      "sigma_09",
+      "sigma_10",
+      "sigma_11",
+      "sigma_12"
+    ],
+    "independence": "PROTECTED_FUNCTIONAL_CHANNEL",
+    "jurisdiction": "source_protection_and_compartmentation",
+    "procedure": "source_protection_and_compartmentation",
+    "outcome": "fuente protegida mediante acceso mínimo sin destruir auditabilidad",
+    "artifact": "SourceHandlingPlan",
+    "documentation": "docs/sigma/agents/sigma-13.md"
+  },
+  "scope": {
+    "inputs": [
+      "SourceDossier",
+      "ClassificationPolicy",
+      "NeedToKnowGraph",
+      "MissionRoles",
+      "ContactPlan",
+      "ThreatModel"
+    ],
+    "steps": [
+      "classify source identity, method and content separately",
+      "define compartments and pseudonymous references",
+      "bind access to purpose, role and expiry",
+      "minimize model and tool exposure",
+      "design contact, storage and dissemination controls",
+      "log sealed audit path for Ω3/Ω7",
+      "monitor access anomalies and revoke on trigger",
+      "verify destruction of ephemeral credentials not evidence"
+    ],
+    "invariants": [
+      "protection cannot erase provenance",
+      "title never grants secret access",
+      "identity shared only when reference insufficient",
+      "contact authority separate from read authority",
+      "sealed records remain independently auditable",
+      "revocation preserves evidence and logs"
+    ],
+    "non_goals": [
+      "judging source truth",
+      "concealing misconduct",
+      "granting legal authority",
+      "counterintelligence attribution",
+      "editing source content"
+    ],
+    "activation": [
+      "sensitive source",
+      "external contact",
+      "new compartment",
+      "access anomaly",
+      "dissemination request"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_06",
+      "sigma_09",
+      "sigma_15"
+    ],
+    "downstream": [
+      "sigma_14",
+      "sigma_30",
+      "sigma_37"
+    ],
+    "omega": [
+      "omega_03",
+      "omega_07",
+      "omega_21"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "compartment designer",
+      "secrets custodian",
+      "privacy engineer",
+      "source safety analyst",
+      "access-log auditor"
+    ],
+    "max_children": 8,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "C",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "SourceHandlingLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "classification_separation",
+    "need_to_know",
+    "least_exposure",
+    "sealed_audit",
+    "contact_authority",
+    "revocation_readiness"
+  ],
+  "failures": [
+    "source_exposure",
+    "overclassification",
+    "audit_blinding",
+    "privilege_creep",
+    "contact_read_confusion",
+    "model_secret_leak",
+    "orphan_access",
+    "evidence_destruction"
+  ],
+  "authority_profile": "CONTROL",
+  "external_contact": false,
+  "protected_channel": true
+}

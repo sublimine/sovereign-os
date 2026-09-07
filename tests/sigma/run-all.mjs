@@ -1,0 +1,4 @@
+import{spawnSync}from"node:child_process";import path from"node:path";import{fileURLToPath}from"node:url";
+const here=path.dirname(fileURLToPath(import.meta.url));
+const tests=["validate-agents.mjs","validate-charters.mjs","validate-authority.mjs","validate-relationships.mjs","validate-state-gates.mjs","validate-fmea.mjs","validate-evals.mjs","validate-schemas-catalogs.mjs","validate-reference-kernel.mjs","validate-simulations.mjs","validate-v3-dossiers.mjs","validate-v3-cross-coherence.mjs","validate-v3-evals-simulations.mjs","validate-v3-mutation-resistance.mjs","validate-v3-command-center.mjs","validate-v3-final-audit.mjs","validate-final-integrity.mjs"];
+for(const test of tests){const run=spawnSync(process.execPath,[path.join(here,test)],{stdio:"inherit"});if(run.status!==0)process.exit(run.status??1);}console.log("ALL SIGMA CORE TESTS PASSED");

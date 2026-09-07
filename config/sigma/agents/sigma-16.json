@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/15",
+  "agent": {
+    "id": "sigma_16",
+    "number": 16,
+    "name": "Cartógrafo de Dependencia, Laundering y Ecos",
+    "short_name": "Source Dependency Cartographer",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "SOURCE",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "SOURCE",
+    "superior": "sigma_14",
+    "direct_reports": [],
+    "peers": [
+      "sigma_15",
+      "sigma_17"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "source_dependency_analysis",
+    "procedure": "source_dependency_analysis",
+    "outcome": "grafo de dependencia que impide falso consenso de fuentes",
+    "artifact": "SourceDependencyGraph",
+    "documentation": "docs/sigma/agents/sigma-16.md"
+  },
+  "scope": {
+    "inputs": [
+      "SourceAssessments",
+      "EvidenceSet",
+      "CitationMetadata",
+      "PublicationTimeline",
+      "TextSimilarity",
+      "CommonAccessSignals"
+    ],
+    "steps": [
+      "identify direct citation and syndication edges",
+      "compare chronology and distinctive errors",
+      "detect near-duplicates and translation copies",
+      "infer common upstream origin with uncertainty",
+      "model partial dependence by claim/method",
+      "cluster coordinated or circular reporting",
+      "calculate effective independent support",
+      "publish graph and confidence penalties"
+    ],
+    "invariants": [
+      "ten copies may equal one source",
+      "dependence is claim-specific",
+      "absence of citation is not independence",
+      "shared dataset/method/model creates dependence",
+      "uncertain edges remain probabilistic",
+      "do not resolve truth by graph centrality"
+    ],
+    "non_goals": [
+      "rating intrinsic source quality",
+      "claim fact-checking",
+      "declaring coordination malicious",
+      "deleting duplicate evidence",
+      "choosing final confidence"
+    ],
+    "activation": [
+      "two or more sources",
+      "consensus claim",
+      "similar wording/error",
+      "aggregator present",
+      "triangulation requested"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_14",
+      "sigma_15"
+    ],
+    "downstream": [
+      "sigma_04",
+      "sigma_24",
+      "sigma_28",
+      "sigma_36"
+    ],
+    "omega": [
+      "omega_10",
+      "omega_09",
+      "omega_12"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "citation network analyst",
+      "near-duplicate detector",
+      "publication chronologist",
+      "common-origin investigator",
+      "method dependency analyst"
+    ],
+    "max_children": 12,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "SourceDependencyLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "claim_level_edges",
+    "chronology",
+    "similarity_evidence",
+    "common_origin",
+    "partial_dependency",
+    "effective_support"
+  ],
+  "failures": [
+    "vote_counting",
+    "hidden_syndication",
+    "translation_echo",
+    "shared_dataset_blindness",
+    "circular_citation",
+    "centrality_truth",
+    "overmerge",
+    "undermerge"
+  ],
+  "authority_profile": "CONTROL",
+  "external_contact": false,
+  "protected_channel": false
+}

@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/outputs/sigma-03-output.schema.json",
+  "title": "outputs/sigma-03-output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_version",
+    "mission_id",
+    "producer",
+    "created_at",
+    "classification",
+    "content_hash",
+    "provenance_refs",
+    "dependency_refs",
+    "status",
+    "artifact_type",
+    "procedure",
+    "accountable_outcome",
+    "inputs_used",
+    "procedure_trace",
+    "gate_evidence",
+    "findings",
+    "limitations",
+    "reconsideration_triggers",
+    "reason_codes"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_version": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependency_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "IntelligenceRequirementSet"
+    },
+    "procedure": {
+      "const": "decision_to_requirements"
+    },
+    "accountable_outcome": {
+      "const": "necesidad decisional convertida en PIR, EEI, observables y cierre"
+    },
+    "inputs_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_trace": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "parse decision and uncertainty",
+          "enumerate decision-switch questions",
+          "decompose into PIR and EEI",
+          "define observable variables and units",
+          "attach hypotheses and discriminating evidence",
+          "define indicators, thresholds and freshness",
+          "rank by decision sensitivity and VOI",
+          "publish versioned requirement dependency tree"
+        ]
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "DECISION_RELEVANCE",
+        "ANSWERABILITY",
+        "ATOMICITY",
+        "OBSERVABLE_DEFINITION",
+        "NON_CONFIRMATION_BIAS",
+        "CLOSURE_CRITERIA"
+      ],
+      "properties": {
+        "DECISION_RELEVANCE": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ANSWERABILITY": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ATOMICITY": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "OBSERVABLE_DEFINITION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "NON_CONFIRMATION_BIAS": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "CLOSURE_CRITERIA": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reconsideration_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version":"1.0.0",
+  "dimensions":["severity","uncertainty","irreversibility","factual_sensitivity","complexity","security_risk","capital","legitimacy","duration","novelty"],
+  "bands":[
+    {"id":"A0","condition":"max<=1 && materiality==M0","expected_range":[5,5]},
+    {"id":"A1","condition":"max<=2 && materiality<=M1","expected_range":[5,9]},
+    {"id":"A2","condition":"max<=3 && materiality<=M2","expected_range":[7,13]},
+    {"id":"A3","condition":"max<=4 && materiality<=M3","expected_range":[12,18]},
+    {"id":"A4","condition":"any==5 || priority==P0 || materiality==M4","expected_range":[15,24]}
+  ],
+  "baseline":["omega_02","omega_04","omega_22","omega_23"],
+  "rules":[
+    {"id":"ACT-DECIDE","when":{"decision_required":true},"activate":["omega_01"]},
+    {"id":"ACT-AUDIT-M4","when":{"materiality_at_least":"M4"},"activate":["omega_03"]},
+    {"id":"ACT-INTEL","when":{"research_required":true},"activate":["omega_05","omega_06"]},
+    {"id":"ACT-FACT","when":{"factual_sensitivity_at_least":3},"activate":["omega_07","omega_11"]},
+    {"id":"ACT-UNCERTAINTY","when":{"uncertainty_at_least":3},"activate":["omega_09","omega_10","omega_12"]},
+    {"id":"ACT-CAUSAL","when":{"causality_material":true},"activate":["omega_08","omega_13","omega_15"]},
+    {"id":"ACT-ADVERSARIAL","when":{"irreversibility_at_least":4},"activate":["omega_13","omega_14","omega_18","omega_19","omega_21","omega_22"]},
+    {"id":"ACT-SIM","when":{"simulation_required":true},"activate":["omega_16"]},
+    {"id":"ACT-STRATEGY","when":{"strategy_required":true},"activate":["omega_15","omega_17","omega_18","omega_19","omega_20","omega_21"]},
+    {"id":"ACT-CAPITAL","when":{"capital_at_least":4},"activate":["omega_20"]},
+    {"id":"ACT-LEGITIMACY","when":{"legitimacy_at_least":2},"activate":["omega_21"]},
+    {"id":"ACT-LONGRUN","when":{"duration_at_least":3},"activate":["omega_24"]},
+    {"id":"ACT-P0-M4","when":{"priority_or_materiality":["P0","M4"]},"activate":["omega_01","omega_03","omega_09","omega_10","omega_11","omega_12","omega_13","omega_14","omega_19","omega_21","omega_22","omega_23"]}
+  ],
+  "exclusion_requires":["no_material_deliverable","capability_covered_without_independence_loss","cost_exceeds_decision_value","reactivation_event"],
+  "output":"ActivationRecord"
+}
+

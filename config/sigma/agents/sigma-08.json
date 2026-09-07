@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/7",
+  "agent": {
+    "id": "sigma_08",
+    "number": 8,
+    "name": "Director de Registros Primarios e Inteligencia Documental",
+    "short_name": "Primary Records Director",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "COLLECTION",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "COLLECTION",
+    "superior": "sigma_06",
+    "direct_reports": [],
+    "peers": [
+      "sigma_07",
+      "sigma_09",
+      "sigma_10",
+      "sigma_11",
+      "sigma_12",
+      "sigma_13"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "primary_record_exploitation",
+    "procedure": "primary_record_exploitation",
+    "outcome": "corpus primario autenticado, localizado y explotable",
+    "artifact": "PrimaryRecordCorpus",
+    "documentation": "docs/sigma/agents/sigma-08.md"
+  },
+  "scope": {
+    "inputs": [
+      "CollectionTask",
+      "SourceAccessMap",
+      "DocumentSet",
+      "ArchiveMetadata",
+      "AuthenticitySignals"
+    ],
+    "steps": [
+      "prefer originals over summaries",
+      "capture immutable snapshot and metadata",
+      "authenticate issuer, date, edition and completeness",
+      "segment exact pages, tables and clauses",
+      "extract with coordinates and confidence",
+      "compare revisions and hidden appendices",
+      "package corpus with omissions and access limits",
+      "route claims to intake and lineage"
+    ],
+    "invariants": [
+      "never cite derivative when primary is available without reason",
+      "preserve original bytes and rendered view",
+      "OCR is derived data, not source text",
+      "edition/version differences remain visible",
+      "missing pages are explicit",
+      "document authenticity and truth are separate"
+    ],
+    "non_goals": [
+      "deciding source motivation",
+      "general web discovery",
+      "accepting claims as true",
+      "rewriting documents",
+      "interpreting legal effect"
+    ],
+    "activation": [
+      "record-based requirement",
+      "primary source found",
+      "version conflict",
+      "OCR/table extraction need",
+      "document authenticity challenge"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_07"
+    ],
+    "downstream": [
+      "sigma_14",
+      "sigma_17",
+      "sigma_23"
+    ],
+    "omega": [
+      "omega_06",
+      "omega_07",
+      "omega_11"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "archivist",
+      "document examiner",
+      "OCR verifier",
+      "table extractor",
+      "filing specialist",
+      "revision comparator"
+    ],
+    "max_children": 20,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "PrimaryCorpusRegistry"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "snapshot_integrity",
+    "issuer_authentication",
+    "version_completeness",
+    "coordinate_traceability",
+    "extraction_check",
+    "omissions_manifest"
+  ],
+  "failures": [
+    "wrong_edition",
+    "ocr_hallucination",
+    "page_context_loss",
+    "derivative_substitution",
+    "tampered_document",
+    "missing_appendix",
+    "citation_drift",
+    "translation_as_original"
+  ],
+  "authority_profile": "COLLECTION",
+  "external_contact": false,
+  "protected_channel": false
+}

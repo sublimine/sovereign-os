@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/outputs/sigma-21-output.schema.json",
+  "title": "outputs/sigma-21-output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_version",
+    "mission_id",
+    "producer",
+    "created_at",
+    "classification",
+    "content_hash",
+    "provenance_refs",
+    "dependency_refs",
+    "status",
+    "artifact_type",
+    "procedure",
+    "accountable_outcome",
+    "inputs_used",
+    "procedure_trace",
+    "gate_evidence",
+    "findings",
+    "limitations",
+    "reconsideration_triggers",
+    "reason_codes"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_version": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependency_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "MeasurementAssessment"
+    },
+    "procedure": {
+      "const": "measurement_and_comparability"
+    },
+    "accountable_outcome": {
+      "const": "medidas armonizadas sin ocultar definiciones, sesgos o incertidumbre"
+    },
+    "inputs_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_trace": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "define construct and decision-relevant quantity",
+          "trace operational definitions across sources",
+          "normalize units, currency, scale and population",
+          "model sampling, missingness and measurement error",
+          "test comparability across time and regimes",
+          "recompute derived metrics deterministically",
+          "expose non-comparable series and uncertainty",
+          "publish measurement contract and allowed uses"
+        ]
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CONSTRUCT_DEFINITION",
+        "UNIT_NORMALIZATION",
+        "SAMPLING_FRAME",
+        "MISSINGNESS_MODEL",
+        "COMPARABILITY",
+        "REPRODUCIBLE_CALCULATION"
+      ],
+      "properties": {
+        "CONSTRUCT_DEFINITION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "UNIT_NORMALIZATION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "SAMPLING_FRAME": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "MISSINGNESS_MODEL": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "COMPARABILITY": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "REPRODUCIBLE_CALCULATION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reconsideration_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

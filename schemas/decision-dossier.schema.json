@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/decision-dossier.schema.json",
+  "title":"DecisionDossier","type":"object","additionalProperties":false,
+  "required":["dossier_id","version","mission_id","decision_requested","objective","options","status_quo","critical_claims","unknowns","assumptions","dissent","risks","resources","governance","gate_refs","drilldown_index","omissions_manifest","created_at","status"],
+  "properties":{
+    "dossier_id":{"type":"string"},"version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},
+    "decision_requested":{"type":"string"},"objective":{"type":"string"},"executive_synthesis":{"type":"string"},
+    "options":{"type":"array","minItems":1,"items":{"type":"object"}},"status_quo":{"type":"object"},
+    "recommendation":{"type":["object","null"]},"critical_claims":{"type":"array","items":{"type":"string"}},
+    "unknowns":{"type":"array","items":{"type":"object"}},"assumptions":{"type":"array","items":{"type":"string"}},
+    "dissent":{"type":"array","items":{"type":"object"}},"risks":{"type":"array","items":{"type":"string"}},
+    "resources":{"type":"object"},"governance":{"type":"object"},"waiver_refs":{"type":"array","items":{"type":"string"}},
+    "gate_refs":{"type":"array","minItems":1,"items":{"type":"string"}},"drilldown_index":{"type":"object"},
+    "omissions_manifest":{"type":"array","items":{"type":"object"}},"created_at":{"type":"string","format":"date-time"},
+    "status":{"enum":["DRAFT","BLOCKED","READY","STALE","RETRACTED","SUPERSEDED"]}
+  }
+}
+

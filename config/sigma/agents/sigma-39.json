@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/38",
+  "agent": {
+    "id": "sigma_39",
+    "number": 39,
+    "name": "Custodio de Memoria, Handover y Reconsideración",
+    "short_name": "Continuity Custodian",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "ASSURANCE",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "ASSURANCE",
+    "superior": "sigma_38",
+    "direct_reports": [],
+    "peers": [],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "intelligence_continuity_and_reassessment",
+    "procedure": "intelligence_continuity_and_reassessment",
+    "outcome": "misión/watch reanudable y juicios reabiertos cuando cambian dependencias",
+    "artifact": "WatchHandover",
+    "documentation": "docs/sigma/agents/sigma-39.md"
+  },
+  "scope": {
+    "inputs": [
+      "MissionCheckpoint",
+      "ProductRegistry",
+      "EstimateLedger",
+      "IndicatorBoard",
+      "DependencyGraph",
+      "TTLPolicies",
+      "NewEvidenceEvents"
+    ],
+    "steps": [
+      "persist state and objective invariant by event",
+      "build handover with active watches, gaps and blockers",
+      "schedule TTL and reconsideration triggers",
+      "detect dependency change, stale support or estimate resolution",
+      "open ReassessmentCase at earliest affected node",
+      "invalidate dependent products and notify owners",
+      "replay minimum necessary subgraph",
+      "publish new version and verify consumer propagation"
+    ],
+    "invariants": [
+      "chat history is not mission memory",
+      "handover includes unresolved dissent and secrets refs",
+      "expired lease never revives with checkpoint",
+      "reassessment starts at root cause",
+      "old product remains immutable",
+      "consumer notification is part of correction"
+    ],
+    "non_goals": [
+      "deciding new judgment",
+      "editing evidence",
+      "promoting lessons to institutional policy",
+      "keeping every context token",
+      "silently closing watch"
+    ],
+    "activation": [
+      "pause/resume",
+      "shift handover",
+      "TTL expiry",
+      "new contradictory evidence",
+      "estimate resolution",
+      "provider/runtime migration"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_02",
+      "sigma_17",
+      "sigma_22",
+      "sigma_33",
+      "sigma_37",
+      "sigma_38"
+    ],
+    "downstream": [
+      "sigma_02",
+      "sigma_30",
+      "sigma_40"
+    ],
+    "omega": [
+      "omega_02",
+      "omega_07",
+      "omega_12",
+      "omega_24"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "checkpoint engineer",
+      "watch handover analyst",
+      "dependency invalidation operator",
+      "reassessment coordinator",
+      "migration verifier",
+      "consumer notification tracker"
+    ],
+    "max_children": 12,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "IntelligenceContinuityLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "objective_anchor",
+    "active_watch_transfer",
+    "lease_expiry",
+    "trigger_coverage",
+    "root_cause_replay",
+    "notification_propagation"
+  ],
+  "failures": [
+    "context_loss",
+    "lease_resurrection",
+    "stale_product_use",
+    "patch_only_correction",
+    "handover_dissent_loss",
+    "trigger_miss",
+    "notification_failure",
+    "migration_split_brain"
+  ],
+  "authority_profile": "ASSURANCE",
+  "external_contact": false,
+  "protected_channel": false
+}

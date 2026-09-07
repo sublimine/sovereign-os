@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/1",
+  "agent": {
+    "id": "sigma_02",
+    "number": 2,
+    "name": "Canciller de Misiones y Cartera de Inteligencia",
+    "short_name": "Mission Chancellor",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "COMMAND",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "COMMAND",
+    "superior": "sigma_01",
+    "direct_reports": [],
+    "peers": [],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "mission_portfolio_control",
+    "procedure": "mission_portfolio_control",
+    "outcome": "misión y cartera coherentes, vivas y sin drift",
+    "artifact": "IntelligenceMissionControl",
+    "documentation": "docs/sigma/agents/sigma-02.md"
+  },
+  "scope": {
+    "inputs": [
+      "IntelligenceCommandDecision",
+      "RequirementSet",
+      "MissionGraph",
+      "ActivationRecord",
+      "BudgetLedger",
+      "StatusEvents"
+    ],
+    "steps": [
+      "anchor original objective and decision horizon",
+      "build executable mission graph",
+      "activate minimum sufficient role set",
+      "bind each node to requirement and deliverable",
+      "schedule parallel, blind and sequential routes",
+      "monitor drift, deadlock, budget and stale dependencies",
+      "replan minimum affected graph",
+      "close or pause with resumable checkpoint"
+    ],
+    "invariants": [
+      "never change objective without signed delta",
+      "never resolve factual conflict administratively",
+      "every task traces to requirement",
+      "no orphan node or unowned blocker",
+      "preserve checkpoints on interruption",
+      "escalate cross-department conflict to Ω2"
+    ],
+    "non_goals": [
+      "designing requirements content",
+      "choosing preferred hypothesis",
+      "certifying products",
+      "allocating beyond envelope",
+      "polling agents without events"
+    ],
+    "activation": [
+      "mission accepted",
+      "material scope change",
+      "deadlock or critical path slip",
+      "budget threshold",
+      "new evidence invalidates graph"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_01"
+    ],
+    "downstream": [
+      "sigma_03",
+      "sigma_04",
+      "sigma_05",
+      "sigma_06",
+      "sigma_37",
+      "sigma_39"
+    ],
+    "omega": [
+      "omega_02",
+      "omega_04",
+      "omega_20"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "mission graph engineer",
+      "scheduler analyst",
+      "dependency planner",
+      "backpressure controller",
+      "checkpoint auditor"
+    ],
+    "max_children": 10,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "A",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "IntelligenceMissionLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "objective_anchor",
+    "graph_closure",
+    "activation_minimality",
+    "budget_reserve",
+    "liveness",
+    "handover"
+  ],
+  "failures": [
+    "mission_drift",
+    "orphan_work",
+    "deadlock",
+    "premature_closure",
+    "overactivation",
+    "underactivation",
+    "lost_checkpoint",
+    "priority_inversion"
+  ],
+  "authority_profile": "COMMAND",
+  "external_contact": false,
+  "protected_channel": false
+}

@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/context-manifest.schema.json",
+  "title":"ContextManifest","type":"object","additionalProperties":false,
+  "required":["manifest_id","version","mission_id","agent_instance","created_at","token_budget","always_loaded","mission_context","retrieved_context","evidence_context","historical_context","forbidden_context","blindness","items","content_hash"],
+  "properties":{
+    "manifest_id":{"type":"string"},"version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},"agent_instance":{"type":"string"},"created_at":{"type":"string","format":"date-time"},"token_budget":{"type":"integer","minimum":1},
+    "always_loaded":{"type":"array","items":{"type":"string"}},"mission_context":{"type":"array","items":{"type":"string"}},"retrieved_context":{"type":"array","items":{"type":"string"}},"evidence_context":{"type":"array","items":{"type":"string"}},"historical_context":{"type":"array","items":{"type":"string"}},"forbidden_context":{"type":"array","items":{"type":"string"}},
+    "blindness":{"type":"object","required":["mode","hidden_fields","contamination_action"],"properties":{"mode":{"enum":["NONE","BLIND","DOUBLE_ROUTE"]},"hidden_fields":{"type":"array","items":{"type":"string"}},"contamination_action":{"enum":["NONE","REDACT","INVALIDATE_RESTART"]}}},
+    "items":{"type":"array","items":{"type":"object","required":["artifact_ref","trust","purpose","fresh_until","classification","token_estimate"],"properties":{"artifact_ref":{"type":"string"},"trust":{"enum":["INSTRUCTION_SIGNED","INTERNAL_DATA","EXTERNAL_UNTRUSTED","HOSTILE_QUARANTINED"]},"purpose":{"type":"string"},"fresh_until":{"type":["string","null"]},"classification":{"type":"string"},"token_estimate":{"type":"integer","minimum":0}}}},
+    "content_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"}
+  }
+}
+

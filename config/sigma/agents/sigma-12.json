@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/11",
+  "agent": {
+    "id": "sigma_12",
+    "number": 12,
+    "name": "Director de Denial, Gaps y Contingencias de Colección",
+    "short_name": "Collection Gap Director",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "COLLECTION",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "COLLECTION",
+    "superior": "sigma_06",
+    "direct_reports": [],
+    "peers": [
+      "sigma_07",
+      "sigma_08",
+      "sigma_09",
+      "sigma_10",
+      "sigma_11",
+      "sigma_13"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "collection_gap_recovery",
+    "procedure": "collection_gap_recovery",
+    "outcome": "gap crítico recuperado o formalmente delimitado",
+    "artifact": "CollectionGapCase",
+    "documentation": "docs/sigma/agents/sigma-12.md"
+  },
+  "scope": {
+    "inputs": [
+      "CoveragePortfolio",
+      "FailedCollectionTasks",
+      "AccessBarriers",
+      "DenialSignals",
+      "BudgetState",
+      "DecisionDeadline"
+    ],
+    "steps": [
+      "classify gap as absent, inaccessible, denied, spoofed or unobservable",
+      "identify cause and adversary incentive",
+      "estimate decision sensitivity to gap",
+      "generate legal proxy and indirect observables",
+      "design route diversity and contingency",
+      "compare VOI against delay and risk",
+      "task minimum discriminating recovery",
+      "close with resolved, residual or typed UNKNOWN"
+    ],
+    "invariants": [
+      "failed access cannot become negative fact",
+      "proxy limitations remain explicit",
+      "do not escalate privilege to overcome denial",
+      "separate adversarial denial from ordinary absence",
+      "preserve inaccessible sources as gaps",
+      "cost pressure cannot relabel unresolved gap"
+    ],
+    "non_goals": [
+      "breaking access controls",
+      "hiding collection failure",
+      "certifying nonexistence",
+      "changing requirement",
+      "accepting existential residual risk"
+    ],
+    "activation": [
+      "critical coverage gap",
+      "collection route failure",
+      "denial/spoofing signal",
+      "deadline approaching",
+      "source disappears"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_04",
+      "sigma_06",
+      "sigma_07"
+    ],
+    "downstream": [
+      "sigma_03",
+      "sigma_04",
+      "sigma_28"
+    ],
+    "omega": [
+      "omega_06",
+      "omega_12",
+      "omega_20",
+      "omega_21"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "proxy-indicator designer",
+      "denial analyst",
+      "access contingency planner",
+      "negative-evidence methodologist",
+      "VOI analyst"
+    ],
+    "max_children": 12,
+    "max_depth": 3,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "CollectionGapRegister"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "gap_classification",
+    "decision_sensitivity",
+    "proxy_validity",
+    "authority",
+    "route_diversity",
+    "unknown_honesty"
+  ],
+  "failures": [
+    "absence_from_failure",
+    "privilege_escalation",
+    "bad_proxy",
+    "denial_misattribution",
+    "gap_relabeling",
+    "cost_driven_certainty",
+    "infinite_search",
+    "single_contingency"
+  ],
+  "authority_profile": "COLLECTION",
+  "external_contact": false,
+  "protected_channel": false
+}

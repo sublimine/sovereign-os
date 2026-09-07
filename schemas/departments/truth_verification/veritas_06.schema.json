@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sovereign-os/departments/truth_verification/veritas_06",
+  "title": "AtomicFactVerdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "result",
+    "evidence_for",
+    "evidence_against",
+    "assumptions",
+    "unknowns",
+    "provenance",
+    "gate_receipts",
+    "next_action"
+  ],
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "source_ref",
+        "locator",
+        "integrity_hash"
+      ],
+      "properties": {
+        "claim_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "integrity_hash": {
+          "type": "string",
+          "minLength": 8
+        }
+      }
+    },
+    "unknown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subtype",
+        "reason",
+        "impact"
+      ],
+      "properties": {
+        "subtype": {
+          "enum": [
+            "NOT_FOUND",
+            "INACCESSIBLE",
+            "UNVERIFIABLE",
+            "CONTRADICTORY",
+            "UNKNOWABLE",
+            "BUDGET_EXHAUSTED"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "gate_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_id",
+        "decision",
+        "evaluator",
+        "evidence_refs"
+      ],
+      "properties": {
+        "gate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "enum": [
+            "PASS",
+            "RETURN",
+            "BLOCK",
+            "ESCALATE"
+          ]
+        },
+        "evaluator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "status": {
+      "enum": [
+        "COMPLETE",
+        "RETURN",
+        "BLOCKED",
+        "UNKNOWN",
+        "BUDGET_EXHAUSTED"
+      ]
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "veritas_06 role-specific result payload"
+    },
+    "evidence_for": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      }
+    },
+    "evidence_against": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unknown"
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "gate_receipts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/gate_receipt"
+      }
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

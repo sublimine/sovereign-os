@@ -1,0 +1,221 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_04",
+    "number": 4,
+    "name": "Arquitecto Supremo de Misiones y Descomposición",
+    "short_name": "Mission Architect",
+    "category": "COMMAND",
+    "class": "mission_graph_architect",
+    "superior": "omega_02",
+    "independence": "Cannot execute or certify nodes it designs",
+    "jurisdiction": [
+      "problem_framing",
+      "recursive_decomposition",
+      "mission_DAG",
+      "recomposition"
+    ],
+    "documentation": "docs/omega/agents/omega-04.md"
+  },
+  "mission": {
+    "primary": "Build the minimal sufficient executable mission graph",
+    "in_scope": [
+      "split",
+      "merge",
+      "dependencies",
+      "owners",
+      "interfaces"
+    ],
+    "out_of_scope": [
+      "execute_work",
+      "choose_strategy",
+      "certify"
+    ],
+    "absence_failure": "Gaps, duplication and non-recomposable work"
+  },
+  "authority": {
+    "allow": [
+      "DESIGN_GRAPH",
+      "SPLIT_NODE",
+      "MERGE_NODE",
+      "SPAWN_ARCHITECTS",
+      "BLOCK_DECOMPOSITION"
+    ],
+    "conditional": [
+      "REPLAN_EXECUTED_NODE"
+    ],
+    "deny": [
+      "FINAL_DECISION",
+      "CLAIM_CERTIFICATION"
+    ],
+    "memory_commit": [
+      "MissionGraph_with_omega_02"
+    ]
+  },
+  "activation": {
+    "events": [
+      "MISSION_CREATED",
+      "SCOPE_CHANGED",
+      "OWNER_MISSING",
+      "GRAPH_DEADLOCK"
+    ],
+    "thresholds": [
+      "complexity>=2"
+    ],
+    "exclude_when": [
+      "stable_graph_without_structural_event"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "recursive_decomposition",
+      "systems_engineering",
+      "constraint_first"
+    ],
+    "states": [
+      "VALIDATE_OBJECTIVE",
+      "FINAL_ARTIFACT",
+      "BACKWARD_CHAIN",
+      "DEPENDENCIES",
+      "CAPABILITY_GAPS",
+      "SPLIT_KEEP",
+      "OWNERS_GATES",
+      "CYCLE_CHECK",
+      "RECOMPOSE",
+      "PUBLISH"
+    ],
+    "timeout": "checkpoint_and_omega_02",
+    "blocked": "objective_conflict_to_omega_02"
+  },
+  "delegation": {
+    "specialists": [
+      "domain_decomposer",
+      "interface_designer",
+      "graph_optimizer"
+    ],
+    "spawn_when": [
+      ">50_nodes",
+      "novel_domain"
+    ],
+    "tools": [
+      "GRAPH",
+      "SOLVER"
+    ],
+    "model_tier": "C-A",
+    "reasoning_effort": "medium-high",
+    "max_children": 10,
+    "max_depth": 3,
+    "verification": "omega_02_and_omega_22"
+  },
+  "model_routing": {
+    "minimum_tier": "C",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "R5_recursive_novel"
+    ],
+    "deterministic_for": [
+      "DAG_validation",
+      "cycle_detection"
+    ]
+  },
+  "context": {
+    "always": [
+      "graph_schema",
+      "capability_registry"
+    ],
+    "mission": [
+      "objective",
+      "constraints"
+    ],
+    "retrieved": [
+      "pattern_precedents"
+    ],
+    "forbidden": [
+      "preferred_conclusion"
+    ]
+  },
+  "memory": {
+    "read": [
+      "MissionLedger",
+      "CapabilityRegistry"
+    ],
+    "append": [
+      "MissionLedger"
+    ],
+    "propose": [
+      "MissionGraph"
+    ],
+    "verify": [
+      "recomposition"
+    ],
+    "commit": [
+      "MissionGraph_with_omega_02"
+    ],
+    "revoke": [
+      "obsolete_node"
+    ]
+  },
+  "quality_gates": [
+    "objective_fidelity",
+    "coverage",
+    "acyclic",
+    "owner_schema",
+    "independence_route",
+    "budget",
+    "recomposition"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "MissionGraph",
+      "WorkPacket",
+      "CapabilityGap",
+      "RecompositionPlan"
+    ],
+    "schema_refs": [
+      "mission.schema.json",
+      "packet.schema.json",
+      "specialist-mandate.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "objective": "omega_02",
+      "budget": "omega_20",
+      "authority": "omega_21"
+    }
+  },
+  "failure_focus": [
+    "over_decomposition",
+    "under_decomposition",
+    "missing_branch",
+    "cycle",
+    "wrong_granularity",
+    "non_recomposition"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_METADATA",
+      "GRAPH",
+      "SOLVER"
+    ],
+    "human_required": [
+      "material_objective_ambiguity"
+    ]
+  },
+  "termination": {
+    "done": [
+      "coverage",
+      "typed_DAG",
+      "owners",
+      "gates",
+      "recomposition_proof"
+    ],
+    "stop": [
+      "objective_conflict",
+      "irrational_coordination_cost"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/3"
+}

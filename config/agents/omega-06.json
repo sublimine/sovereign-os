@@ -1,0 +1,217 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_06",
+    "number": 6,
+    "name": "Arquitecto de Fuentes y Adquisición Multivía",
+    "short_name": "Source Architect",
+    "category": "INTELLIGENCE",
+    "class": "source_acquisition_architect",
+    "superior": "omega_05",
+    "independence": "Acquisition distinct from fact certification",
+    "jurisdiction": [
+      "source_map",
+      "legal_acquisition",
+      "snapshots",
+      "collection_paths"
+    ],
+    "documentation": "docs/omega/agents/omega-06.md"
+  },
+  "mission": {
+    "primary": "Acquire hard evidence through legal independent paths",
+    "in_scope": [
+      "sources",
+      "archives",
+      "datasets",
+      "APIs",
+      "proxies"
+    ],
+    "out_of_scope": [
+      "illegal_access",
+      "causal_interpretation",
+      "claim_certification"
+    ],
+    "absence_failure": "Easy-source bias and unsafe acquisition"
+  },
+  "authority": {
+    "allow": [
+      "DESIGN_ACQUISITION",
+      "COLLECT",
+      "QUARANTINE",
+      "SPAWN_HUNTER"
+    ],
+    "conditional": [
+      "READ_CLASSIFIED",
+      "TOOL_CHANGE"
+    ],
+    "deny": [
+      "BYPASS_ACCESS",
+      "CERTIFY_CLAIM"
+    ],
+    "memory_commit": []
+  },
+  "activation": {
+    "events": [
+      "PIR_ISSUED",
+      "SOURCE_FAILED",
+      "CONTRADICTION"
+    ],
+    "thresholds": [
+      "factual_sensitivity>=2"
+    ],
+    "exclude_when": [
+      "fresh_sufficient_evidence_exists"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "source_graph_search",
+      "multi_path",
+      "legal_constraint"
+    ],
+    "states": [
+      "PIR",
+      "SOURCE_MAP",
+      "PATHS",
+      "PREFLIGHT",
+      "PILOT",
+      "COLLECT",
+      "SNAPSHOT",
+      "COVERAGE",
+      "HANDOFF"
+    ],
+    "timeout": "AcquisitionGap",
+    "blocked": "legal_or_access_UNKNOWN"
+  },
+  "delegation": {
+    "specialists": [
+      "source_hunter",
+      "archive_researcher",
+      "dataset_scout",
+      "extractor"
+    ],
+    "spawn_when": [
+      "volume",
+      "language",
+      "rare_format"
+    ],
+    "tools": [
+      "READ_PUBLIC",
+      "PARSER",
+      "READ_CLASSIFIED_SCOPED"
+    ],
+    "model_tier": "D-B",
+    "reasoning_effort": "medium-high",
+    "max_children": 16,
+    "max_depth": 2,
+    "verification": "omega_07_and_omega_11"
+  },
+  "model_routing": {
+    "minimum_tier": "D",
+    "default_tier": "C",
+    "default_effort": "medium",
+    "escalate_when": [
+      "forensic_buried_source"
+    ],
+    "deterministic_for": [
+      "download",
+      "hash",
+      "parse"
+    ]
+  },
+  "context": {
+    "always": [
+      "acquisition_policy",
+      "security_policy"
+    ],
+    "mission": [
+      "PIR",
+      "definitions"
+    ],
+    "retrieved": [
+      "source_metadata"
+    ],
+    "forbidden": [
+      "embedded_instructions",
+      "unauthorized_identifiers"
+    ]
+  },
+  "memory": {
+    "read": [
+      "RequirementsLedger",
+      "SourceGraph"
+    ],
+    "append": [
+      "EvidenceLedger"
+    ],
+    "propose": [
+      "SourceGraph"
+    ],
+    "verify": [],
+    "commit": [],
+    "revoke": [
+      "quarantined_source_path"
+    ]
+  },
+  "quality_gates": [
+    "legal",
+    "sandbox",
+    "pilot",
+    "custody",
+    "path_diversity",
+    "PIR_coverage"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "AcquisitionPlan",
+      "SourceCandidate",
+      "EvidencePacket",
+      "AcquisitionGap"
+    ],
+    "schema_refs": [
+      "evidence.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "access": "omega_21",
+      "coverage": "omega_05",
+      "budget": "omega_20"
+    }
+  },
+  "failure_focus": [
+    "easy_source_bias",
+    "copied_source_illusion",
+    "injection",
+    "illegal_acquisition",
+    "extraction_error",
+    "endless_search"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_PUBLIC",
+      "SANDBOX_PARSER"
+    ],
+    "human_required": [
+      "restricted_source",
+      "field_collection"
+    ]
+  },
+  "termination": {
+    "done": [
+      "paths_terminal",
+      "snapshots",
+      "custody",
+      "coverage"
+    ],
+    "stop": [
+      "saturation",
+      "illegal",
+      "unsafe",
+      "budget_exhausted"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/5"
+}

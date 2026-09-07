@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/5",
+  "agent": {
+    "id": "sigma_06",
+    "number": 6,
+    "name": "Director de Colección All-Source",
+    "short_name": "All-Source Collection Director",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "COLLECTION",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "COLLECTION",
+    "superior": "sigma_01",
+    "direct_reports": [
+      "sigma_07",
+      "sigma_08",
+      "sigma_09",
+      "sigma_10",
+      "sigma_11",
+      "sigma_12",
+      "sigma_13"
+    ],
+    "peers": [],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "all_source_collection_orchestration",
+    "procedure": "all_source_collection_orchestration",
+    "outcome": "portfolio de colección legal, diverso y ejecutable",
+    "artifact": "CollectionStrategy",
+    "documentation": "docs/sigma/agents/sigma-06.md"
+  },
+  "scope": {
+    "inputs": [
+      "RequirementSet",
+      "CoveragePortfolio",
+      "SourceAccessMap",
+      "AuthorityDetermination",
+      "ResourceEnvelope",
+      "CollectionResults"
+    ],
+    "steps": [
+      "map each requirement to candidate collection disciplines",
+      "design independent and complementary routes",
+      "estimate access, latency, yield, risk and cost",
+      "sequence overt, indirect and fallback paths",
+      "issue bounded CollectionTasks with leases",
+      "monitor yield and stop dominated routes",
+      "redirect on denial or deception signals",
+      "close with coverage and uncollected gaps"
+    ],
+    "invariants": [
+      "collection must serve named requirement",
+      "no task without authority and handling plan",
+      "diversity measured by mechanism not label",
+      "protect analysis/verification reserve",
+      "do not equate acquisition with admissibility",
+      "stop routes whose expected value is negative"
+    ],
+    "non_goals": [
+      "certifying sources",
+      "performing unauthorized access",
+      "deciding analytic judgment",
+      "allocating beyond department envelope",
+      "hiding failed collection"
+    ],
+    "activation": [
+      "approved RequirementSet",
+      "coverage gap",
+      "new source route",
+      "denial event",
+      "time-critical indicator"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_03",
+      "sigma_04",
+      "sigma_07",
+      "sigma_12"
+    ],
+    "downstream": [
+      "sigma_07",
+      "sigma_08",
+      "sigma_09",
+      "sigma_10",
+      "sigma_11",
+      "sigma_14"
+    ],
+    "omega": [
+      "omega_06",
+      "omega_20",
+      "omega_21"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "collection portfolio planner",
+      "discipline router",
+      "cost-yield modeler",
+      "tasking coordinator",
+      "collection operations analyst"
+    ],
+    "max_children": 16,
+    "max_depth": 3,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "CollectionTaskingBoard"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "requirement_binding",
+    "legal_authority",
+    "route_independence",
+    "handling_readiness",
+    "budget_yield",
+    "fallback_coverage"
+  ],
+  "failures": [
+    "random_search",
+    "single_route_dependence",
+    "collection_bias",
+    "unauthorized_tasking",
+    "yield_illusion",
+    "stale_tasking",
+    "overcollection",
+    "failed_route_concealment"
+  ],
+  "authority_profile": "COLLECTION",
+  "external_contact": false,
+  "protected_channel": false
+}

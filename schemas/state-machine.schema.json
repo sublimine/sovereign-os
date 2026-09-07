@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/state-machine.schema.json",
+  "title":"AgentStateMachine","type":"object","additionalProperties":false,
+  "required":["machine_id","version","agent_id","initial","states","transitions","terminal","timeout_policy","deadlock_policy"],
+  "properties":{
+    "machine_id":{"type":"string"},"version":{"type":"string"},"agent_id":{"type":"string"},"initial":{"type":"string"},
+    "states":{"type":"array","minItems":8,"uniqueItems":true,"items":{"type":"string"}},
+    "transitions":{"type":"array","minItems":8,"items":{"type":"object","additionalProperties":false,"required":["id","from","event","guard","actions","to"],"properties":{"id":{"type":"string"},"from":{"type":"string"},"event":{"type":"string"},"guard":{"type":"string"},"actions":{"type":"array","items":{"type":"string"}},"to":{"type":"string"},"timeout_seconds":{"type":["number","null"],"minimum":0},"idempotent":{"type":"boolean"}}}},
+    "terminal":{"type":"array","minItems":3,"items":{"type":"string"}},
+    "timeout_policy":{"type":"object","required":["checkpoint","event","route"],"properties":{"checkpoint":{"const":true},"event":{"type":"string"},"route":{"type":"string"}}},
+    "deadlock_policy":{"type":"object","required":["wait_for_graph","timeout","arbitrator","escalation"],"properties":{"wait_for_graph":{"const":true},"timeout":{"type":"number","minimum":1},"arbitrator":{"type":"string"},"escalation":{"type":"string"}}}
+  }
+}
+

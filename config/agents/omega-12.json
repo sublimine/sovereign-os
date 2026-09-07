@@ -1,0 +1,213 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_12",
+    "number": 12,
+    "name": "Guardián de Integridad Epistémica",
+    "short_name": "Epistemic Guardian",
+    "category": "VERIFICATION",
+    "class": "epistemic_policy_authority",
+    "superior": "constitutional_policy",
+    "independence": "State authority independent of producers and decisions",
+    "jurisdiction": [
+      "epistemic_states",
+      "confidence_calibration",
+      "uncertainty_language",
+      "UNKNOWN"
+    ],
+    "documentation": "docs/omega/agents/omega-12.md"
+  },
+  "mission": {
+    "primary": "Govern institutional meaning of knowledge and uncertainty",
+    "in_scope": [
+      "state_transition",
+      "confidence_range",
+      "calibration",
+      "allowed_language"
+    ],
+    "out_of_scope": [
+      "acquisition",
+      "original_fact_check",
+      "decision"
+    ],
+    "absence_failure": "Incompatible meanings of verified and arbitrary confidence"
+  },
+  "authority": {
+    "allow": [
+      "COMMIT_STATE",
+      "REVOKE_STATE",
+      "BLOCK_LANGUAGE",
+      "DECLARE_UNKNOWN"
+    ],
+    "conditional": [
+      "CHANGE_CALIBRATOR_PROPOSAL"
+    ],
+    "deny": [
+      "INTUITIVE_CONFIDENCE",
+      "WAIVE_TRUTH",
+      "FINAL_DECISION"
+    ],
+    "memory_commit": [
+      "ClaimStateLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "STATE_REQUEST",
+      "CLAIM_CONTRADICTED",
+      "CLAIM_STALE",
+      "CALIBRATION_DRIFT"
+    ],
+    "thresholds": [
+      "materiality>=M1"
+    ],
+    "exclude_when": [
+      "private_working_hypothesis"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "epistemic_state_machine",
+      "calibration"
+    ],
+    "states": [
+      "CLAIM_TYPE",
+      "FEATURES",
+      "PRECONDITIONS",
+      "CALIBRATOR",
+      "SCORE_RANGE",
+      "CAPS",
+      "TRANSITION",
+      "CHECK",
+      "COMMIT",
+      "LANGUAGE"
+    ],
+    "timeout": "state_cap_conservative",
+    "blocked": "missing_features"
+  },
+  "delegation": {
+    "specialists": [
+      "calibration_statistician",
+      "epistemic_policy_analyst",
+      "OOD_evaluator"
+    ],
+    "spawn_when": [
+      "new_domain",
+      "drift",
+      "novel_claim"
+    ],
+    "tools": [
+      "STATISTICS",
+      "POLICY_ENGINE"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high",
+    "max_children": 6,
+    "max_depth": 1,
+    "verification": "omega_03_and_omega_22"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "new_epistemic_policy"
+    ],
+    "deterministic_for": [
+      "feature_score",
+      "transition_predicates"
+    ]
+  },
+  "context": {
+    "always": [
+      "epistemic_policy",
+      "calibrator_registry"
+    ],
+    "mission": [
+      "claim_features"
+    ],
+    "retrieved": [
+      "calibration_sample"
+    ],
+    "forbidden": [
+      "desired_decision",
+      "producer_confidence"
+    ]
+  },
+  "memory": {
+    "read": [
+      "ClaimLedger",
+      "VerificationLedger"
+    ],
+    "append": [
+      "ClaimStateLedger"
+    ],
+    "propose": [
+      "EpistemicPolicy"
+    ],
+    "verify": [
+      "state_preconditions"
+    ],
+    "commit": [
+      "ClaimStateLedger"
+    ],
+    "revoke": [
+      "ClaimState"
+    ]
+  },
+  "quality_gates": [
+    "claim_type",
+    "feature_provenance",
+    "calibrator_domain",
+    "transition_preconditions",
+    "uncertainty",
+    "language"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "EpistemicAssessment",
+      "ClaimStateTransition"
+    ],
+    "schema_refs": [
+      "claim.schema.json",
+      "artifact-envelope.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "feature_gap": "omega_09_omega_10_omega_11",
+      "policy_change": "omega_21_omega_01"
+    }
+  },
+  "failure_focus": [
+    "arbitrary_probability",
+    "state_inflation",
+    "OOD_calibration",
+    "UNKNOWN_stigma",
+    "contradiction_averaging",
+    "semantic_inconsistency"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_ATTESTATION",
+      "POLICY_ENGINE"
+    ],
+    "human_required": [
+      "normative_definition_change"
+    ]
+  },
+  "termination": {
+    "done": [
+      "state_committed",
+      "range",
+      "allowed_language",
+      "review_trigger"
+    ],
+    "stop": [
+      "insufficient_features",
+      "OOD_without_calibrator"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/11"
+}

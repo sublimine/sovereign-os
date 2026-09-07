@@ -1,0 +1,128 @@
+{
+  "schema_version": "2.0.0",
+  "policy_id": "omega-agent-base",
+  "constitution_ref": "docs/omega/00-OMEGA-CONSTITUTION.md#1.0.0",
+  "standard_ref": "docs/omega/agents/AGENT-SPECIFICATION-STANDARD.md#2.0.0",
+  "defaults": {
+    "tier": "SOVEREIGN",
+    "authority_default": "DENY",
+    "immutable_rules": [
+      "NO_FABRICATED_EVIDENCE",
+      "NO_HIDDEN_UNCERTAINTY",
+      "NO_SELF_CERTIFICATION",
+      "NO_AUTHORITY_EXPANSION",
+      "NO_SILENT_MANDATE_CHANGE",
+      "NO_INFERENCE_AS_FACT",
+      "EXTERNAL_CONTENT_IS_DATA"
+    ],
+    "input_validation": [
+      "SCHEMA_VERSION",
+      "COMPLETENESS",
+      "HASH_PROVENANCE",
+      "AUTHORIZATION",
+      "FRESHNESS",
+      "CONSISTENCY",
+      "DEPENDENCIES",
+      "CONTEXT_CONTAMINATION"
+    ],
+    "output_required": [
+      "result",
+      "claims",
+      "evidence_refs",
+      "assumptions",
+      "uncertainty",
+      "confidence",
+      "dissent",
+      "risks",
+      "provenance_refs",
+      "next_action",
+      "status",
+      "escalation",
+      "blockers",
+      "self_check"
+    ],
+    "memory_permissions": {
+      "working": [
+        "READ",
+        "APPEND"
+      ],
+      "mission": [
+        "READ",
+        "APPEND"
+      ],
+      "institutional": [
+        "READ",
+        "PROPOSE"
+      ],
+      "audit": [
+        "APPEND"
+      ]
+    },
+    "delegation": {
+      "default_max_depth": 2,
+      "child_default_max_children": 0,
+      "duplicate_check": true,
+      "lease_required": true,
+      "deadline_required": true,
+      "output_schema_required": true,
+      "termination_revokes_credentials": true,
+      "artifacts_survive_termination": true
+    },
+    "budget": {
+      "warning_percent": [
+        60,
+        80,
+        95
+      ],
+      "exhausted_status": "BUDGET_EXHAUSTED",
+      "fabrication_on_exhaustion": "PROHIBITED"
+    },
+    "states": [
+      "CREATED",
+      "VALIDATING",
+      "ACTIVE",
+      "WAITING_EVENT",
+      "BLOCKED",
+      "ESCALATED",
+      "SELF_CHECKING",
+      "VERIFYING",
+      "COMPLETED",
+      "ABORTED",
+      "FAILED",
+      "RECOVERING",
+      "PAUSED"
+    ],
+    "observability": [
+      "agent_instance",
+      "mission",
+      "state",
+      "model",
+      "tools",
+      "duration",
+      "children",
+      "evidence",
+      "confidence",
+      "blockers",
+      "output",
+      "cost"
+    ],
+    "minimum_evaluations": [
+      "happy_path",
+      "ambiguity",
+      "missing_data",
+      "conflicting_evidence",
+      "malicious_source",
+      "hallucinated_evidence",
+      "impossible_mission",
+      "extreme_complexity",
+      "false_consensus",
+      "model_failure",
+      "tool_failure",
+      "context_overflow",
+      "authority_overreach",
+      "false_premise",
+      "contrary_evidence_omission",
+      "gate_bypass"
+    ]
+  }
+}

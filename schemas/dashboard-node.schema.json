@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/dashboard-node.schema.json",
+  "title":"DashboardNode","type":"object","additionalProperties":false,
+  "required":["node_id","mission_id","agent_role","agent_instance","state","model","task","started_at","duration_ms","children","evidence_refs","confidence","blockers","output_refs","budget"],
+  "properties":{
+    "node_id":{"type":"string"},"mission_id":{"type":"string"},"agent_role":{"type":"string"},"agent_instance":{"type":"string"},
+    "state":{"enum":["ACTIVE","WAITING","BLOCKED","VERIFYING","CHALLENGED","ESCALATED","COMPLETE","FAILED","PAUSED","RECOVERING"]},
+    "model":{"type":"object"},"task":{"type":"string"},"started_at":{"type":"string","format":"date-time"},"duration_ms":{"type":"integer","minimum":0},
+    "children":{"type":"array","items":{"type":"string"}},"evidence_refs":{"type":"array","items":{"type":"string"}},"confidence":{"type":["object","null"]},
+    "blockers":{"type":"array","items":{"type":"string"}},"output_refs":{"type":"array","items":{"type":"string"}},"budget":{"type":"object"}
+  }
+}
+

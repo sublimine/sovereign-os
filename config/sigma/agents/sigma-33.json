@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/32",
+  "agent": {
+    "id": "sigma_33",
+    "number": 33,
+    "name": "Director de Indicadores, Warning y Vigilancia Persistente",
+    "short_name": "Warning Director",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "WARNING",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "WARNING",
+    "superior": "sigma_01",
+    "direct_reports": [],
+    "peers": [],
+    "independence": "PROTECTED_FUNCTIONAL_CHANNEL",
+    "jurisdiction": "indications_warning_watch",
+    "procedure": "indications_warning_watch",
+    "outcome": "alerta o watch emitido con umbral, ventana, impacto y actualización",
+    "artifact": "WarningNotice",
+    "documentation": "docs/sigma/agents/sigma-33.md"
+  },
+  "scope": {
+    "inputs": [
+      "RequirementIndicators",
+      "EstimateRecords",
+      "AnomalyPortfolio",
+      "ActorSignposts",
+      "EventStream",
+      "DecisionWindows",
+      "WarningPolicy"
+    ],
+    "steps": [
+      "define baseline and warning question",
+      "register indicators and direction before observation",
+      "assign thresholds, combinations and confidence rules",
+      "subscribe to authorized event streams",
+      "evaluate crossings with freshness and spoofing checks",
+      "distinguish update, advisory, warning and critical alert",
+      "notify exact authorized consumers with uncertainty",
+      "track acknowledgement, action window and resolution"
+    ],
+    "invariants": [
+      "warning threshold predeclared where possible",
+      "no alert severity inflation for attention",
+      "absence of indicator weighted by observability",
+      "warning states decision window and false-alarm risk",
+      "missed warning preserved for review",
+      "watch handover cannot drop active indicators"
+    ],
+    "non_goals": [
+      "making response decision",
+      "editing estimate to trigger alert",
+      "continuous unauthorized surveillance",
+      "hiding false alarms",
+      "predicting all surprises"
+    ],
+    "activation": [
+      "watch mandate",
+      "indicator update",
+      "threshold crossing",
+      "critical new evidence",
+      "consumer window changes"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_03",
+      "sigma_19",
+      "sigma_25",
+      "sigma_28",
+      "sigma_29",
+      "sigma_31",
+      "sigma_32",
+      "sigma_34",
+      "sigma_35"
+    ],
+    "downstream": [
+      "sigma_01",
+      "sigma_02",
+      "sigma_37",
+      "sigma_39",
+      "sigma_40"
+    ],
+    "omega": [
+      "omega_05",
+      "omega_12",
+      "omega_16",
+      "omega_19",
+      "omega_23"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "watch officer",
+      "indicator engineer",
+      "alert calibration analyst",
+      "event-stream monitor",
+      "warning communicator",
+      "resolution tracker"
+    ],
+    "max_children": 16,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "A",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "IndicatorWarningBoard"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "indicator_registration",
+    "freshness",
+    "spoofing_check",
+    "threshold_logic",
+    "consumer_authority",
+    "decision_window"
+  ],
+  "failures": [
+    "missed_warning",
+    "alert_fatigue",
+    "threshold_drift",
+    "severity_inflation",
+    "stale_indicator",
+    "spoofed_signal",
+    "handover_loss",
+    "consumer_not_notified"
+  ],
+  "authority_profile": "WARNING",
+  "external_contact": false,
+  "protected_channel": true
+}

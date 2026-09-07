@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/outputs/sigma-31-output.schema.json",
+  "title": "outputs/sigma-31-output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_version",
+    "mission_id",
+    "producer",
+    "created_at",
+    "classification",
+    "content_hash",
+    "provenance_refs",
+    "dependency_refs",
+    "status",
+    "artifact_type",
+    "procedure",
+    "accountable_outcome",
+    "inputs_used",
+    "procedure_trace",
+    "gate_evidence",
+    "findings",
+    "limitations",
+    "reconsideration_triggers",
+    "reason_codes"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_version": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependency_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "AnomalyPortfolio"
+    },
+    "procedure": {
+      "const": "pattern_anomaly_weak_signal_analysis"
+    },
+    "accountable_outcome": {
+      "const": "señales débiles diferenciadas de ruido, artefacto y cambio de medición"
+    },
+    "inputs_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_trace": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "define baseline, regime and expected variance",
+          "detect statistical and qualitative deviations",
+          "separate data-quality and pipeline artifacts",
+          "cluster correlated anomalies without assuming cause",
+          "seek cross-source orthogonal confirmation",
+          "estimate novelty, persistence and decision relevance",
+          "generate causal and collection hypotheses",
+          "publish anomaly portfolio with false-positive controls"
+        ]
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "BASELINE",
+        "ARTIFACT_EXCLUSION",
+        "MULTIPLE_TESTING",
+        "ORTHOGONAL_CHECK",
+        "PERSISTENCE",
+        "DECISION_RELEVANCE"
+      ],
+      "properties": {
+        "BASELINE": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ARTIFACT_EXCLUSION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "MULTIPLE_TESTING": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ORTHOGONAL_CHECK": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "PERSISTENCE": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "DECISION_RELEVANCE": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reconsideration_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

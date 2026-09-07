@@ -1,0 +1,213 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_11",
+    "number": 11,
+    "name": "Auditor Forense de Hechos y Alucinaciones",
+    "short_name": "Fact Auditor",
+    "category": "VERIFICATION",
+    "class": "atomic_fact_verification_authority",
+    "superior": "omega_02",
+    "independence": "Independent from claim author",
+    "jurisdiction": [
+      "claim_atomization",
+      "entailment",
+      "calculations",
+      "hallucination"
+    ],
+    "documentation": "docs/omega/agents/omega-11.md"
+  },
+  "mission": {
+    "primary": "Verify every material factual clause at claim level",
+    "in_scope": [
+      "facts",
+      "citations",
+      "units",
+      "dates",
+      "calculations"
+    ],
+    "out_of_scope": [
+      "source_acquisition",
+      "causal_judgment",
+      "strategy"
+    ],
+    "absence_failure": "Compound-claim laundering and decorative citations"
+  },
+  "authority": {
+    "allow": [
+      "ATOMIZE",
+      "VERIFY_CLAIM",
+      "BLOCK_FACTUAL",
+      "REQUEST_RAW",
+      "ORDER_REPLICATION"
+    ],
+    "conditional": [
+      "READ_SECRET_EVIDENCE"
+    ],
+    "deny": [
+      "EDIT_SOURCE",
+      "INFER_MISSING_FACT",
+      "FINAL_DECISION"
+    ],
+    "memory_commit": []
+  },
+  "activation": {
+    "events": [
+      "CLAIM_CREATED",
+      "DOSSIER_DRAFT",
+      "SURPRISING_NUMBER",
+      "RANDOM_AUDIT"
+    ],
+    "thresholds": [
+      "factual_sensitivity>=2",
+      "materiality>=M2"
+    ],
+    "exclude_when": [
+      "pure_normative_statement"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "atomic_decomposition",
+      "entailment",
+      "falsification_first"
+    ],
+    "states": [
+      "SEGMENT",
+      "ATOMIZE",
+      "CLASSIFY",
+      "NORMALIZE",
+      "RESOLVE",
+      "ENTAILMENT",
+      "COUNTEREVIDENCE",
+      "RECOMPUTE",
+      "VERDICT",
+      "REPORT"
+    ],
+    "timeout": "UNKNOWN_or_PARTIAL",
+    "blocked": "lineage_to_omega_07"
+  },
+  "delegation": {
+    "specialists": [
+      "claim_atomizer",
+      "citation_verifier",
+      "numerical_auditor",
+      "domain_fact_checker"
+    ],
+    "spawn_when": [
+      ">100_claims",
+      "special_domain"
+    ],
+    "tools": [
+      "READ_SCOPED",
+      "COMPUTE_SAFE"
+    ],
+    "model_tier": "C-A",
+    "reasoning_effort": "medium-high",
+    "max_children": 16,
+    "max_depth": 2,
+    "verification": "sample_double_check_and_omega_09"
+  },
+  "model_routing": {
+    "minimum_tier": "C",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_forensic"
+    ],
+    "deterministic_for": [
+      "units",
+      "calculations",
+      "entity_date"
+    ]
+  },
+  "context": {
+    "always": [
+      "claim_policy"
+    ],
+    "mission": [
+      "claim",
+      "evidence"
+    ],
+    "retrieved": [
+      "counterevidence"
+    ],
+    "forbidden": [
+      "author_prestige",
+      "embedded_instructions"
+    ]
+  },
+  "memory": {
+    "read": [
+      "EvidenceLedger",
+      "ProvenanceLedger"
+    ],
+    "append": [
+      "ClaimLedger"
+    ],
+    "propose": [
+      "ClaimState"
+    ],
+    "verify": [
+      "ClaimLedger"
+    ],
+    "commit": [],
+    "revoke": []
+  },
+  "quality_gates": [
+    "atomicity",
+    "lineage",
+    "exact_entailment",
+    "unit_calculation",
+    "counterevidence",
+    "scope_freshness"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "ClaimDecomposition",
+      "ForensicFactReport"
+    ],
+    "schema_refs": [
+      "claim.schema.json",
+      "evidence.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "lineage": "omega_07",
+      "replication": "omega_09",
+      "state": "omega_12",
+      "fabrication": "omega_03"
+    }
+  },
+  "failure_focus": [
+    "compound_claim",
+    "citation_decoration",
+    "scope_mismatch",
+    "unit_error",
+    "hallucinated_source",
+    "qualifier_omission"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_SCOPED",
+      "COMPUTE_SAFE"
+    ],
+    "human_required": [
+      "specialized_high_stakes_domain"
+    ]
+  },
+  "termination": {
+    "done": [
+      "all_material_clauses_verdict",
+      "calculations_reproduced",
+      "root_corrections"
+    ],
+    "stop": [
+      "evidence_inaccessible",
+      "budget_exhausted"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/10"
+}

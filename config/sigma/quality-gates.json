@@ -1,0 +1,4380 @@
+{
+  "schema_version": "1.0.0",
+  "outcomes": [
+    "PASS",
+    "FAIL",
+    "RETURN",
+    "ESCALATE",
+    "WAIVE"
+  ],
+  "global_nonwaivable": [
+    "AUTHORITY",
+    "NO_FABRICATION",
+    "MATERIAL_LINEAGE",
+    "MATERIAL_DISSENT",
+    "SAFE_EFFECT",
+    "NO_SELF_CERTIFICATION"
+  ],
+  "agents": {
+    "sigma_01": {
+      "artifact": "IntelligenceCommandDecision",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_01",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "MANDATE_AUTHORITY",
+          "condition": "mandate_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_01",
+          "evidence": [
+            "mandate_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "OUTCOME_CLARITY",
+          "condition": "outcome_clarity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "outcome_clarity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONTROL_INDEPENDENCE",
+          "condition": "control_independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_01",
+          "evidence": [
+            "control_independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESOURCE_FEASIBILITY",
+          "condition": "resource_feasibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "resource_feasibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PORTFOLIO_RISK",
+          "condition": "portfolio_risk evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_01",
+          "evidence": [
+            "portfolio_risk:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DECISION_RECORD",
+          "condition": "decision_record evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "decision_record:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_01",
+          "evidence": [
+            "IntelligenceCommandDecision",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_02": {
+      "artifact": "IntelligenceMissionControl",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_02",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "OBJECTIVE_ANCHOR",
+          "condition": "objective_anchor evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_02",
+          "evidence": [
+            "objective_anchor:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "GRAPH_CLOSURE",
+          "condition": "graph_closure evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "graph_closure:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ACTIVATION_MINIMALITY",
+          "condition": "activation_minimality evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_02",
+          "evidence": [
+            "activation_minimality:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BUDGET_RESERVE",
+          "condition": "budget_reserve evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "budget_reserve:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "LIVENESS",
+          "condition": "liveness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_02",
+          "evidence": [
+            "liveness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HANDOVER",
+          "condition": "handover evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "handover:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_02",
+          "evidence": [
+            "IntelligenceMissionControl",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_03": {
+      "artifact": "IntelligenceRequirementSet",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_03",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "DECISION_RELEVANCE",
+          "condition": "decision_relevance evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_03",
+          "evidence": [
+            "decision_relevance:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "ANSWERABILITY",
+          "condition": "answerability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "answerability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ATOMICITY",
+          "condition": "atomicity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_03",
+          "evidence": [
+            "atomicity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "OBSERVABLE_DEFINITION",
+          "condition": "observable_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "observable_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "NON_CONFIRMATION_BIAS",
+          "condition": "non_confirmation_bias evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_03",
+          "evidence": [
+            "non_confirmation_bias:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CLOSURE_CRITERIA",
+          "condition": "closure_criteria evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "closure_criteria:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_03",
+          "evidence": [
+            "IntelligenceRequirementSet",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_04": {
+      "artifact": "CoveragePortfolio",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_04",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "COVERAGE_DENOMINATOR",
+          "condition": "coverage_denominator evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_04",
+          "evidence": [
+            "coverage_denominator:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "INDEPENDENCE_ADJUSTMENT",
+          "condition": "independence_adjustment evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "independence_adjustment:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CRITICAL_GAP_VISIBILITY",
+          "condition": "critical_gap_visibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_04",
+          "evidence": [
+            "critical_gap_visibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESERVE_PROTECTION",
+          "condition": "reserve_protection evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "reserve_protection:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MARGINAL_VALUE",
+          "condition": "marginal_value evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_04",
+          "evidence": [
+            "marginal_value:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRIORITY_AUTHORITY",
+          "condition": "priority_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "priority_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_04",
+          "evidence": [
+            "CoveragePortfolio",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_05": {
+      "artifact": "ConsumerDecisionModel",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_05",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "DECISION_OWNER",
+          "condition": "decision_owner evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_05",
+          "evidence": [
+            "decision_owner:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "OBJECTIVE_METHOD_SEPARATION",
+          "condition": "objective_method_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "objective_method_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "OPTION_SPACE",
+          "condition": "option_space evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_05",
+          "evidence": [
+            "option_space:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "LOSS_ASYMMETRY",
+          "condition": "loss_asymmetry evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "loss_asymmetry:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONSUMER_VALIDATION",
+          "condition": "consumer_validation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_05",
+          "evidence": [
+            "consumer_validation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "VERSION_NOTIFICATION",
+          "condition": "version_notification evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "version_notification:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_05",
+          "evidence": [
+            "ConsumerDecisionModel",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_06": {
+      "artifact": "CollectionStrategy",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_06",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "REQUIREMENT_BINDING",
+          "condition": "requirement_binding evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_06",
+          "evidence": [
+            "requirement_binding:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "LEGAL_AUTHORITY",
+          "condition": "legal_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "legal_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ROUTE_INDEPENDENCE",
+          "condition": "route_independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_06",
+          "evidence": [
+            "route_independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HANDLING_READINESS",
+          "condition": "handling_readiness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "handling_readiness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BUDGET_YIELD",
+          "condition": "budget_yield evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_06",
+          "evidence": [
+            "budget_yield:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "FALLBACK_COVERAGE",
+          "condition": "fallback_coverage evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "fallback_coverage:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_06",
+          "evidence": [
+            "CollectionStrategy",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_07": {
+      "artifact": "SourceAccessMap",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_07",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "SEARCH_SPACE_MODEL",
+          "condition": "search_space_model evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_07",
+          "evidence": [
+            "search_space_model:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "LEGAL_ACCESS",
+          "condition": "legal_access evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "legal_access:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ROUTE_NOVELTY",
+          "condition": "route_novelty evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_07",
+          "evidence": [
+            "route_novelty:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "NEGATIVE_EVIDENCE_LOG",
+          "condition": "negative_evidence_log evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "negative_evidence_log:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "QUERY_REPRODUCIBILITY",
+          "condition": "query_reproducibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_07",
+          "evidence": [
+            "query_reproducibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HANDOFF_COMPLETENESS",
+          "condition": "handoff_completeness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "handoff_completeness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_07",
+          "evidence": [
+            "SourceAccessMap",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_08": {
+      "artifact": "PrimaryRecordCorpus",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_08",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "SNAPSHOT_INTEGRITY",
+          "condition": "snapshot_integrity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_08",
+          "evidence": [
+            "snapshot_integrity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "ISSUER_AUTHENTICATION",
+          "condition": "issuer_authentication evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "issuer_authentication:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "VERSION_COMPLETENESS",
+          "condition": "version_completeness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_08",
+          "evidence": [
+            "version_completeness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COORDINATE_TRACEABILITY",
+          "condition": "coordinate_traceability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "coordinate_traceability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EXTRACTION_CHECK",
+          "condition": "extraction_check evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_08",
+          "evidence": [
+            "extraction_check:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "OMISSIONS_MANIFEST",
+          "condition": "omissions_manifest evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "omissions_manifest:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_08",
+          "evidence": [
+            "PrimaryRecordCorpus",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_09": {
+      "artifact": "ElicitationPortfolio",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_09",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CONTACT_AUTHORITY",
+          "condition": "contact_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_09",
+          "evidence": [
+            "contact_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "CONSENT",
+          "condition": "consent evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "consent:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EXPERTISE_RELEVANCE",
+          "condition": "expertise_relevance evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_09",
+          "evidence": [
+            "expertise_relevance:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "QUESTION_NEUTRALITY",
+          "condition": "question_neutrality evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "question_neutrality:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONFLICT_DISCLOSURE",
+          "condition": "conflict_disclosure evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_09",
+          "evidence": [
+            "conflict_disclosure:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TESTIMONY_ATOMICITY",
+          "condition": "testimony_atomicity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "testimony_atomicity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_09",
+          "evidence": [
+            "ElicitationPortfolio",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_10": {
+      "artifact": "TechnicalCollectionPlan",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_10",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "TECHNICAL_AUTHORITY",
+          "condition": "technical_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_10",
+          "evidence": [
+            "technical_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "MEASUREMENT_DEFINITION",
+          "condition": "measurement_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "measurement_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SENSOR_CALIBRATION",
+          "condition": "sensor_calibration evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_10",
+          "evidence": [
+            "sensor_calibration:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INTEGRITY_CHAIN",
+          "condition": "integrity_chain evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "integrity_chain:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SPOOFING_MODEL",
+          "condition": "spoofing_model evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_10",
+          "evidence": [
+            "spoofing_model:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRIVACY_MINIMIZATION",
+          "condition": "privacy_minimization evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "privacy_minimization:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_10",
+          "evidence": [
+            "TechnicalCollectionPlan",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_11": {
+      "artifact": "GeotemporalCollectionPlan",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_11",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "AREA_TIME_DEFINITION",
+          "condition": "area_time_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_11",
+          "evidence": [
+            "area_time_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "SOURCE_AUTHORITY",
+          "condition": "source_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "source_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESOLUTION_CEILING",
+          "condition": "resolution_ceiling evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_11",
+          "evidence": [
+            "resolution_ceiling:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COORDINATE_NORMALIZATION",
+          "condition": "coordinate_normalization evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "coordinate_normalization:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INDEPENDENT_GEOLOCATION",
+          "condition": "independent_geolocation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_11",
+          "evidence": [
+            "independent_geolocation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRIVACY",
+          "condition": "privacy evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "privacy:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_11",
+          "evidence": [
+            "GeotemporalCollectionPlan",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_12": {
+      "artifact": "CollectionGapCase",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_12",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "GAP_CLASSIFICATION",
+          "condition": "gap_classification evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_12",
+          "evidence": [
+            "gap_classification:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "DECISION_SENSITIVITY",
+          "condition": "decision_sensitivity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "decision_sensitivity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PROXY_VALIDITY",
+          "condition": "proxy_validity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_12",
+          "evidence": [
+            "proxy_validity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "AUTHORITY",
+          "condition": "authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ROUTE_DIVERSITY",
+          "condition": "route_diversity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_12",
+          "evidence": [
+            "route_diversity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "UNKNOWN_HONESTY",
+          "condition": "unknown_honesty evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "unknown_honesty:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_12",
+          "evidence": [
+            "CollectionGapCase",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_13": {
+      "artifact": "SourceHandlingPlan",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_13",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CLASSIFICATION_SEPARATION",
+          "condition": "classification_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_13",
+          "evidence": [
+            "classification_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NEED_TO_KNOW",
+          "condition": "need_to_know evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "need_to_know:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "LEAST_EXPOSURE",
+          "condition": "least_exposure evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_13",
+          "evidence": [
+            "least_exposure:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SEALED_AUDIT",
+          "condition": "sealed_audit evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "sealed_audit:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONTACT_AUTHORITY",
+          "condition": "contact_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_13",
+          "evidence": [
+            "contact_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "REVOCATION_READINESS",
+          "condition": "revocation_readiness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "revocation_readiness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_13",
+          "evidence": [
+            "SourceHandlingPlan",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_14": {
+      "artifact": "EvidenceIntakeDecision",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_14",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "RAW_INTEGRITY",
+          "condition": "raw_integrity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_14",
+          "evidence": [
+            "raw_integrity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "SAFE_PARSE",
+          "condition": "safe_parse evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "safe_parse:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INSTRUCTION_SEPARATION",
+          "condition": "instruction_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_14",
+          "evidence": [
+            "instruction_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SCHEMA_VALIDATION",
+          "condition": "schema_validation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "schema_validation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CLASSIFICATION",
+          "condition": "classification evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_14",
+          "evidence": [
+            "classification:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ADMISSIBILITY_RECORD",
+          "condition": "admissibility_record evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "admissibility_record:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_14",
+          "evidence": [
+            "EvidenceIntakeDecision",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_15": {
+      "artifact": "SourceAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_15",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "IDENTITY_CHANNEL_SEPARATION",
+          "condition": "identity_channel_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_15",
+          "evidence": [
+            "identity_channel_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "ACCESS_BASIS",
+          "condition": "access_basis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "access_basis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COMPETENCE",
+          "condition": "competence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_15",
+          "evidence": [
+            "competence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MOTIVATION_EVIDENCE",
+          "condition": "motivation_evidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "motivation_evidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TASK_CLASS_HISTORY",
+          "condition": "task_class_history evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_15",
+          "evidence": [
+            "task_class_history:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "UNCERTAINTY",
+          "condition": "uncertainty evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "uncertainty:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_15",
+          "evidence": [
+            "SourceAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_16": {
+      "artifact": "SourceDependencyGraph",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_16",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CLAIM_LEVEL_EDGES",
+          "condition": "claim_level_edges evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_16",
+          "evidence": [
+            "claim_level_edges:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "CHRONOLOGY",
+          "condition": "chronology evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "chronology:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SIMILARITY_EVIDENCE",
+          "condition": "similarity_evidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_16",
+          "evidence": [
+            "similarity_evidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COMMON_ORIGIN",
+          "condition": "common_origin evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "common_origin:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PARTIAL_DEPENDENCY",
+          "condition": "partial_dependency evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_16",
+          "evidence": [
+            "partial_dependency:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EFFECTIVE_SUPPORT",
+          "condition": "effective_support evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "effective_support:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_16",
+          "evidence": [
+            "SourceDependencyGraph",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_17": {
+      "artifact": "OperationalProvenanceBundle",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_17",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "SNAPSHOT_EDGE",
+          "condition": "snapshot_edge evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_17",
+          "evidence": [
+            "snapshot_edge:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "LOCATOR_EDGE",
+          "condition": "locator_edge evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "locator_edge:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EXECUTION_EDGE",
+          "condition": "execution_edge evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_17",
+          "evidence": [
+            "execution_edge:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CLAIM_EDGE",
+          "condition": "claim_edge evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "claim_edge:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HASH_INTEGRITY",
+          "condition": "hash_integrity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_17",
+          "evidence": [
+            "hash_integrity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SEALED_AUDITABILITY",
+          "condition": "sealed_auditability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "sealed_auditability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_17",
+          "evidence": [
+            "OperationalProvenanceBundle",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_18": {
+      "artifact": "EntityResolutionCase",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_18",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "ORIGINAL_PRESERVATION",
+          "condition": "original_preservation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_18",
+          "evidence": [
+            "original_preservation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "CANDIDATE_COMPLETENESS",
+          "condition": "candidate_completeness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "candidate_completeness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COUNTEREVIDENCE",
+          "condition": "counterevidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_18",
+          "evidence": [
+            "counterevidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TEMPORAL_CONSISTENCY",
+          "condition": "temporal_consistency evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "temporal_consistency:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "REVERSIBILITY",
+          "condition": "reversibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_18",
+          "evidence": [
+            "reversibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INDEPENDENT_DISCRIMINANT",
+          "condition": "independent_discriminant evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "independent_discriminant:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_18",
+          "evidence": [
+            "EntityResolutionCase",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_19": {
+      "artifact": "EventChronology",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_19",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "TIME_BASIS",
+          "condition": "time_basis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_19",
+          "evidence": [
+            "time_basis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "FOUR_TIME_SEPARATION",
+          "condition": "four_time_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "four_time_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INTERVAL_PRECISION",
+          "condition": "interval_precision evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_19",
+          "evidence": [
+            "interval_precision:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRECEDENCE_CONSTRAINTS",
+          "condition": "precedence_constraints evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "precedence_constraints:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONFLICT_PRESERVATION",
+          "condition": "conflict_preservation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_19",
+          "evidence": [
+            "conflict_preservation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MISSING_INTERVAL",
+          "condition": "missing_interval evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "missing_interval:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_19",
+          "evidence": [
+            "EventChronology",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_20": {
+      "artifact": "NetworkAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_20",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "ONTOLOGY",
+          "condition": "ontology evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_20",
+          "evidence": [
+            "ontology:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "EDGE_PROVENANCE",
+          "condition": "edge_provenance evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "edge_provenance:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TEMPORAL_EDGES",
+          "condition": "temporal_edges evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_20",
+          "evidence": [
+            "temporal_edges:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INFERENCE_LABELS",
+          "condition": "inference_labels evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "inference_labels:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MISSINGNESS_SENSITIVITY",
+          "condition": "missingness_sensitivity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_20",
+          "evidence": [
+            "missingness_sensitivity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ALTERNATIVE_GRAPH",
+          "condition": "alternative_graph evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "alternative_graph:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_20",
+          "evidence": [
+            "NetworkAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_21": {
+      "artifact": "MeasurementAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_21",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CONSTRUCT_DEFINITION",
+          "condition": "construct_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_21",
+          "evidence": [
+            "construct_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "UNIT_NORMALIZATION",
+          "condition": "unit_normalization evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "unit_normalization:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SAMPLING_FRAME",
+          "condition": "sampling_frame evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_21",
+          "evidence": [
+            "sampling_frame:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MISSINGNESS_MODEL",
+          "condition": "missingness_model evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "missingness_model:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COMPARABILITY",
+          "condition": "comparability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_21",
+          "evidence": [
+            "comparability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "REPRODUCIBLE_CALCULATION",
+          "condition": "reproducible_calculation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "reproducible_calculation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_21",
+          "evidence": [
+            "MeasurementAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_22": {
+      "artifact": "KnowledgeGraphDelta",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_22",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CONCEPT_DEFINITION",
+          "condition": "concept_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_22",
+          "evidence": [
+            "concept_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "EDGE_TYPING",
+          "condition": "edge_typing evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "edge_typing:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RAW_TERM_PRESERVATION",
+          "condition": "raw_term_preservation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_22",
+          "evidence": [
+            "raw_term_preservation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MIGRATION_PLAN",
+          "condition": "migration_plan evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "migration_plan:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DEPENDENCY_INTEGRITY",
+          "condition": "dependency_integrity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_22",
+          "evidence": [
+            "dependency_integrity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "QUERY_REGRESSION",
+          "condition": "query_regression evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "query_regression:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_22",
+          "evidence": [
+            "KnowledgeGraphDelta",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_23": {
+      "artifact": "SemanticContextAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_23",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "ORIGINAL_PRESERVED",
+          "condition": "original_preserved evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_23",
+          "evidence": [
+            "original_preserved:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "TRANSLATION_INDEPENDENCE",
+          "condition": "translation_independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "translation_independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "REGISTER_CONTEXT",
+          "condition": "register_context evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_23",
+          "evidence": [
+            "register_context:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "AMBIGUITY_SET",
+          "condition": "ambiguity_set evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "ambiguity_set:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CULTURAL_EVIDENCE",
+          "condition": "cultural_evidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_23",
+          "evidence": [
+            "cultural_evidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SEMANTIC_DRIFT",
+          "condition": "semantic_drift evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "semantic_drift:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_23",
+          "evidence": [
+            "SemanticContextAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_24": {
+      "artifact": "AllSourceFusion",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_24",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "ONTOLOGY_ALIGNMENT",
+          "condition": "ontology_alignment evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_24",
+          "evidence": [
+            "ontology_alignment:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "DEPENDENCY_ADJUSTMENT",
+          "condition": "dependency_adjustment evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "dependency_adjustment:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COUNTEREVIDENCE",
+          "condition": "counterevidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_24",
+          "evidence": [
+            "counterevidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONTRADICTION_VISIBILITY",
+          "condition": "contradiction_visibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "contradiction_visibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SENSITIVITY",
+          "condition": "sensitivity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_24",
+          "evidence": [
+            "sensitivity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DISSENT_PRESERVATION",
+          "condition": "dissent_preservation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "dissent_preservation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_24",
+          "evidence": [
+            "AllSourceFusion",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_25": {
+      "artifact": "ActorAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_25",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "DECISION_UNIT",
+          "condition": "decision_unit evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_25",
+          "evidence": [
+            "decision_unit:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "CAPABILITY_READINESS",
+          "condition": "capability_readiness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "capability_readiness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INTENT_HYPOTHESES",
+          "condition": "intent_hypotheses evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_25",
+          "evidence": [
+            "intent_hypotheses:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONSTRAINT_MAP",
+          "condition": "constraint_map evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "constraint_map:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BEHAVIOR_STATEMENT_GAP",
+          "condition": "behavior_statement_gap evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_25",
+          "evidence": [
+            "behavior_statement_gap:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "OBSERVABLE_PREDICTIONS",
+          "condition": "observable_predictions evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "observable_predictions:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_25",
+          "evidence": [
+            "ActorAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_26": {
+      "artifact": "StrategicEnvironmentModel",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_26",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "BOUNDARY_DEFINITION",
+          "condition": "boundary_definition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_26",
+          "evidence": [
+            "boundary_definition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "STOCK_FLOW_RULES",
+          "condition": "stock_flow_rules evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "stock_flow_rules:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "FEEDBACK_EVIDENCE",
+          "condition": "feedback_evidence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_26",
+          "evidence": [
+            "feedback_evidence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "REGIME_ASSUMPTIONS",
+          "condition": "regime_assumptions evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "regime_assumptions:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ALTERNATIVE_FRAMING",
+          "condition": "alternative_framing evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_26",
+          "evidence": [
+            "alternative_framing:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HISTORICAL_FIT",
+          "condition": "historical_fit evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "historical_fit:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_26",
+          "evidence": [
+            "StrategicEnvironmentModel",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_27": {
+      "artifact": "CausalMechanismAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_27",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CAUSAL_QUERY",
+          "condition": "causal_query evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_27",
+          "evidence": [
+            "causal_query:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "COMPETING_DAGS",
+          "condition": "competing_DAGs evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "competing_DAGs:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "IDENTIFIABILITY",
+          "condition": "identifiability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_27",
+          "evidence": [
+            "identifiability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DESIGN_VALIDITY",
+          "condition": "design_validity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "design_validity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SENSITIVITY",
+          "condition": "sensitivity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_27",
+          "evidence": [
+            "sensitivity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TRANSPORTABILITY",
+          "condition": "transportability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "transportability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_27",
+          "evidence": [
+            "CausalMechanismAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_28": {
+      "artifact": "AnalyticHypothesisSet",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_28",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "HYPOTHESIS_DISTINCTNESS",
+          "condition": "hypothesis_distinctness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_28",
+          "evidence": [
+            "hypothesis_distinctness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NULL_INCLUSION",
+          "condition": "null_inclusion evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "null_inclusion:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PREDICTION_TABLE",
+          "condition": "prediction_table evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_28",
+          "evidence": [
+            "prediction_table:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DIAGNOSTICITY",
+          "condition": "diagnosticity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "diagnosticity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DISCONFIRMATION_SEARCH",
+          "condition": "disconfirmation_search evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_28",
+          "evidence": [
+            "disconfirmation_search:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BLIND_INDEPENDENCE",
+          "condition": "blind_independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "blind_independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_28",
+          "evidence": [
+            "AnalyticHypothesisSet",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_29": {
+      "artifact": "DeceptionAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_29",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "TARGET_BELIEF",
+          "condition": "target_belief evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_29",
+          "evidence": [
+            "target_belief:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "DECEIVER_CAPABILITY",
+          "condition": "deceiver_capability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "deceiver_capability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BENIGN_ALTERNATIVES",
+          "condition": "benign_alternatives evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_29",
+          "evidence": [
+            "benign_alternatives:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HARD_TO_FAKE_DISCRIMINANT",
+          "condition": "hard_to_fake_discriminant evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "hard_to_fake_discriminant:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "OPERATIONAL_SAFETY",
+          "condition": "operational_safety evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_29",
+          "evidence": [
+            "operational_safety:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESIDUAL_RISK",
+          "condition": "residual_risk evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "residual_risk:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_29",
+          "evidence": [
+            "DeceptionAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_30": {
+      "artifact": "CounterintelligenceCase",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_30",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "INDICATOR_BASIS",
+          "condition": "indicator_basis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_30",
+          "evidence": [
+            "indicator_basis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "INDEPENDENCE",
+          "condition": "independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "LEAST_CONTAINMENT",
+          "condition": "least_containment evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_30",
+          "evidence": [
+            "least_containment:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EVIDENCE_PRESERVATION",
+          "condition": "evidence_preservation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "evidence_preservation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ALTERNATIVE_CAUSES",
+          "condition": "alternative_causes evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_30",
+          "evidence": [
+            "alternative_causes:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "BLAST_RADIUS",
+          "condition": "blast_radius evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "blast_radius:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_30",
+          "evidence": [
+            "CounterintelligenceCase",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_31": {
+      "artifact": "AnomalyPortfolio",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_31",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "BASELINE",
+          "condition": "baseline evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_31",
+          "evidence": [
+            "baseline:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "ARTIFACT_EXCLUSION",
+          "condition": "artifact_exclusion evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "artifact_exclusion:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MULTIPLE_TESTING",
+          "condition": "multiple_testing evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_31",
+          "evidence": [
+            "multiple_testing:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ORTHOGONAL_CHECK",
+          "condition": "orthogonal_check evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "orthogonal_check:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PERSISTENCE",
+          "condition": "persistence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_31",
+          "evidence": [
+            "persistence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DECISION_RELEVANCE",
+          "condition": "decision_relevance evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "decision_relevance:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_31",
+          "evidence": [
+            "AnomalyPortfolio",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_32": {
+      "artifact": "EstimateRecord",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_32",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "RESOLVABLE_QUESTION",
+          "condition": "resolvable_question evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_32",
+          "evidence": [
+            "resolvable_question:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "REFERENCE_CLASS",
+          "condition": "reference_class evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "reference_class:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DEPENDENCY_ADJUSTMENT",
+          "condition": "dependency_adjustment evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_32",
+          "evidence": [
+            "dependency_adjustment:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRECISION_CEILING",
+          "condition": "precision_ceiling evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "precision_ceiling:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SENSITIVITY",
+          "condition": "sensitivity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_32",
+          "evidence": [
+            "sensitivity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PRE_OUTCOME_COMMIT",
+          "condition": "pre_outcome_commit evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "pre_outcome_commit:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_32",
+          "evidence": [
+            "EstimateRecord",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_33": {
+      "artifact": "WarningNotice",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_33",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "INDICATOR_REGISTRATION",
+          "condition": "indicator_registration evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_33",
+          "evidence": [
+            "indicator_registration:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "FRESHNESS",
+          "condition": "freshness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "freshness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "SPOOFING_CHECK",
+          "condition": "spoofing_check evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_33",
+          "evidence": [
+            "spoofing_check:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "THRESHOLD_LOGIC",
+          "condition": "threshold_logic evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "threshold_logic:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONSUMER_AUTHORITY",
+          "condition": "consumer_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_33",
+          "evidence": [
+            "consumer_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DECISION_WINDOW",
+          "condition": "decision_window evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "decision_window:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_33",
+          "evidence": [
+            "WarningNotice",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_34": {
+      "artifact": "StrategicSurpriseAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_34",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "SHARED_ASSUMPTION_MAP",
+          "condition": "shared_assumption_map evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_34",
+          "evidence": [
+            "shared_assumption_map:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "MECHANISM_DISTINCTNESS",
+          "condition": "mechanism_distinctness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "mechanism_distinctness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HISTORICAL_GROUNDING",
+          "condition": "historical_grounding evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_34",
+          "evidence": [
+            "historical_grounding:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EDGE_DOMAIN_SEARCH",
+          "condition": "edge_domain_search evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "edge_domain_search:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TRIPWIRES",
+          "condition": "tripwires evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_34",
+          "evidence": [
+            "tripwires:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESILIENCE_RELEVANCE",
+          "condition": "resilience_relevance evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "resilience_relevance:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_34",
+          "evidence": [
+            "StrategicSurpriseAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_35": {
+      "artifact": "OpportunityAssessment",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_35",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "MECHANISM_WINDOW",
+          "condition": "mechanism_window evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_35",
+          "evidence": [
+            "mechanism_window:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "MAGNITUDE_BASIS",
+          "condition": "magnitude_basis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "magnitude_basis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COMPETITION",
+          "condition": "competition evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_35",
+          "evidence": [
+            "competition:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "PREREQUISITES",
+          "condition": "prerequisites evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "prerequisites:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MIRAGE_HYPOTHESIS",
+          "condition": "mirage_hypothesis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_35",
+          "evidence": [
+            "mirage_hypothesis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "VALIDATION_PATH",
+          "condition": "validation_path evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "validation_path:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_35",
+          "evidence": [
+            "OpportunityAssessment",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_36": {
+      "artifact": "DissentRegisterDelta",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_36",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "ATOMIC_DISAGREEMENT",
+          "condition": "atomic_disagreement evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_36",
+          "evidence": [
+            "atomic_disagreement:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "SUBSTANTIVE_TEST",
+          "condition": "substantive_test evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "substantive_test:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EVIDENCE_BINDING",
+          "condition": "evidence_binding evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_36",
+          "evidence": [
+            "evidence_binding:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "MATERIALITY",
+          "condition": "materiality evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "materiality:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "RESOLUTION_PLAN",
+          "condition": "resolution_plan evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_36",
+          "evidence": [
+            "resolution_plan:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DOWNSTREAM_VISIBILITY",
+          "condition": "downstream_visibility evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "downstream_visibility:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_36",
+          "evidence": [
+            "DissentRegisterDelta",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_37": {
+      "artifact": "IntelligenceProduct",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_37",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "CONSUMER_FIT",
+          "condition": "consumer_fit evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_37",
+          "evidence": [
+            "consumer_fit:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "JUDGMENT_TRACEABILITY",
+          "condition": "judgment_traceability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "judgment_traceability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "EPISTEMIC_LANGUAGE",
+          "condition": "epistemic_language evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_37",
+          "evidence": [
+            "epistemic_language:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DISSENT_SURFACE",
+          "condition": "dissent_surface evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "dissent_surface:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "COMPRESSION_FIDELITY",
+          "condition": "compression_fidelity evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_37",
+          "evidence": [
+            "compression_fidelity:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "DISSEMINATION_AUTHORITY",
+          "condition": "dissemination_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "dissemination_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_37",
+          "evidence": [
+            "IntelligenceProduct",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_38": {
+      "artifact": "AnalyticQualityReport",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "STRUCTURAL_COMPLETENESS",
+          "condition": "structural_completeness evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "structural_completeness:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "PROVENANCE_SAMPLE",
+          "condition": "provenance_sample evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "provenance_sample:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "METHOD_SUITABILITY",
+          "condition": "method_suitability evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "method_suitability:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "INDEPENDENCE",
+          "condition": "independence evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "independence:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CALIBRATION",
+          "condition": "calibration evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "calibration:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "HARD_MINIMA",
+          "condition": "hard_minima evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "hard_minima:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "AnalyticQualityReport",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_39": {
+      "artifact": "WatchHandover",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_39",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "OBJECTIVE_ANCHOR",
+          "condition": "objective_anchor evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_39",
+          "evidence": [
+            "objective_anchor:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "ACTIVE_WATCH_TRANSFER",
+          "condition": "active_watch_transfer evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "active_watch_transfer:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "LEASE_EXPIRY",
+          "condition": "lease_expiry evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_39",
+          "evidence": [
+            "lease_expiry:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TRIGGER_COVERAGE",
+          "condition": "trigger_coverage evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "trigger_coverage:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ROOT_CAUSE_REPLAY",
+          "condition": "root_cause_replay evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_39",
+          "evidence": [
+            "root_cause_replay:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "NOTIFICATION_PROPAGATION",
+          "condition": "notification_propagation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "notification_propagation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_39",
+          "evidence": [
+            "WatchHandover",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    },
+    "sigma_40": {
+      "artifact": "IntelligenceEffectivenessReview",
+      "gates": [
+        {
+          "id": "AUTHORITY",
+          "condition": "active lease authorizes artifact and every intended effect",
+          "evaluator": "PolicyDecisionPoint",
+          "evidence": [
+            "CapabilityLease",
+            "AuthorityDecision"
+          ],
+          "threshold": "all actions permitted",
+          "nonwaivable": true
+        },
+        {
+          "id": "INPUT_INTEGRITY",
+          "condition": "input contract, freshness, classification and hashes pass",
+          "evaluator": "sigma_40",
+          "evidence": [
+            "InputValidationRecord"
+          ],
+          "threshold": "zero unresolved hard defects",
+          "nonwaivable": true
+        },
+        {
+          "id": "VERSION_LINKAGE",
+          "condition": "version_linkage evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_40",
+          "evidence": [
+            "version_linkage:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "METRIC_PREREGISTRATION",
+          "condition": "metric_preregistration evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "metric_preregistration:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "TRUTH_UTILITY_SEPARATION",
+          "condition": "truth_utility_separation evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_40",
+          "evidence": [
+            "truth_utility_separation:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CONFOUNDER_ANALYSIS",
+          "condition": "confounder_analysis evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "confounder_analysis:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "ROOT_CAUSE",
+          "condition": "root_cause evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_40",
+          "evidence": [
+            "root_cause:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": false
+        },
+        {
+          "id": "CHANGE_AUTHORITY",
+          "condition": "change_authority evidence satisfies the role-specific acceptance test",
+          "evaluator": "sigma_38",
+          "evidence": [
+            "change_authority:evidence"
+          ],
+          "threshold": "predeclared criterion met",
+          "nonwaivable": true
+        },
+        {
+          "id": "NO_SELF_CERTIFICATION",
+          "condition": "material output has a distinct reviewer/certifier route",
+          "evaluator": "sigma_38_or_omega_control",
+          "evidence": [
+            "ReviewAssignment",
+            "VerificationRef"
+          ],
+          "threshold": "producer != sole certifier",
+          "nonwaivable": true
+        },
+        {
+          "id": "TERMINATION",
+          "condition": "done predicate, downstream acknowledgement and reconsideration triggers exist",
+          "evaluator": "sigma_40",
+          "evidence": [
+            "IntelligenceEffectivenessReview",
+            "Acknowledgement",
+            "ReviewTriggers"
+          ],
+          "threshold": "all closure elements present",
+          "nonwaivable": false
+        }
+      ]
+    }
+  }
+}

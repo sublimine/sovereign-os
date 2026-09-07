@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/claim.schema.json",
+  "title": "AtomicClaim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_id", "version", "exact_statement", "claim_type", "scope", "evidence_for",
+    "evidence_against", "source_independence", "confidence", "uncertainty",
+    "freshness", "contradictions", "produced_by", "verified_by", "epistemic_state",
+    "provenance_refs", "dependency_refs", "created_at", "status"
+  ],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 8},
+    "version": {"type": "integer", "minimum": 1},
+    "parent_version": {"type": ["integer", "null"], "minimum": 1},
+    "exact_statement": {"type": "string", "minLength": 1},
+    "claim_type": {"enum": ["FACT", "INFERENCE", "HYPOTHESIS", "PREDICTION", "CAUSAL", "NORMATIVE", "DECISION"]},
+    "scope": {
+      "type": "object",
+      "required": ["temporal", "geographic", "population", "definitions"],
+      "properties": {
+        "temporal": {"type": "string"},
+        "geographic": {"type": "string"},
+        "population": {"type": "string"},
+        "definitions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence_for": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "evidence_against": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source_independence": {
+      "type": "object",
+      "required": ["cluster_count", "score", "graph_version", "unknown_dependencies"],
+      "properties": {
+        "cluster_count": {"type": "integer", "minimum": 0},
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "graph_version": {"type": "string"},
+        "unknown_dependencies": {"type": "integer", "minimum": 0}
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "required": ["raw_score", "calibrated_probability", "interval", "calibrator_version", "calibration_status", "feature_values"],
+      "properties": {
+        "raw_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "calibrated_probability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "interval": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "number", "minimum": 0, "maximum": 1},
+            {"type": "number", "minimum": 0, "maximum": 1}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "calibrator_version": {"type": ["string", "null"]},
+        "calibration_status": {"enum": ["CALIBRATED", "INSUFFICIENT_DATA", "OUT_OF_DISTRIBUTION"]},
+        "feature_values": {"type": "object"}
+      }
+    },
+    "uncertainty": {"type": "array", "items": {"type": "string"}},
+    "freshness": {
+      "type": "object",
+      "required": ["observed_at", "valid_until", "policy_id"],
+      "properties": {
+        "observed_at": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "policy_id": {"type": "string"}
+      }
+    },
+    "contradictions": {"type": "array", "items": {"type": "string"}},
+    "produced_by": {"type": "string"},
+    "verified_by": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "epistemic_state": {"enum": ["HYPOTHESIS", "INFERENCE", "UNVERIFIED", "LOW_CONFIDENCE", "MODERATE_CONFIDENCE", "HIGH_CONFIDENCE", "CORROBORATED", "VERIFIED", "CONTRADICTED", "REFUTED", "STALE", "UNKNOWN", "UNKNOWABLE", "RETRACTED"]},
+    "unknown_reason": {"enum": ["NOT_FOUND", "NOT_YET_VERIFIED", "INACCESSIBLE", "CONTRADICTORY", "PROBABLY_NONEXISTENT", "UNOBSERVABLE", "LEGALLY_UNOBTAINABLE", "TECHNICALLY_UNKNOWABLE", "BUDGET_EXHAUSTED", "TIME_EXHAUSTED"]},
+    "provenance_refs": {"type": "array", "items": {"type": "string"}},
+    "dependency_refs": {"type": "array", "items": {"type": "string"}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["DRAFT", "ACTIVE", "BLOCKED", "RETRACTED", "SUPERSEDED"]},
+    "superseded_by": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"epistemic_state": {"enum": ["UNKNOWN", "UNKNOWABLE"]}}},
+      "then": {"required": ["unknown_reason"]}
+    }
+  ]
+}
+

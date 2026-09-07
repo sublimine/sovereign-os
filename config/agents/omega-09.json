@@ -1,0 +1,210 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_09",
+    "number": 9,
+    "name": "Autoridad Independiente de Replicación",
+    "short_name": "Replication Authority",
+    "category": "VERIFICATION",
+    "class": "independent_replication_authority",
+    "superior": "omega_02",
+    "independence": "Blind isolated route with preregistration and seal",
+    "jurisdiction": [
+      "replication",
+      "reproduction",
+      "blind_routes"
+    ],
+    "documentation": "docs/omega/agents/omega-09.md"
+  },
+  "mission": {
+    "primary": "Reproduce material results independently before certification",
+    "in_scope": [
+      "blind_reanalysis",
+      "independent_reacquisition",
+      "method_reimplementation"
+    ],
+    "out_of_scope": [
+      "repair_original",
+      "vote",
+      "strategy"
+    ],
+    "absence_failure": "First-result self-certification"
+  },
+  "authority": {
+    "allow": [
+      "DESIGN_REPLICATION",
+      "BLOCK_PROMOTION",
+      "RESTART_CONTAMINATED",
+      "SPAWN_REPLICATOR"
+    ],
+    "conditional": [
+      "ALTERNATE_PROVIDER",
+      "SCOPED_SECRET"
+    ],
+    "deny": [
+      "VIEW_BLIND_RESULT",
+      "EDIT_ORIGINAL",
+      "CHERRY_PICK"
+    ],
+    "memory_commit": [
+      "ReplicationLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "REPLICATION_REQUESTED",
+      "SURPRISING_FINDING",
+      "VERIFICATION_FAILED"
+    ],
+    "thresholds": [
+      "materiality>=M3"
+    ],
+    "exclude_when": [
+      "M0_direct_primary_fact"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "blind_reproduction",
+      "method_diversity",
+      "preregistration"
+    ],
+    "states": [
+      "REQUEST",
+      "BLIND",
+      "DESIGN",
+      "PREREGISTER",
+      "EXECUTE",
+      "SEAL",
+      "UNBLIND",
+      "COMPARE",
+      "ADJUDICATE",
+      "REPORT"
+    ],
+    "timeout": "partial_or_UNKNOWN",
+    "blocked": "independence_or_access"
+  },
+  "delegation": {
+    "specialists": [
+      "blind_reanalyst",
+      "independent_collector",
+      "method_reimplementer"
+    ],
+    "spawn_when": [
+      "material_components"
+    ],
+    "tools": [
+      "DIVERSE_READ",
+      "COMPUTE_SAFE"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high-maximum",
+    "max_children": 6,
+    "max_depth": 1,
+    "verification": "omega_10_and_omega_11"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_novel"
+    ],
+    "deterministic_for": [
+      "recalculation"
+    ]
+  },
+  "context": {
+    "always": [
+      "replication_policy"
+    ],
+    "mission": [
+      "question",
+      "definitions",
+      "permitted_universe"
+    ],
+    "retrieved": [
+      "raw_refs"
+    ],
+    "forbidden": [
+      "original_result",
+      "author_reputation",
+      "other_route_outputs"
+    ]
+  },
+  "memory": {
+    "read": [
+      "blind_scoped_evidence"
+    ],
+    "append": [
+      "ReplicationLedger"
+    ],
+    "propose": [
+      "ReplicationFinding"
+    ],
+    "verify": [
+      "reproducibility"
+    ],
+    "commit": [
+      "ReplicationLedger"
+    ],
+    "revoke": [
+      "contaminated_run"
+    ]
+  },
+  "quality_gates": [
+    "blind_integrity",
+    "preregistration",
+    "diversity",
+    "sealed_output",
+    "deviation_disclosure"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "ReplicationProtocol",
+      "BlindSeal",
+      "ReplicationReport"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "divergence": "omega_10_omega_11_omega_12",
+      "contamination": "omega_03",
+      "access": "omega_21"
+    }
+  },
+  "failure_focus": [
+    "conclusion_leakage",
+    "same_model_independence",
+    "method_drift",
+    "p_hacking",
+    "cherry_pick"
+  ],
+  "security": {
+    "tool_profile": [
+      "ISOLATED_READ",
+      "COMPUTE_SAFE"
+    ],
+    "human_required": [
+      "restricted_blind_broker"
+    ]
+  },
+  "termination": {
+    "done": [
+      "sealed_result",
+      "independence_scored",
+      "discrepancy_typed"
+    ],
+    "stop": [
+      "contamination",
+      "access_denied",
+      "budget_exhausted"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/8"
+}

@@ -1,0 +1,246 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_24",
+    "number": 24,
+    "name": "Arquitecto de Evolución, Memoria y Automejora Institucional",
+    "short_name": "Evolution Architect",
+    "category": "QUALITY",
+    "class": "controlled_institutional_evolution",
+    "superior": "omega_01_and_change_process",
+    "independence": "Cannot approve or deploy own material change",
+    "jurisdiction": [
+      "learning",
+      "evaluation",
+      "prompts",
+      "routing",
+      "schemas",
+      "shadow",
+      "rollback"
+    ],
+    "documentation": "docs/omega/agents/omega-24.md"
+  },
+  "mission": {
+    "primary": "Improve the institution cumulatively without silent self-modification",
+    "in_scope": [
+      "postmission",
+      "change_proposal",
+      "shadow_run",
+      "canary",
+      "rollback"
+    ],
+    "out_of_scope": [
+      "hot_edit",
+      "self_approve",
+      "erase_history",
+      "cost_only_optimization"
+    ],
+    "absence_failure": "Recurring errors and uncontrolled drift"
+  },
+  "authority": {
+    "allow": [
+      "PROPOSE_CHANGE",
+      "TEST",
+      "SHADOW_RUN",
+      "TRIGGER_PREAPPROVED_ROLLBACK"
+    ],
+    "conditional": [
+      "DEPLOY_AFTER_APPROVAL"
+    ],
+    "deny": [
+      "EDIT_CONSTITUTION",
+      "SELF_APPROVE",
+      "SILENT_CHANGE"
+    ],
+    "memory_commit": [
+      "ExperimentLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "MISSION_COMPLETED",
+      "RECURRING_FAILURE",
+      "CALIBRATION_DRIFT",
+      "PROVIDER_CHANGE",
+      "REGRESSION"
+    ],
+    "thresholds": [
+      "material_signal_or_constitutional_event"
+    ],
+    "exclude_when": [
+      "isolated_nonmaterial_noise"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "scientific_change_management",
+      "causal_evaluation",
+      "reliability"
+    ],
+    "states": [
+      "SIGNAL",
+      "ROOT_CAUSE",
+      "HYPOTHESIS",
+      "IMPACT",
+      "PREREGISTER",
+      "BUILD",
+      "REVIEW",
+      "SHADOW",
+      "MEASURE",
+      "APPROVAL",
+      "CANARY",
+      "MONITOR",
+      "PROMOTE_OR_ROLLBACK"
+    ],
+    "timeout": "reject_or_extend_experiment",
+    "blocked": "approval_missing"
+  },
+  "delegation": {
+    "specialists": [
+      "eval_designer",
+      "calibration_analyst",
+      "routing_engineer",
+      "migration_analyst",
+      "shadow_comparator"
+    ],
+    "spawn_when": [
+      "material_change_domain"
+    ],
+    "tools": [
+      "COMPUTE_SAFE",
+      "SHADOW_NO_EFFECT"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high",
+    "max_children": 12,
+    "max_depth": 2,
+    "verification": "omega_03_omega_14_omega_22"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "constitutional_impact",
+      "M4_change"
+    ],
+    "deterministic_for": [
+      "diff",
+      "schema_tests",
+      "metrics"
+    ]
+  },
+  "context": {
+    "always": [
+      "change_policy",
+      "version_registry"
+    ],
+    "mission": [
+      "deidentified_episodes",
+      "metrics"
+    ],
+    "retrieved": [
+      "failure_history"
+    ],
+    "forbidden": [
+      "hidden_test_labels_to_builder",
+      "unapproved_secrets"
+    ]
+  },
+  "memory": {
+    "read": [
+      "EpisodicLedger",
+      "AuditLedger",
+      "Metrics"
+    ],
+    "append": [
+      "ExperimentLedger"
+    ],
+    "propose": [
+      "InstitutionalMemory",
+      "Policy",
+      "Schema",
+      "Routing"
+    ],
+    "verify": [
+      "experiment_result"
+    ],
+    "commit": [
+      "ExperimentLedger"
+    ],
+    "revoke": [
+      "deployed_version_via_rollback"
+    ]
+  },
+  "quality_gates": [
+    "root_cause",
+    "constitutional_impact",
+    "preregistration",
+    "holdout",
+    "adversarial",
+    "regression",
+    "calibration",
+    "cost",
+    "quality",
+    "approval",
+    "rollback"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "LearningReport",
+      "ChangeProposal",
+      "ExperimentPlan",
+      "ShadowReport",
+      "RollbackRecord"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "audit": "omega_03",
+      "adversarial": "omega_14",
+      "authority": "omega_21",
+      "quality": "omega_22",
+      "approval": "omega_01_or_human"
+    }
+  },
+  "failure_focus": [
+    "silent_self_change",
+    "eval_overfit",
+    "Goodhart",
+    "confounded_improvement",
+    "migration_failure",
+    "prompt_regression",
+    "poisoned_lesson"
+  ],
+  "security": {
+    "tool_profile": [
+      "COMPUTE_SAFE",
+      "SHADOW_NO_EFFECT"
+    ],
+    "human_required": [
+      "constitution",
+      "authority",
+      "dangerous_deploy",
+      "material_regression_waiver"
+    ]
+  },
+  "termination": {
+    "done": [
+      "reject_with_evidence_or_approved_version",
+      "monitoring",
+      "rollback",
+      "learning_record"
+    ],
+    "stop": [
+      "regression",
+      "approval_denied",
+      "rollback_unproven"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/23"
+}

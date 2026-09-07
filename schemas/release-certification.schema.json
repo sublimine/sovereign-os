@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/release-certification.schema.json",
+  "title":"OmegaReleaseCertification","type":"object","additionalProperties":false,
+  "required":["release_id","version","issued_at","scope","maturity","test_evidence","agent_coverage","exceptions","validation_debt","risk_residual","certification","independent_audit"],
+  "properties":{
+    "release_id":{"type":"string"},"version":{"type":"string"},"issued_at":{"type":"string","format":"date-time"},"scope":{"type":"string"},
+    "maturity":{"enum":["D0_DESIGN","D1_STATIC_VALIDATED","D2_DETERMINISTIC_TESTED","D3_MODEL_EVALUATED","D4_SHADOW_VALIDATED","D5_PRODUCTION_CALIBRATED"]},
+    "test_evidence":{"type":"array","minItems":1,"items":{"type":"object","required":["suite","status","evidence"],"properties":{"suite":{"type":"string"},"status":{"enum":["PASS","FAIL","NOT_RUN"]},"evidence":{"type":"string"}}}},
+    "agent_coverage":{"type":"object","required":["roles","charters","state_machines","gate_sets","output_payloads","effective_evals","fmea_rows"],"properties":{"roles":{"const":24},"charters":{"const":24},"state_machines":{"const":24},"gate_sets":{"const":24},"output_payloads":{"const":24},"effective_evals":{"const":576},"fmea_rows":{"const":192}}},
+    "exceptions":{"type":"array","items":{"type":"string"}},"validation_debt":{"type":"array","minItems":1,"items":{"type":"string"}},"risk_residual":{"type":"array","items":{"type":"string"}},
+    "certification":{"type":"object","required":["scope_result","issuer","basis"],"properties":{"scope_result":{"enum":["PASS","FAIL","CONDITIONAL"]},"issuer":{"type":"string"},"basis":{"type":"string"}}},
+    "independent_audit":{"type":"object","required":["status","required_for"],"properties":{"status":{"enum":["NOT_PERFORMED","PASS","FAIL"]},"required_for":{"type":"array","items":{"type":"string"}}}}
+  }
+}
+

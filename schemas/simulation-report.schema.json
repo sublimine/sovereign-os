@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/simulation-report.schema.json",
+  "title":"SimulationReport","type":"object","additionalProperties":false,
+  "required":["simulation_id","version","mission_id","question","model_type","boundary","equations_or_code_ref","assumptions","parameter_refs","calibration","validation","seeds","scenarios","outputs","uncertainty","sensitivity","convergence","limitations","reproduction","status"],
+  "properties":{
+    "simulation_id":{"type":"string"},"version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},
+    "question":{"type":"string"},"model_type":{"type":"string"},"boundary":{"type":"object"},
+    "equations_or_code_ref":{"type":"string"},"assumptions":{"type":"array","items":{"type":"string"}},
+    "parameter_refs":{"type":"array","items":{"type":"string"}},"calibration":{"type":"object"},"validation":{"type":"object"},
+    "seeds":{"type":"array","items":{"type":["integer","string"]}},"scenarios":{"type":"array","items":{"type":"object"}},
+    "outputs":{"type":"array","items":{"type":"object"}},"uncertainty":{"type":"object"},"sensitivity":{"type":"object"},
+    "convergence":{"type":"object"},"limitations":{"type":"array","items":{"type":"string"}},"reproduction":{"type":"object"},
+    "status":{"enum":["VALID","LIMITED","INVALID","NONCONVERGENT","SUPERSEDED"]}
+  }
+}
+

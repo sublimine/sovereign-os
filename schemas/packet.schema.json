@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/packet.schema.json",
+  "title": "InterAgentPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id", "packet_type", "schema_version", "mission_id", "sender",
+    "recipients", "priority", "created_at", "expires_at", "classification",
+    "correlation_id", "artifact_refs", "requires_ack", "payload"
+  ],
+  "properties": {
+    "packet_id": {"type": "string", "minLength": 8},
+    "packet_type": {"enum": ["MISSION", "INTELLIGENCE_REQUIREMENT", "ACQUISITION_PLAN", "EVIDENCE", "CLAIM", "VERIFICATION", "CONTRADICTION", "CHALLENGE", "SIMULATION", "RISK", "RESOURCE_DECISION", "GOVERNANCE", "QUALITY_GATE", "DECISION_DOSSIER", "DECISION", "AUDIT", "CHANGE_PROPOSAL", "ESCALATION", "SOVEREIGN_ATTENTION"]},
+    "schema_version": {"type": "string"},
+    "mission_id": {"type": "string"},
+    "sender": {"type": "string"},
+    "recipients": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "priority": {"enum": ["INFO", "REQUEST", "BLOCKER", "WARNING", "CRITICAL", "SOVEREIGN"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": ["string", "null"], "format": "date-time"},
+    "classification": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "SECRET", "RESTRICTED"]},
+    "correlation_id": {"type": "string"},
+    "causation_id": {"type": ["string", "null"]},
+    "artifact_refs": {"type": "array", "items": {"type": "string"}},
+    "requires_ack": {"type": "boolean"},
+    "payload": {}
+  }
+}
+

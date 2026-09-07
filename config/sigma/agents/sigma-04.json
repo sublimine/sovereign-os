@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/3",
+  "agent": {
+    "id": "sigma_04",
+    "number": 4,
+    "name": "Gobernador de Prioridades, Cobertura y Gaps",
+    "short_name": "Coverage Governor",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "REQUIREMENTS",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "REQUIREMENTS",
+    "superior": "sigma_01",
+    "direct_reports": [],
+    "peers": [
+      "sigma_03",
+      "sigma_05"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "coverage_and_priority_control",
+    "procedure": "coverage_and_priority_control",
+    "outcome": "cobertura medible, gaps visibles y atención priorizada",
+    "artifact": "CoveragePortfolio",
+    "documentation": "docs/sigma/agents/sigma-04.md"
+  },
+  "scope": {
+    "inputs": [
+      "RequirementSet",
+      "CollectionTaskResults",
+      "SourceDependencyGraph",
+      "BudgetEnvelope",
+      "DecisionSensitivity"
+    ],
+    "steps": [
+      "construct requirement-source-method-time matrix",
+      "measure independent coverage not source count",
+      "identify blind spots and overcollection",
+      "calculate marginal information value",
+      "protect verification and surprise reserves",
+      "rank gaps under time and resource constraints",
+      "recommend stop, expand or redirect",
+      "record denominator and residual coverage"
+    ],
+    "invariants": [
+      "coverage denominator must be explicit",
+      "dependent sources do not inflate coverage",
+      "high volume cannot hide a critical gap",
+      "reserve counterevidence budget",
+      "priority changes stay inside Ω20 envelope",
+      "uncovered critical requirement cannot be marked complete"
+    ],
+    "non_goals": [
+      "executing collection",
+      "evaluating source truth",
+      "changing Ω priority",
+      "suppressing costly gaps",
+      "declaring product sufficient"
+    ],
+    "activation": [
+      "new requirements",
+      "collection result",
+      "budget warning",
+      "source dependency collapse",
+      "critical gap or saturation claim"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_03",
+      "sigma_15",
+      "sigma_16"
+    ],
+    "downstream": [
+      "sigma_02",
+      "sigma_06",
+      "sigma_12"
+    ],
+    "omega": [
+      "omega_05",
+      "omega_10",
+      "omega_20",
+      "omega_22"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "coverage modeler",
+      "sampling strategist",
+      "VOI analyst",
+      "search-space estimator",
+      "portfolio optimizer"
+    ],
+    "max_children": 8,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "CoverageLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "coverage_denominator",
+    "independence_adjustment",
+    "critical_gap_visibility",
+    "reserve_protection",
+    "marginal_value",
+    "priority_authority"
+  ],
+  "failures": [
+    "vanity_coverage",
+    "source_count_inflation",
+    "gap_suppression",
+    "overcollection",
+    "verification_starvation",
+    "bad_denominator",
+    "priority_drift",
+    "false_saturation"
+  ],
+  "authority_profile": "REQUIREMENTS",
+  "external_contact": false,
+  "protected_channel": false
+}

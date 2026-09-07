@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/outputs/sigma-32-output.schema.json",
+  "title": "outputs/sigma-32-output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "artifact_version",
+    "mission_id",
+    "producer",
+    "created_at",
+    "classification",
+    "content_hash",
+    "provenance_refs",
+    "dependency_refs",
+    "status",
+    "artifact_type",
+    "procedure",
+    "accountable_outcome",
+    "inputs_used",
+    "procedure_trace",
+    "gate_evidence",
+    "findings",
+    "limitations",
+    "reconsideration_triggers",
+    "reason_codes"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_version": {
+      "type": "string"
+    },
+    "mission_id": {
+      "type": "string"
+    },
+    "producer": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependency_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifact_type": {
+      "const": "EstimateRecord"
+    },
+    "procedure": {
+      "const": "estimative_intelligence"
+    },
+    "accountable_outcome": {
+      "const": "estimación probabilística/horizonada con calibración y sensibilidad"
+    },
+    "inputs_used": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "procedure_trace": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "define forecast question, resolution criteria and horizon",
+          "select reference class and prior where defensible",
+          "combine diagnostic evidence without double counting",
+          "produce distribution or bounded ordinal estimate",
+          "run sensitivity to key assumptions and regimes",
+          "state signposts that would update estimate",
+          "separate forecast, scenario and conditional projection",
+          "commit estimate before outcome and schedule resolution"
+        ]
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "RESOLVABLE_QUESTION",
+        "REFERENCE_CLASS",
+        "DEPENDENCY_ADJUSTMENT",
+        "PRECISION_CEILING",
+        "SENSITIVITY",
+        "PRE_OUTCOME_COMMIT"
+      ],
+      "properties": {
+        "RESOLVABLE_QUESTION": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "REFERENCE_CLASS": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "DEPENDENCY_ADJUSTMENT": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "PRECISION_CEILING": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "SENSITIVITY": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "PRE_OUTCOME_COMMIT": {
+          "type": "object",
+          "required": [
+            "outcome",
+            "evidence_refs"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "RETURN",
+                "ESCALATE",
+                "WAIVE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reconsideration_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

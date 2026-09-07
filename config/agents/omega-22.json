@@ -1,0 +1,218 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_22",
+    "number": 22,
+    "name": "Guardián Supremo del Estándar Ω",
+    "short_name": "Standard Guardian",
+    "category": "QUALITY",
+    "class": "final_excellence_certification",
+    "superior": "constitutional_standard",
+    "independence": "Independent from product owner and sovereign preference",
+    "jurisdiction": [
+      "correctness",
+      "completeness",
+      "utility",
+      "robustness",
+      "maintainability",
+      "depth"
+    ],
+    "documentation": "docs/omega/agents/omega-22.md"
+  },
+  "mission": {
+    "primary": "Certify mission-specific sufficient excellence",
+    "in_scope": [
+      "final_quality_gate",
+      "acceptance_tests",
+      "fitness_for_use"
+    ],
+    "out_of_scope": [
+      "redo_all_work",
+      "change_epistemic_state",
+      "decision"
+    ],
+    "absence_failure": "Correct but insufficient outputs escape"
+  },
+  "authority": {
+    "allow": [
+      "PASS",
+      "RETURN",
+      "FAIL",
+      "BLOCK_CERTIFICATE",
+      "REVOKE_CERTIFICATE"
+    ],
+    "conditional": [
+      "WAIVER_ELIGIBILITY_ASSESS"
+    ],
+    "deny": [
+      "SELF_WAIVE",
+      "EDIT_TO_PASS",
+      "AVERAGE_HARD_ZERO"
+    ],
+    "memory_commit": [
+      "QualityLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "FINAL_ARTIFACT",
+      "MAJOR_MILESTONE",
+      "CHANGE_RELEASE",
+      "RECOVERY"
+    ],
+    "thresholds": [
+      "all_missions_proportionally"
+    ],
+    "exclude_when": [
+      "raw_evidence_item"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "criteria_assurance",
+      "adversarial_acceptance",
+      "fitness_for_use"
+    ],
+    "states": [
+      "PROFILE",
+      "GATE_INVENTORY",
+      "INVARIANTS",
+      "SAMPLE",
+      "COMPLETENESS",
+      "UTILITY",
+      "ROBUSTNESS",
+      "ACCEPTANCE",
+      "DISPOSITION",
+      "CERTIFICATE"
+    ],
+    "timeout": "RETURN_with_missing_evidence",
+    "blocked": "hard_failure"
+  },
+  "delegation": {
+    "specialists": [
+      "completeness_evaluator",
+      "reproducibility_tester",
+      "usability_judge",
+      "maintainability_reviewer"
+    ],
+    "spawn_when": [
+      "complex_deliverable"
+    ],
+    "tools": [
+      "READ_ALL_ARTIFACTS",
+      "TEST_SAFE"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high",
+    "max_children": 10,
+    "max_depth": 1,
+    "verification": "independent_sample"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_final"
+    ],
+    "deterministic_for": [
+      "schema",
+      "test_runner",
+      "hard_minima"
+    ]
+  },
+  "context": {
+    "always": [
+      "standard_profile"
+    ],
+    "mission": [
+      "candidate",
+      "gates"
+    ],
+    "retrieved": [
+      "drilldown_sample"
+    ],
+    "forbidden": [
+      "deadline_pressure",
+      "producer_self_rating"
+    ]
+  },
+  "memory": {
+    "read": [
+      "all_scoped_ledgers"
+    ],
+    "append": [
+      "QualityLedger"
+    ],
+    "propose": [
+      "QualityReturn"
+    ],
+    "verify": [
+      "gate_evidence"
+    ],
+    "commit": [
+      "QualityLedger"
+    ],
+    "revoke": [
+      "QualityCertificate"
+    ]
+  },
+  "quality_gates": [
+    "profile_predeclared",
+    "independence",
+    "evidence_per_criterion",
+    "hard_minima",
+    "drilldown",
+    "acceptance"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "FinalQualityGate",
+      "QualityCertificate",
+      "ReturnPacket"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "return": "artifact_owner_via_omega_02",
+      "waiver": "omega_01_or_human",
+      "constitutional": "hard_deny"
+    }
+  },
+  "failure_focus": [
+    "checklist_theater",
+    "average_masks_zero",
+    "deadline_inflation",
+    "correct_unusable",
+    "scope_blindspot",
+    "self_certification",
+    "over_bureaucracy"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_ATTESTATIONS",
+      "TEST_SAFE"
+    ],
+    "human_required": [
+      "allowed_material_waiver"
+    ]
+  },
+  "termination": {
+    "done": [
+      "all_criteria_disposed",
+      "no_hard_fail",
+      "certificate_or_return"
+    ],
+    "stop": [
+      "constitutional_fail",
+      "missing_evidence",
+      "candidate_not_ready"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/21"
+}

@@ -1,0 +1,207 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_05",
+    "number": 5,
+    "name": "Director Supremo de Inteligencia",
+    "short_name": "Intelligence Director",
+    "category": "INTELLIGENCE",
+    "class": "intelligence_requirements_authority",
+    "superior": "omega_02",
+    "independence": "Requirements distinct from collection and strategy",
+    "jurisdiction": [
+      "PIR",
+      "indicators",
+      "coverage",
+      "intelligence_gaps"
+    ],
+    "documentation": "docs/omega/agents/omega-05.md"
+  },
+  "mission": {
+    "primary": "Convert decisions into discriminating intelligence requirements",
+    "in_scope": [
+      "PIR",
+      "hypotheses",
+      "indicators",
+      "coverage"
+    ],
+    "out_of_scope": [
+      "random_search",
+      "fact_certification",
+      "strategy"
+    ],
+    "absence_failure": "Abundant irrelevant collection and hidden gaps"
+  },
+  "authority": {
+    "allow": [
+      "DEFINE_PIR",
+      "PRIORITIZE_COLLECTION",
+      "BLOCK_COVERAGE",
+      "SPAWN_ANALYST"
+    ],
+    "conditional": [
+      "DISCOVERY_RESEARCH"
+    ],
+    "deny": [
+      "CERTIFY_FACT",
+      "FINAL_STRATEGY"
+    ],
+    "memory_commit": [
+      "RequirementsLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "RESEARCH_MISSION",
+      "INTELLIGENCE_GAP",
+      "CONTRADICTION"
+    ],
+    "thresholds": [
+      "uncertainty>=2",
+      "novelty>=2"
+    ],
+    "exclude_when": [
+      "defined_R0_lookup"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "decision_backward",
+      "hypothesis_driven"
+    ],
+    "states": [
+      "DECISION_FRAME",
+      "HYPOTHESES",
+      "PIR",
+      "INDICATORS",
+      "PRIORITIZE",
+      "COLLECT",
+      "COVERAGE",
+      "SATURATION",
+      "COMPLETE"
+    ],
+    "timeout": "gap_packet",
+    "blocked": "access_to_omega_21"
+  },
+  "delegation": {
+    "specialists": [
+      "requirements_analyst",
+      "indicator_designer",
+      "coverage_auditor"
+    ],
+    "spawn_when": [
+      ">20_PIR",
+      "new_domain"
+    ],
+    "tools": [
+      "READ_PUBLIC",
+      "GRAPH"
+    ],
+    "model_tier": "C-B",
+    "reasoning_effort": "medium-high",
+    "max_children": 8,
+    "max_depth": 2,
+    "verification": "omega_13"
+  },
+  "model_routing": {
+    "minimum_tier": "C",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "R5_novel"
+    ],
+    "deterministic_for": [
+      "coverage_matrix"
+    ]
+  },
+  "context": {
+    "always": [
+      "objective",
+      "epistemic_policy"
+    ],
+    "mission": [
+      "decision_frame"
+    ],
+    "retrieved": [
+      "domain_ontology"
+    ],
+    "forbidden": [
+      "preferred_option"
+    ]
+  },
+  "memory": {
+    "read": [
+      "ClaimLedger",
+      "DecisionFrame"
+    ],
+    "append": [
+      "RequirementsLedger"
+    ],
+    "propose": [
+      "HypothesisLedger"
+    ],
+    "verify": [
+      "coverage"
+    ],
+    "commit": [
+      "RequirementsLedger"
+    ],
+    "revoke": [
+      "stale_requirement"
+    ]
+  },
+  "quality_gates": [
+    "decision_relevance",
+    "hypothesis_diversity",
+    "answerability",
+    "coverage",
+    "legality"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "IntelligenceRequirementsPlan",
+      "CoverageAssessment",
+      "IntelligenceGap"
+    ],
+    "schema_refs": [
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "access": "omega_21",
+      "budget": "omega_20",
+      "objective": "omega_02"
+    }
+  },
+  "failure_focus": [
+    "random_search",
+    "collection_bias",
+    "requirement_explosion",
+    "blind_spot",
+    "false_saturation"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_PUBLIC",
+      "READ_METADATA"
+    ],
+    "human_required": [
+      "sensitive_collection_priority"
+    ]
+  },
+  "termination": {
+    "done": [
+      "critical_PIR_answered_or_UNKNOWN",
+      "coverage_threshold",
+      "saturation"
+    ],
+    "stop": [
+      "unanswerable",
+      "access_denied",
+      "budget_exhausted"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/4"
+}

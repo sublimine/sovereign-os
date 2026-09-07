@@ -1,0 +1,4365 @@
+{
+  "schema_version": "1.0.0",
+  "machines": {
+    "pi_01": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_02": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_03": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_04": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_05": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_06": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_07": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_08": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_09": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_10": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_11": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_12": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_13": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_14": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_15": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_16": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_17": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_18": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_19": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_20": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_21": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_22": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_23": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_24": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_25": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_26": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_27": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_28": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_29": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_30": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_31": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_32": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_33": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_34": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_35": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_36": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_37": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_38": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_39": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pi_40": {
+      "initial": "RECEIVED",
+      "terminal": [
+        "COMPLETED",
+        "ABORTED",
+        "FAILED"
+      ],
+      "states": [
+        {
+          "id": "RECEIVED",
+          "on": [
+            "StrategicMissionPacket",
+            "ActivationEvent"
+          ],
+          "next": "VALIDATING"
+        },
+        {
+          "id": "VALIDATING",
+          "on": [
+            "schema/authority/freshness/classification checks"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "branches": {
+            "invalid": "RETURN_FOR_INPUT",
+            "unsafe": "BLOCKED",
+            "unauthorized": "ESCALATED"
+          }
+        },
+        {
+          "id": "ACTIVE_DOCTRINE",
+          "on": [
+            "accepted inputs"
+          ],
+          "next": "SELF_CHECK",
+          "loop": "only on material evidence delta with positive decision relevance"
+        },
+        {
+          "id": "WAITING_EVENT",
+          "on": [
+            "declared dependency or approval"
+          ],
+          "next": "ACTIVE_DOCTRINE",
+          "timeout": "checkpoint then BLOCKED or ESCALATED"
+        },
+        {
+          "id": "BLOCKED",
+          "on": [
+            "BlockerRecord"
+          ],
+          "next": "WAITING_EVENT",
+          "escape": "owner resolves, mission aborts or escalation accepts"
+        },
+        {
+          "id": "SELF_CHECK",
+          "on": [
+            "candidate artifact"
+          ],
+          "next": "INDEPENDENT_REVIEW"
+        },
+        {
+          "id": "INDEPENDENT_REVIEW",
+          "on": [
+            "frozen artifact plus blind manifest"
+          ],
+          "next": "COMPLETED",
+          "branches": {
+            "fail": "ACTIVE_DOCTRINE",
+            "contamination": "QUARANTINED",
+            "authority": "ESCALATED"
+          }
+        },
+        {
+          "id": "ESCALATED",
+          "on": [
+            "typed EscalationPacket"
+          ],
+          "next": "WAITING_EVENT"
+        },
+        {
+          "id": "QUARANTINED",
+          "on": [
+            "contamination signal"
+          ],
+          "next": "FAILED",
+          "escape": "new independent instance from clean checkpoint"
+        },
+        {
+          "id": "COMPLETED",
+          "on": [
+            "all gates and acknowledgment"
+          ],
+          "next": null
+        },
+        {
+          "id": "ABORTED",
+          "on": [
+            "authorized cancellation"
+          ],
+          "next": null
+        },
+        {
+          "id": "FAILED",
+          "on": [
+            "unrecoverable integrity failure"
+          ],
+          "next": null
+        }
+      ]
+    }
+  }
+}

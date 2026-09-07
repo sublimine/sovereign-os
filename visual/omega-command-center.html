@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ω Command Center</title>
+  <style>
+    :root {
+      --bg: #06090f;
+      --panel: rgba(16, 23, 36, .88);
+      --panel-2: rgba(10, 16, 27, .95);
+      --line: rgba(155, 178, 212, .16);
+      --text: #eef4ff;
+      --muted: #8996aa;
+      --cyan: #50d7ff;
+      --blue: #6c8cff;
+      --gold: #ffcb67;
+      --green: #58e6ad;
+      --red: #ff6f7d;
+      --purple: #bd8cff;
+      --shadow: 0 22px 60px rgba(0, 0, 0, .34);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 5%, rgba(80, 215, 255, .10), transparent 28%),
+        radial-gradient(circle at 85% 22%, rgba(189, 140, 255, .09), transparent 30%),
+        linear-gradient(180deg, #070b13 0%, #05070c 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .25;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    button, select { font: inherit; }
+    a { color: inherit; }
+
+    .shell {
+      width: min(1540px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(20, 31, 48, .90), rgba(9, 14, 24, .90));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .omega-mark {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(80, 215, 255, .4);
+      border-radius: 17px;
+      color: var(--cyan);
+      font-family: Georgia, serif;
+      font-size: 34px;
+      background: radial-gradient(circle at 35% 25%, rgba(80, 215, 255, .2), rgba(17, 25, 40, .55));
+      box-shadow: inset 0 0 30px rgba(80, 215, 255, .08), 0 0 28px rgba(80, 215, 255, .09);
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 { margin: 0; font-size: clamp(20px, 2vw, 29px); letter-spacing: -.03em; }
+    .subtitle { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+
+    .system-state {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border: 1px solid rgba(88, 230, 173, .25);
+      border-radius: 13px;
+      color: #caffec;
+      background: rgba(88, 230, 173, .07);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(88, 230, 173, .1), 0 0 16px var(--green);
+      animation: pulse 1.9s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 50% { opacity: .48; transform: scale(.84); } }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .mission-control { padding: 18px; }
+    .section-label {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .scenarios { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+    .scenario {
+      min-height: 72px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.018);
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .scenario:hover { border-color: rgba(80, 215, 255, .34); transform: translateY(-1px); }
+    .scenario.active {
+      color: var(--text);
+      border-color: rgba(80, 215, 255, .58);
+      background: linear-gradient(135deg, rgba(80, 215, 255, .14), rgba(108, 140, 255, .08));
+      box-shadow: inset 0 0 24px rgba(80, 215, 255, .05);
+    }
+    .scenario strong { display: block; margin-bottom: 5px; font-size: 13px; }
+    .scenario span { font-size: 11px; }
+
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 18px; }
+    .stat {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.018);
+    }
+    .stat-value { display: block; font-size: 24px; font-weight: 800; letter-spacing: -.04em; }
+    .stat-label { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .11em; }
+
+    .tabs {
+      display: flex;
+      gap: 7px;
+      margin: 22px 0 15px;
+      padding: 5px;
+      width: fit-content;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(11, 16, 26, .82);
+    }
+    .tab {
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 9px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tab.active { color: var(--text); background: rgba(80, 215, 255, .11); }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .group { margin: 0 0 18px; }
+    .group-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+      color: #afbed2;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .group-head::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+
+    .agent-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .agent {
+      position: relative;
+      min-height: 145px;
+      padding: 15px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      color: var(--text);
+      background: linear-gradient(145deg, rgba(23, 33, 50, .82), rgba(10, 15, 25, .9));
+      text-align: left;
+      cursor: pointer;
+      transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+    }
+    .agent::after {
+      content: "";
+      position: absolute;
+      right: -34px;
+      bottom: -44px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--accent, var(--cyan));
+      filter: blur(38px);
+      opacity: .08;
+    }
+    .agent:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.28); }
+    .agent.inactive { opacity: .25; filter: grayscale(.72); }
+    .agent.active-agent { border-color: color-mix(in srgb, var(--accent, var(--cyan)) 47%, transparent); }
+    .agent-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .agent-id { color: var(--accent, var(--cyan)); font-size: 17px; font-weight: 900; }
+    .state-pill {
+      padding: 4px 7px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(88, 230, 173, .09);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .inactive .state-pill { color: var(--muted); background: rgba(137,150,170,.08); }
+    .agent h3 { margin: 13px 0 7px; font-size: 14px; line-height: 1.25; letter-spacing: -.015em; }
+    .agent p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    .flow-stage { padding: 24px; overflow-x: auto; }
+    .flow-title { margin: 0 0 5px; font-size: 18px; }
+    .flow-subtitle { margin: 0 0 24px; color: var(--muted); font-size: 12px; }
+    .flow-line {
+      display: flex;
+      align-items: stretch;
+      min-width: 1030px;
+      gap: 8px;
+    }
+    .flow-node {
+      position: relative;
+      flex: 1;
+      min-width: 118px;
+      padding: 14px 11px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.025);
+    }
+    .flow-node:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      z-index: 2;
+      color: var(--cyan);
+      transform: translateY(-50%);
+    }
+    .flow-node b { display: block; margin-bottom: 5px; color: var(--cyan); font-size: 11px; }
+    .flow-node span { color: var(--muted); font-size: 10px; line-height: 1.4; }
+
+    .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 18px; }
+    .lane { padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.018); }
+    .lane h3 { margin: 0 0 9px; font-size: 13px; }
+    .lane p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .lane.cyan h3 { color: var(--cyan); }
+    .lane.red h3 { color: var(--red); }
+    .lane.gold h3 { color: var(--gold); }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 17px 2px 0; color: var(--muted); font-size: 10px; }
+    .legend span { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+    .dot.off { background: #4f5968; }
+    .dot.verify { background: var(--green); }
+    .dot.block { background: var(--red); }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(5px);
+    }
+    .drawer-backdrop.open { display: block; }
+    .drawer {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: min(520px, 92vw);
+      min-height: 100%;
+      padding: 28px;
+      border-left: 1px solid var(--line);
+      background: #0a101b;
+      box-shadow: -26px 0 70px rgba(0,0,0,.45);
+    }
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+    }
+    .drawer-id { color: var(--cyan); font-size: 34px; font-weight: 900; }
+    .drawer h2 { margin: 10px 42px 8px 0; font-size: 24px; line-height: 1.16; }
+    .drawer-group { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .13em; }
+    .detail-block { margin-top: 24px; }
+    .detail-block h4 { margin: 0 0 8px; color: #b9c7db; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+    .detail-block p { margin: 0; color: #dbe5f4; font-size: 13px; line-height: 1.65; }
+    .doc-link {
+      display: inline-flex;
+      margin-top: 26px;
+      padding: 11px 14px;
+      border: 1px solid rgba(80,215,255,.36);
+      border-radius: 11px;
+      color: var(--cyan);
+      background: rgba(80,215,255,.07);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    footer { margin-top: 24px; color: #657186; font-size: 10px; text-align: center; letter-spacing: .08em; }
+
+    @media (max-width: 1050px) {
+      .agent-grid { grid-template-columns: repeat(3, 1fr); }
+      .control-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 20px, 1540px); padding-top: 10px; }
+      .topbar { grid-template-columns: 1fr; }
+      .system-state { width: fit-content; }
+      .scenarios, .agent-grid, .lanes { grid-template-columns: repeat(2, 1fr); }
+      .tabs { width: 100%; overflow-x: auto; }
+      .tab { white-space: nowrap; }
+    }
+    @media (max-width: 500px) {
+      .scenarios, .agent-grid, .lanes { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="omega-mark">Ω</div>
+        <div>
+          <p class="eyebrow">Sovereign OS · Department Ω</p>
+          <h1>Centro de Mando de Autoridad Final</h1>
+          <p class="subtitle">Arquitectura institucional · 24 autoridades permanentes · especialistas dinámicos</p>
+        </div>
+      </div>
+      <div class="system-state"><span class="pulse"></span> V2 · D2 DETERMINISTIC TESTED</div>
+    </header>
+
+    <section class="control-row">
+      <div class="panel mission-control">
+        <p class="section-label">Activación contextual de misión</p>
+        <div class="scenarios">
+          <button class="scenario" data-scenario="minimal"><strong>M1 · Esencial</strong><span>4 autoridades</span></button>
+          <button class="scenario active" data-scenario="factual"><strong>M2 · Factual</strong><span>11 autoridades</span></button>
+          <button class="scenario" data-scenario="strategic"><strong>M3 · Estratégica</strong><span>18 autoridades</span></button>
+          <button class="scenario" data-scenario="existential"><strong>M5 · Existencial</strong><span>24 autoridades</span></button>
+        </div>
+      </div>
+      <div class="panel stats">
+        <div class="stat"><span class="stat-value" id="activeCount">11</span><span class="stat-label">Ω activos</span></div>
+        <div class="stat"><span class="stat-value">24</span><span class="stat-label">autoridades</span></div>
+        <div class="stat"><span class="stat-value">456</span><span class="stat-label">reglas autoridad</span></div>
+        <div class="stat"><span class="stat-value">229</span><span class="stat-label">relaciones</span></div>
+        <div class="stat"><span class="stat-value">576</span><span class="stat-label">evals con oracle</span></div>
+        <div class="stat"><span class="stat-value">192</span><span class="stat-label">FMEA efectivos</span></div>
+        <div class="stat"><span class="stat-value">98</span><span class="stat-label">eventos simulados</span></div>
+        <div class="stat"><span class="stat-value">D2</span><span class="stat-label">madurez probada</span></div>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="Vistas">
+      <button class="tab active" data-view="institution">Institución Ω</button>
+      <button class="tab" data-view="truth">Cadena de verdad</button>
+      <button class="tab" data-view="recovery">Corrección raíz</button>
+    </nav>
+
+    <section id="institution" class="view active">
+      <div id="agentGroups"></div>
+      <div class="legend">
+        <span><i class="dot"></i> Activo para la misión seleccionada</span>
+        <span><i class="dot off"></i> En espera contextual</span>
+        <span><i class="dot verify"></i> Estado institucional válido</span>
+      </div>
+    </section>
+
+    <section id="truth" class="view">
+      <div class="panel flow-stage">
+        <h2 class="flow-title">Cadena institucional de verdad</h2>
+        <p class="flow-subtitle">La producción no se convierte en certificación sin independencia, ataque y trazabilidad.</p>
+        <div class="flow-line">
+          <div class="flow-node"><b>PRODUCIR</b><span>Ω5–Ω8 + especialistas</span></div>
+          <div class="flow-node"><b>TRAZAR</b><span>Ω7 fija lineage y hashes</span></div>
+          <div class="flow-node"><b>REPLICAR</b><span>Ω9 ejecuta ruta ciega</span></div>
+          <div class="flow-node"><b>TRIANGULAR</b><span>Ω10 mide independencia</span></div>
+          <div class="flow-node"><b>AUDITAR</b><span>Ω11 atomiza y verifica claims</span></div>
+          <div class="flow-node"><b>DESAFIAR</b><span>Ω13–Ω15 buscan fallo real</span></div>
+          <div class="flow-node"><b>CERTIFICAR</b><span>Ω12 + Ω22 aplican gates</span></div>
+          <div class="flow-node"><b>SINTETIZAR</b><span>Ω23 preserva disenso</span></div>
+        </div>
+        <div class="lanes">
+          <article class="lane cyan"><h3>Independencia cognitiva</h3><p>Modelo, método, contexto, orden de evidencia y herramientas se diversifican. El replicador no recibe inicialmente la conclusión original.</p></article>
+          <article class="lane red"><h3>Bloqueo legítimo</h3><p>Una contradicción material, lineage roto o claim no verificable bloquea certificación. UNKNOWN es una salida válida.</p></article>
+          <article class="lane gold"><h3>Compresión sin pérdida</h3><p>Cada síntesis conserva referencias inversas hasta fuente, ejecución, herramienta, cálculo, timestamp y agente productor.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="recovery" class="view">
+      <div class="panel flow-stage">
+        <h2 class="flow-title">Bucle obligatorio de corrección causal</h2>
+        <p class="flow-subtitle">Nunca se parchea sólo la conclusión: se invalida desde el primer nodo defectuoso.</p>
+        <div class="flow-line">
+          <div class="flow-node"><b>ERROR</b><span>Fallo detectado por gate, auditoría o evento</span></div>
+          <div class="flow-node"><b>TRAZAR</b><span>Recorrer el grafo de dependencias</span></div>
+          <div class="flow-node"><b>LOCALIZAR</b><span>Primer nodo causal inválido</span></div>
+          <div class="flow-node"><b>CONTENER</b><span>Congelar decisiones afectadas</span></div>
+          <div class="flow-node"><b>INVALIDAR</b><span>Marcar descendientes y dossiers</span></div>
+          <div class="flow-node"><b>RECALCULAR</b><span>Reejecutar ramas mínimas necesarias</span></div>
+          <div class="flow-node"><b>REVERIFICAR</b><span>Ruta independiente desde cero</span></div>
+          <div class="flow-node"><b>REPUBLICAR</b><span>Nueva versión; anterior preservada</span></div>
+        </div>
+        <div class="lanes">
+          <article class="lane red"><h3>Propagación automática</h3><p>Claims, hipótesis, simulaciones, estrategias y decisiones descendientes reciben STALE o INVALIDATED hasta recalcularse.</p></article>
+          <article class="lane cyan"><h3>Idempotencia y recuperación</h3><p>Los pasos usan claves de idempotencia, checkpoints y event log para sobrevivir reinicios, migraciones y reintentos.</p></article>
+          <article class="lane gold"><h3>Registro de retractación</h3><p>Ningún artefacto se sobrescribe. Toda corrección mantiene parent, author, reason, evidence y superseded_by.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <footer>OMEGA COMMAND CENTER V2 · D2 no implica evaluación real de modelos ni producción · Fuente de verdad: artefactos del repositorio</footer>
+  </main>
+
+  <div class="drawer-backdrop" id="drawerBackdrop">
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <button class="close" id="closeDrawer" aria-label="Cerrar">×</button>
+      <div class="drawer-id" id="drawerId"></div>
+      <h2 id="drawerTitle"></h2>
+      <div class="drawer-group" id="drawerGroup"></div>
+      <div class="detail-block"><h4>Mandato soberano</h4><p id="drawerMission"></p></div>
+      <div class="detail-block"><h4>Se activa cuando</h4><p id="drawerTrigger"></p></div>
+      <div class="detail-block"><h4>Frontera decisional</h4><p id="drawerBoundary"></p></div>
+      <a class="doc-link" id="drawerLink" href="#">Abrir especificación completa →</a>
+    </aside>
+  </div>
+
+  <script>
+    var groups = [
+      { name: "Mando soberano", color: "#50d7ff", agents: [1,2,3,4] },
+      { name: "Inteligencia y realidad", color: "#6c8cff", agents: [5,6,7,8] },
+      { name: "Verdad y verificación", color: "#58e6ad", agents: [9,10,11,12] },
+      { name: "Ataque adversarial", color: "#ff6f7d", agents: [13,14,15] },
+      { name: "Predicción y decisión", color: "#bd8cff", agents: [16,17,18,19] },
+      { name: "Poder institucional", color: "#ffcb67", agents: [20,21] },
+      { name: "Calidad final y evolución", color: "#55e1cf", agents: [22,23,24] }
+    ];
+
+    var agents = [
+      [1,"Arquitecto Soberano Absoluto del Dominio Total","Decide exclusivamente cuestiones soberanas irreversibles o de máximo impacto.","Decisión P0/P1, conflicto de autoridad o waiver soberano.","No microgestiona; recibe sólo dossiers de alta densidad decisional."],
+      [2,"Gran Canciller del Mando Soberano","Custodia objetivo, coordina la misión y evita deriva institucional.","Toda misión admitida o cambio material del objetivo.","Orquesta; no sustituye producción, verificación ni decisión final."],
+      [3,"Inspector General Soberano","Audita proceso, autoridad, trazabilidad e integridad incluso respecto de Ω1.","Muestreo, denuncia, anomalía o misión crítica.","Independencia funcional; audita proceso, no usurpa la decisión soberana."],
+      [4,"Arquitecto Supremo de Misiones y Descomposición","Convierte intención en un grafo ejecutable sin sobredescomponer.","Objetivo nuevo, misión compleja o plan incapaz de progresar.","Diseña trabajo; los especialistas y departamentos lo ejecutan."],
+      [5,"Director Supremo de Inteligencia","Transforma objetivos estratégicos en requisitos de inteligencia priorizados.","Vacío de realidad relevante para una decisión.","Define qué debe saberse; Ω6 diseña cómo adquirirlo."],
+      [6,"Arquitecto de Fuentes y Adquisición Multivía","Diseña adquisición legal, multivía y resistente a fuentes hostiles.","Requisito de inteligencia sin cobertura suficiente.","Adquiere evidencia; no decide su verdad institucional."],
+      [7,"Custodio de Procedencia y Trazabilidad","Garantiza lineage completo y reconstrucción forense de artefactos.","Creación o transformación de evidencia y claims.","Certifica procedencia, no validez semántica del claim."],
+      [8,"Arquitecto de Contexto, Causalidad y Patrones","Separa correlación, mecanismo, causalidad y coincidencia.","Claim causal, patrón material o explicación contextual.","Modela causalidad; Ω16 simula y Ω11 verifica hechos atómicos."],
+      [9,"Autoridad Independiente de Replicación","Reproduce resultados mediante rutas cognitivamente independientes.","Claim material, resultado sorprendente o verificación fallida.","Replica sin conocer inicialmente la conclusión original."],
+      [10,"Triangulador Soberano de Evidencia","Mide dependencia real y converge evidencia heterogénea.","Múltiples fuentes o aparente consenso.","No cuenta duplicados como independencia; no reemplaza replicación."],
+      [11,"Auditor Forense de Hechos y Alucinaciones","Atomiza cada frase factual y audita evidencia, alcance y frescura.","Output factual material o sospecha de evidencia inventada.","Verifica claims; Ω12 gobierna el significado epistemológico final."],
+      [12,"Guardián de Integridad Epistémica","Gobierna qué significa saber, inferir, desconocer o contradecir.","Cambio de estado epistémico o lenguaje de certeza.","Certifica estado epistémico; nunca crea evidencia ausente."],
+      [13,"Fiscal Soberano de Supuestos","Expone y ataca supuestos explícitos, ocultos y heredados.","Plan, modelo, estrategia o decisión con dependencias implícitas.","Desafía supuestos; Ω14 ejecuta ataques sistémicos reales."],
+      [14,"Tribunal Red Team Soberano","Intenta producir fallos reales, exploits y escenarios adversos.","Alta irreversibilidad, superficie de ataque o decisión crítica.","Ataca en sandbox; no despliega acciones peligrosas sin aprobación."],
+      [15,"Arquitecto de Contrahipótesis y Alternativas Improbables","Genera terceras opciones, inversiones y marcos alternativos.","Convergencia prematura o espacio de opciones estrecho.","Amplía opciones; Ω17 formula estrategia y Ω1 decide."],
+      [16,"Arquitecto Supremo de Simulación","Construye simulaciones, sensibilidad y distribuciones de escenarios.","Decisión dependiente del futuro o sistema dinámico.","Simula consecuencias; no presenta simulación como predicción cierta."],
+      [17,"Arquitecto de Estrategia Soberana","Diseña estrategia desde realidad, restricciones, recursos y horizonte.","Objetivo estratégico con evidencia y restricciones maduras.","Recomienda estrategia; autoridad final permanece en Ω1/humano."],
+      [18,"Evaluador Supremo de Impacto Sistémico","Analiza efectos de primer, segundo, tercer orden y entre dominios.","Cambio con externalidades o consecuencias sistémicas.","Evalúa impactos; Ω19 es dueño de riesgo extremo y resiliencia."],
+      [19,"Arquitecto de Riesgo Existencial y Resiliencia","Identifica colas, cascadas, puntos únicos de fallo y recuperación.","Riesgo P0/P1, irreversibilidad o vulnerabilidad sistémica.","Puede bloquear por riesgo; no acepta riesgo en nombre de Ω1/humano."],
+      [20,"Soberano de Capital, Recursos y Prioridades","Asigna capacidad por valor marginal, oportunidad y criticidad.","Conflicto de recursos, gran inversión o cambio de prioridad.","Asigna dentro del mandato; cambios soberanos requieren Ω1."],
+      [21,"Canciller de Gobernanza, Legitimidad y Autoridad","Determina si lo posible es legal, legítimo y autorizable.","Acción regulada, sensible o fuera de autoridad ordinaria.","Autoriza institucionalmente; no certifica verdad técnica."],
+      [22,"Guardián Supremo del Estándar Ω","Aplica el último gate: correcto, completo, útil y suficientemente bueno.","Candidato a entrega material o cierre de misión.","Certifica calidad final; no reescribe silenciosamente el trabajo."],
+      [23,"Sintetizador de Verdad y Constructor del Dossier Soberano","Comprime sin perder incertidumbre, disenso, riesgo ni drill-down.","Hallazgos verificados listos para decisión o entrega.","Sintetiza; no introduce claims nuevos ni elimina minority reports."],
+      [24,"Arquitecto de Evolución, Memoria y Automejora Institucional","Convierte experiencia en mejoras versionadas, probadas y reversibles.","Post-misión, regresión, deriva o oportunidad de mejora.","Propone y prueba; jamás auto-modifica Constitución o autoridad." ]
+    ];
+
+    var scenarioSets = {
+      minimal: [2,4,22,23],
+      factual: [2,4,5,6,7,9,10,11,12,22,23],
+      strategic: [1,2,4,5,6,7,8,9,10,11,12,13,15,17,18,19,22,23],
+      existential: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+    };
+
+    function getAgent(id) { return agents.filter(function(a) { return a[0] === id; })[0]; }
+
+    function renderAgents() {
+      var host = document.getElementById("agentGroups");
+      host.innerHTML = "";
+      groups.forEach(function(group) {
+        var section = document.createElement("section");
+        section.className = "group";
+        var head = document.createElement("div");
+        head.className = "group-head";
+        head.textContent = group.name;
+        section.appendChild(head);
+        var grid = document.createElement("div");
+        grid.className = "agent-grid";
+        group.agents.forEach(function(id) {
+          var a = getAgent(id);
+          var button = document.createElement("button");
+          button.className = "agent";
+          button.dataset.agent = id;
+          button.style.setProperty("--accent", group.color);
+          button.innerHTML = '<div class="agent-top"><span class="agent-id">Ω' + id + '</span><span class="state-pill">WAITING</span></div><h3>' + a[1] + '</h3><p>' + a[2] + '</p>';
+          button.addEventListener("click", function() { openDrawer(id, group.name); });
+          grid.appendChild(button);
+        });
+        section.appendChild(grid);
+        host.appendChild(section);
+      });
+      applyScenario("factual");
+    }
+
+    function applyScenario(name) {
+      var active = scenarioSets[name];
+      document.querySelectorAll(".scenario").forEach(function(b) { b.classList.toggle("active", b.dataset.scenario === name); });
+      document.querySelectorAll(".agent").forEach(function(card) {
+        var isActive = active.indexOf(Number(card.dataset.agent)) !== -1;
+        card.classList.toggle("inactive", !isActive);
+        card.classList.toggle("active-agent", isActive);
+        card.querySelector(".state-pill").textContent = isActive ? "ACTIVE" : "WAITING";
+      });
+      document.getElementById("activeCount").textContent = active.length;
+    }
+
+    function openDrawer(id, groupName) {
+      var a = getAgent(id);
+      document.getElementById("drawerId").textContent = "Ω" + id;
+      document.getElementById("drawerTitle").textContent = a[1];
+      document.getElementById("drawerGroup").textContent = groupName;
+      document.getElementById("drawerMission").textContent = a[2];
+      document.getElementById("drawerTrigger").textContent = a[3];
+      document.getElementById("drawerBoundary").textContent = a[4];
+      document.getElementById("drawerLink").href = "../docs/omega/agents/omega-" + String(id).padStart(2, "0") + ".md";
+      document.getElementById("drawerBackdrop").classList.add("open");
+    }
+
+    function closeDrawer() { document.getElementById("drawerBackdrop").classList.remove("open"); }
+
+    document.querySelectorAll(".scenario").forEach(function(button) {
+      button.addEventListener("click", function() { applyScenario(button.dataset.scenario); });
+    });
+
+    document.querySelectorAll(".tab").forEach(function(button) {
+      button.addEventListener("click", function() {
+        document.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
+        document.querySelectorAll(".view").forEach(function(v) { v.classList.remove("active"); });
+        button.classList.add("active");
+        document.getElementById(button.dataset.view).classList.add("active");
+      });
+    });
+
+    document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+    document.getElementById("drawerBackdrop").addEventListener("click", function(e) { if (e.target === this) closeDrawer(); });
+    document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeDrawer(); });
+    renderAgents();
+  </script>
+</body>
+</html>

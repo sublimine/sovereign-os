@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/2",
+  "agent": {
+    "id": "sigma_03",
+    "number": 3,
+    "name": "Arquitecto de Requisitos de Inteligencia",
+    "short_name": "Requirements Architect",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "REQUIREMENTS",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "REQUIREMENTS",
+    "superior": "sigma_01",
+    "direct_reports": [],
+    "peers": [
+      "sigma_04",
+      "sigma_05"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "decision_to_requirements",
+    "procedure": "decision_to_requirements",
+    "outcome": "necesidad decisional convertida en PIR, EEI, observables y cierre",
+    "artifact": "IntelligenceRequirementSet",
+    "documentation": "docs/sigma/agents/sigma-03.md"
+  },
+  "scope": {
+    "inputs": [
+      "IntelligenceRequirementsPlan",
+      "ConsumerDecisionModel",
+      "MissionConstraints",
+      "PriorKnowledge",
+      "CoverageMap"
+    ],
+    "steps": [
+      "parse decision and uncertainty",
+      "enumerate decision-switch questions",
+      "decompose into PIR and EEI",
+      "define observable variables and units",
+      "attach hypotheses and discriminating evidence",
+      "define indicators, thresholds and freshness",
+      "rank by decision sensitivity and VOI",
+      "publish versioned requirement dependency tree"
+    ],
+    "invariants": [
+      "every requirement changes or protects a decision",
+      "questions must be answerable or typed UNKNOWN",
+      "do not encode preferred answer",
+      "distinguish collection question from analytic question",
+      "define temporal and geographic bounds",
+      "no vague investigate-everything task"
+    ],
+    "non_goals": [
+      "collecting evidence",
+      "assigning sovereign priority",
+      "answering own requirements",
+      "choosing sources",
+      "publishing intelligence product"
+    ],
+    "activation": [
+      "new Ω5 plan",
+      "consumer decision changes",
+      "coverage gap exposes missing discriminant",
+      "estimate reconsidered",
+      "warning model needs indicator"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_02",
+      "sigma_05"
+    ],
+    "downstream": [
+      "sigma_04",
+      "sigma_06",
+      "sigma_28",
+      "sigma_33"
+    ],
+    "omega": [
+      "omega_05",
+      "omega_04",
+      "omega_12"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "requirements decomposer",
+      "measurement designer",
+      "domain question expert",
+      "value-of-information analyst",
+      "indicator designer"
+    ],
+    "max_children": 8,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "RequirementsLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "decision_relevance",
+    "answerability",
+    "atomicity",
+    "observable_definition",
+    "non_confirmation_bias",
+    "closure_criteria"
+  ],
+  "failures": [
+    "requirements_sprawl",
+    "confirmation_bias",
+    "unanswerable_question",
+    "missing_unit",
+    "wrong_horizon",
+    "method_as_objective",
+    "orphan_requirement",
+    "false_completeness"
+  ],
+  "authority_profile": "REQUIREMENTS",
+  "external_contact": false,
+  "protected_channel": false
+}

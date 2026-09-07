@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/forecast.schema.json",
+  "title":"ForecastRecord","type":"object","additionalProperties":false,
+  "required":["forecast_id","version","mission_id","target","operational_definition","scope","issued_at","resolution_at","data_cutoff","information_set_hash","method","base_rate","distribution","calibration_class","assumptions","evidence_refs","resolution_source","scoring_rule","update_policy","status"],
+  "properties":{
+    "forecast_id":{"type":"string"},"version":{"type":"integer","minimum":1},"parent_version":{"type":["integer","null"]},
+    "mission_id":{"type":"string"},"target":{"type":"string"},"operational_definition":{"type":"string"},
+    "scope":{"type":"object"},"issued_at":{"type":"string","format":"date-time"},"resolution_at":{"type":"string","format":"date-time"},
+    "data_cutoff":{"type":"string","format":"date-time"},"information_set_hash":{"type":"string"},
+    "method":{"type":"object"},"base_rate":{"type":"object"},"distribution":{"type":"object"},
+    "calibration_class":{"type":"string"},"assumptions":{"type":"array","items":{"type":"string"}},
+    "evidence_refs":{"type":"array","items":{"type":"string"}},"competing_forecast_refs":{"type":"array","items":{"type":"string"}},
+    "resolution_source":{"type":"string"},"scoring_rule":{"enum":["BRIER","LOG","CRPS","INTERVAL_COVERAGE"]},
+    "update_policy":{"type":"object"},"resolved_value":{},"score":{"type":["number","null"]},
+    "status":{"enum":["ISSUED","UPDATED","RESOLVED","VOID","SUPERSEDED"]}
+  }
+}
+

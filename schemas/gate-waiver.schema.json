@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/gate-waiver.schema.json",
+  "title":"QualityGateOrWaiver","type":"object","additionalProperties":false,
+  "required":["record_id","record_type","version","mission_id","scope","gate_id","condition","evaluator","evidence_refs","threshold","outcome","waivable","created_at"],
+  "properties":{
+    "record_id":{"type":"string"},"record_type":{"enum":["QUALITY_GATE","SOVEREIGN_WAIVER"]},
+    "version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},"scope":{"type":"string"},
+    "gate_id":{"type":"string"},"condition":{"type":"string"},"evaluator":{"type":"string"},
+    "evidence_refs":{"type":"array","items":{"type":"string"}},"threshold":{"type":"string"},
+    "outcome":{"enum":["PASS","FAIL","RETURN","ESCALATE","WAIVE"]},"waivable":{"type":"boolean"},
+    "reason":{"type":["string","null"]},"risk_accepted":{"type":["string","null"]},
+    "responsible":{"type":["string","null"]},"approvers":{"type":"array","items":{"type":"string"}},
+    "expires_at":{"type":["string","null"],"format":"date-time"},"consequences":{"type":"array","items":{"type":"string"}},
+    "created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[{"if":{"properties":{"record_type":{"const":"SOVEREIGN_WAIVER"}}},"then":{"required":["reason","risk_accepted","responsible","approvers","expires_at","consequences"],"properties":{"outcome":{"const":"WAIVE"}}}}]
+}
+

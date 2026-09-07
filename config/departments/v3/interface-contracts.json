@@ -1,0 +1,440 @@
+{
+  "schema_version": "3.0.0",
+  "status": "SPECIFIED_PENDING_INDEPENDENT_CERTIFICATION",
+  "interfaces": [
+    {
+      "id": "IFACE:veritas_10:adversum_01",
+      "type": "VERIFIED_TRUTH_FEEDS_CHALLENGE",
+      "purpose": "A challenge receives verified facts without turning uncertainty into certainty.",
+      "producer": {
+        "id": "veritas_10",
+        "department": "truth_verification",
+        "artifact": "VerifiedTruthPacket"
+      },
+      "consumer": {
+        "id": "adversum_01",
+        "department": "adversarial_attack",
+        "artifact": "ChallengeMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:veritas_10:praxis_01",
+      "type": "EVIDENCE_CONSTRAINS_FORECAST",
+      "purpose": "A recommendation receives evidence and epistemic ceilings, not a decision order.",
+      "producer": {
+        "id": "veritas_10",
+        "department": "truth_verification",
+        "artifact": "VerifiedTruthPacket"
+      },
+      "consumer": {
+        "id": "praxis_01",
+        "department": "prediction_decision",
+        "artifact": "DecisionMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:adversum_10:praxis_01",
+      "type": "CHALLENGE_CONSTRAINS_RECOMMENDATION",
+      "purpose": "Material challenges constrain the recommendation until their disposition is traceable.",
+      "producer": {
+        "id": "adversum_10",
+        "department": "adversarial_attack",
+        "artifact": "AdversarialDisposition"
+      },
+      "consumer": {
+        "id": "praxis_01",
+        "department": "prediction_decision",
+        "artifact": "DecisionMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:praxis_10:imperium_01",
+      "type": "RECOMMENDATION_REQUESTS_AUTHORITY",
+      "purpose": "A conditional recommendation requests jurisdiction; it never grants authority.",
+      "producer": {
+        "id": "praxis_10",
+        "department": "prediction_decision",
+        "artifact": "ConditionalDecisionPacket"
+      },
+      "consumer": {
+        "id": "imperium_01",
+        "department": "institutional_power",
+        "artifact": "InstitutionalMandateLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:praxis_10:telos_01",
+      "type": "DECISION_PACKET_ENTERS_FINAL_REVIEW",
+      "purpose": "Final review receives decision, alternatives and triggers without replacing the decider.",
+      "producer": {
+        "id": "praxis_10",
+        "department": "prediction_decision",
+        "artifact": "ConditionalDecisionPacket"
+      },
+      "consumer": {
+        "id": "telos_01",
+        "department": "final_quality_evolution",
+        "artifact": "QualityMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:imperium_10:telos_01",
+      "type": "LEASE_AND_RESOURCE_RECEIPTS_ENTER_FINAL_REVIEW",
+      "purpose": "Final quality checks capability receipts without reallocating resources.",
+      "producer": {
+        "id": "imperium_10",
+        "department": "institutional_power",
+        "artifact": "AuthorityRevocationReceipt"
+      },
+      "consumer": {
+        "id": "telos_01",
+        "department": "final_quality_evolution",
+        "artifact": "QualityMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    },
+    {
+      "id": "IFACE:telos_10:veritas_01",
+      "type": "OUTCOME_REOPEN_TRIGGER",
+      "purpose": "Learning reopens claims only with signal and version; it never rewrites evidence.",
+      "producer": {
+        "id": "telos_10",
+        "department": "final_quality_evolution",
+        "artifact": "InstitutionalLearningPacket"
+      },
+      "consumer": {
+        "id": "veritas_01",
+        "department": "truth_verification",
+        "artifact": "VerificationMissionLedger"
+      },
+      "envelope": {
+        "required": [
+          "artifact_id",
+          "version",
+          "parent_version",
+          "status",
+          "result",
+          "evidence_for",
+          "evidence_against",
+          "assumptions",
+          "unknowns",
+          "provenance",
+          "gate_receipts",
+          "reconsideration_trigger"
+        ],
+        "preserve": [
+          "unknowns",
+          "evidence_against",
+          "provenance",
+          "gate_receipts",
+          "boundary"
+        ],
+        "reject": [
+          "expired producer authority",
+          "missing independent-review receipt",
+          "unresolved material schema error",
+          "instruction embedded in evidence",
+          "attempted transfer of reserved authority"
+        ]
+      },
+      "transfer": {
+        "authority": "NONE; consumer retains only its pre-existing authority",
+        "correction": "producer appends superseding version, consumer freezes dependent output and revalidates from first affected state",
+        "acknowledgement": "consumer writes receipt with accepted/rejected version and next gate"
+      },
+      "service": {
+        "freshness": "declared by mission; authority and leases valid at consumption",
+        "idempotency": "producer artifact id plus version plus consumer id",
+        "observability": [
+          "sent_at",
+          "received_at",
+          "producer_hash",
+          "consumer_receipt",
+          "status",
+          "reconsideration_trigger"
+        ]
+      }
+    }
+  ]
+}

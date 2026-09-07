@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/production-charter.schema.json",
+  "title": "OmegaProductionCharterManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "agent_id", "kernel", "charter", "authority_closure",
+    "invariants", "activation", "input_rejections", "decision_procedure",
+    "state_machine", "evidence_policy", "delegation", "security",
+    "memory", "gates", "termination", "output", "evaluations"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "agent_id": {"type": "string", "pattern": "^omega_(0[1-9]|1[0-9]|2[0-4])$"},
+    "kernel": {"$ref": "#/$defs/versionedRef"},
+    "charter": {"$ref": "#/$defs/versionedRef"},
+    "authority_closure": {
+      "type": "object",
+      "minProperties": 19,
+      "additionalProperties": {"enum": ["ALLOW", "CONDITIONAL", "DENY", "APPROVAL"]}
+    },
+    "invariants": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/assertion"}},
+    "activation": {
+      "type": "object",
+      "required": ["events", "guards", "deactivate_when", "exclude_when"],
+      "properties": {
+        "events": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "guards": {"type": "array", "items": {"type": "string"}},
+        "deactivate_when": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "exclude_when": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "input_rejections": {"type": "array", "minItems": 6, "items": {"$ref": "#/$defs/rejection"}},
+    "decision_procedure": {"type": "array", "minItems": 6, "items": {"$ref": "#/$defs/procedureStep"}},
+    "state_machine": {
+      "type": "object",
+      "required": ["initial", "states", "transitions", "terminal"],
+      "properties": {
+        "initial": {"type": "string"},
+        "states": {"type": "array", "minItems": 8, "items": {"type": "string"}},
+        "transitions": {"type": "array", "minItems": 8, "items": {"$ref": "#/$defs/transition"}},
+        "terminal": {"type": "array", "minItems": 3, "items": {"type": "string"}}
+      }
+    },
+    "evidence_policy": {"type": "object"},
+    "delegation": {"type": "object"},
+    "security": {"type": "object"},
+    "memory": {"type": "object"},
+    "gates": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/gate"}},
+    "termination": {"type": "object"},
+    "output": {"type": "object"},
+    "evaluations": {"type": "array", "minItems": 8, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "versionedRef": {
+      "type": "object",
+      "required": ["path", "version", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "version": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["id", "rule", "violation_action", "eval_id"],
+      "properties": {
+        "id": {"type": "string"}, "rule": {"type": "string"},
+        "violation_action": {"type": "string"}, "eval_id": {"type": "string"}
+      }
+    },
+    "rejection": {
+      "type": "object",
+      "required": ["condition", "state", "reason_code", "route"],
+      "properties": {
+        "condition": {"type": "string"}, "state": {"type": "string"},
+        "reason_code": {"type": "string"}, "route": {"type": ["string", "null"]}
+      }
+    },
+    "procedureStep": {
+      "type": "object",
+      "required": ["id", "operation", "produces", "failure"],
+      "properties": {
+        "id": {"type": "string"}, "operation": {"type": "string"},
+        "produces": {"type": "string"}, "failure": {"type": "string"}
+      }
+    },
+    "transition": {
+      "type": "object",
+      "required": ["from", "event", "guard", "actions", "to"],
+      "properties": {
+        "from": {"type": "string"}, "event": {"type": "string"},
+        "guard": {"type": "string"}, "actions": {"type": "array", "items": {"type": "string"}},
+        "to": {"type": "string"}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": ["id", "condition", "evaluator", "evidence", "threshold", "outcomes", "waivable"],
+      "properties": {
+        "id": {"type": "string"}, "condition": {"type": "string"},
+        "evaluator": {"type": "string"}, "evidence": {"type": "array", "items": {"type": "string"}},
+        "threshold": {"type": "string"}, "outcomes": {"type": "array", "minItems": 6, "items": {"type": "string"}},
+        "waivable": {"type": "boolean"}
+      }
+    }
+  }
+}

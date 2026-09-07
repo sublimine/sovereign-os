@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/agent-overlay.schema.json",
+  "title": "OmegaAgentCharterOverlay",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "extends", "production_ref", "agent", "mission", "authority",
+    "activation", "workflow", "delegation", "model_routing", "context",
+    "memory", "quality_gates", "output_contract", "escalation",
+    "failure_focus", "security", "termination"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "extends": {"const": "_base-policy.json"},
+    "production_ref": {
+      "type": "string",
+      "pattern": "^\\.\\./production-charters\\.json#/agents/(?:[0-9]|1[0-9]|2[0-3])$"
+    },
+    "agent": {
+      "type": "object",
+      "required": ["id", "number", "name", "short_name", "category", "class", "superior", "independence", "jurisdiction", "documentation"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^omega_(0[1-9]|1[0-9]|2[0-4])$"},
+        "number": {"type": "integer", "minimum": 1, "maximum": 24},
+        "name": {"type": "string"},
+        "short_name": {"type": "string"},
+        "category": {"enum": ["COMMAND", "INTELLIGENCE", "VERIFICATION", "ADVERSARIAL", "DECISION", "INSTITUTIONAL", "QUALITY"]},
+        "class": {"type": "string"},
+        "superior": {"type": ["string", "null"]},
+        "independence": {"type": "string"},
+        "jurisdiction": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "documentation": {"type": "string"}
+      }
+    },
+    "mission": {"type": "object", "required": ["primary", "in_scope", "out_of_scope", "absence_failure"]},
+    "authority": {"type": "object", "required": ["allow", "conditional", "deny", "memory_commit"]},
+    "activation": {"type": "object", "required": ["events", "thresholds", "exclude_when"]},
+    "workflow": {"type": "object", "required": ["cognitive_model", "states", "timeout", "blocked"]},
+    "delegation": {"type": "object", "required": ["specialists", "spawn_when", "tools", "model_tier", "reasoning_effort", "max_children", "max_depth", "verification"]},
+    "model_routing": {"type": "object", "required": ["minimum_tier", "default_tier", "default_effort", "escalate_when", "deterministic_for"]},
+    "context": {"type": "object", "required": ["always", "mission", "retrieved", "forbidden"]},
+    "memory": {"type": "object", "required": ["read", "append", "propose", "verify", "commit", "revoke"]},
+    "quality_gates": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "output_contract": {"type": "object", "required": ["artifacts", "schema_refs"]},
+    "escalation": {"type": "object", "required": ["routes"]},
+    "failure_focus": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+    "security": {"type": "object", "required": ["tool_profile", "human_required"]},
+    "termination": {"type": "object", "required": ["done", "stop"]}
+  }
+}

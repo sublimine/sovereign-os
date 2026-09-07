@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "default_policy": "DENY_UNLESS_TYPED_AUTHORIZED_AND_ACKNOWLEDGED",
+  "packet": "DepartmentExchangePacket",
+  "states": ["DRAFT", "VALIDATING", "ACCEPTED", "RETURNED", "REJECTED", "IN_PROGRESS", "DELIVERED", "ACKNOWLEDGED", "CLOSED", "BLOCKED", "EXPIRED", "RECALLED", "SUPERSEDED"],
+  "rejections": ["SCHEMA_INVALID", "AUTHORITY_MISSING", "CLASSIFICATION_MISMATCH", "PURPOSE_UNCLEAR", "UNANSWERABLE_REQUIREMENT", "INSUFFICIENT_BUDGET", "UNSAFE_METHOD", "CONFLICT_OF_INTEREST", "PROVENANCE_BROKEN", "STALE_INPUT", "DUPLICATE_REQUEST", "CAPABILITY_MISMATCH", "OBJECTIVE_METHOD_CONFLICT", "DEPENDENCY_BLOCKED"],
+  "interfaces": [
+    {"department":"OMEGA", "sigma_sends":["OmegaIntelligenceHandoff"], "sigma_receives":["OmegaMissionPacket", "IntelligenceRequirementsPlan", "AuthorityDetermination", "ResourceEnvelope"], "authority_owner":"omega", "truth_owner":"omega_truth_controls"},
+    {"department":"RESEARCH", "sigma_sends":["ResearchCommission"], "sigma_receives":["ResearchArtifact"], "authority_owner":"research", "truth_owner":"shared_with_independent_verification"},
+    {"department":"DATA", "sigma_sends":["DataWorkOrder"], "sigma_receives":["DatasetManifest", "QualityProfile"], "authority_owner":"data", "truth_owner":"shared_with_lineage"},
+    {"department":"COMPETITIVE_INTELLIGENCE", "sigma_sends":["ActorWatchTasking"], "sigma_receives":["ObservationBundle"], "authority_owner":"competitive_intelligence", "truth_owner":"sigma_analysis"},
+    {"department":"ENGINEERING_SYSTEMS_ARCHITECTURE", "sigma_sends":["TechnicalIntelligenceRequirement"], "sigma_receives":["FeasibilityEvidence", "BenchmarkArtifact"], "authority_owner":"engineering", "truth_owner":"shared_by_claim_type"},
+    {"department":"PRODUCT_STRATEGY", "sigma_sends":["StrategicRealityBrief"], "sigma_receives":["DecisionModelFeedback"], "authority_owner":"product_strategy", "truth_owner":"sigma_for_intelligence_only"},
+    {"department":"SECURITY_CYBERSECURITY", "sigma_sends":["WarningNotice", "CompromiseNotice"], "sigma_receives":["ResponseDisposition", "SecurityTelemetry"], "authority_owner":"security", "truth_owner":"shared_by_claim_type"},
+    {"department":"LEGAL_COMPLIANCE_GOVERNANCE", "sigma_sends":["AuthorityRequest"], "sigma_receives":["AuthorityDetermination"], "authority_owner":"legal_governance", "truth_owner":"not_applicable"},
+    {"department":"FINANCE_PROCUREMENT", "sigma_sends":["CapabilityDemand"], "sigma_receives":["CostAndVendorEnvelope"], "authority_owner":"finance_procurement", "truth_owner":"shared_by_claim_type"},
+    {"department":"OPERATIONS_INFRASTRUCTURE_DEPLOYMENT_MONITORING", "sigma_sends":["IndicatorSpecification", "OperationalWarning"], "sigma_receives":["OutcomeTelemetry", "Acknowledgment"], "authority_owner":"operations", "truth_owner":"shared_by_claim_type"},
+    {"department":"DOCUMENTATION_RECORDS", "sigma_sends":["ApprovedProduct", "RetractionNotice"], "sigma_receives":["PublicationReceipt"], "authority_owner":"documentation", "truth_owner":"sigma_canonical_artifact"},
+    {"department":"HUMAN_RESOURCES_EXTERNAL_EXPERTS", "sigma_sends":["ExpertCapabilityRequest"], "sigma_receives":["ConflictDisclosure", "ExpertArtifact"], "authority_owner":"human_resources_legal", "truth_owner":"sigma_source_assessment"}
+  ]
+}

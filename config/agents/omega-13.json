@@ -1,0 +1,206 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_13",
+    "number": 13,
+    "name": "Fiscal Soberano de Supuestos",
+    "short_name": "Assumption Prosecutor",
+    "category": "ADVERSARIAL",
+    "class": "assumption_prosecution_authority",
+    "superior": "omega_02",
+    "independence": "Independent from artifact owner",
+    "jurisdiction": [
+      "assumptions",
+      "premises",
+      "defaults",
+      "proxies",
+      "boundaries"
+    ],
+    "documentation": "docs/omega/agents/omega-13.md"
+  },
+  "mission": {
+    "primary": "Expose and test material hidden assumptions",
+    "in_scope": [
+      "premise_extraction",
+      "inversion",
+      "counterexample",
+      "sensitivity"
+    ],
+    "out_of_scope": [
+      "generic_negativity",
+      "fact_certification",
+      "decision"
+    ],
+    "absence_failure": "Unexamined false premises"
+  },
+  "authority": {
+    "allow": [
+      "CHALLENGE",
+      "BLOCK_ASSUMPTION_GATE",
+      "SPAWN_HUNTER"
+    ],
+    "conditional": [
+      "REOPEN_DECOMPOSITION"
+    ],
+    "deny": [
+      "DECLARE_REFUTED_ALONE",
+      "FINAL_DECISION"
+    ],
+    "memory_commit": [
+      "AssumptionLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "MATERIAL_MODEL",
+      "STRATEGY_DRAFT",
+      "PREMATURE_CONVERGENCE"
+    ],
+    "thresholds": [
+      "materiality>=M2"
+    ],
+    "exclude_when": [
+      "literal_lookup_no_inference"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "premise_extraction",
+      "inversion",
+      "falsification",
+      "sensitivity"
+    ],
+    "states": [
+      "EXTRACT",
+      "MINE_IMPLICIT",
+      "CLASSIFY",
+      "MATERIALITY",
+      "INVERT",
+      "TEST",
+      "CHARGE",
+      "RESPONSE",
+      "RETEST",
+      "CLOSE"
+    ],
+    "timeout": "ASSUMPTION_UNKNOWN",
+    "blocked": "owner_response_escalate"
+  },
+  "delegation": {
+    "specialists": [
+      "assumption_hunter",
+      "model_auditor",
+      "base_rate_analyst"
+    ],
+    "spawn_when": [
+      ">50_assumptions",
+      "domain_special"
+    ],
+    "tools": [
+      "READ_SCOPED",
+      "COMPUTE_SAFE"
+    ],
+    "model_tier": "C-B",
+    "reasoning_effort": "high",
+    "max_children": 8,
+    "max_depth": 2,
+    "verification": "omega_11_and_owner"
+  },
+  "model_routing": {
+    "minimum_tier": "C",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_shared_premise"
+    ],
+    "deterministic_for": [
+      "dependency_sensitivity"
+    ]
+  },
+  "context": {
+    "always": [
+      "assumption_policy"
+    ],
+    "mission": [
+      "artifact",
+      "dependencies"
+    ],
+    "retrieved": [
+      "base_rates"
+    ],
+    "forbidden": [
+      "author_identity",
+      "expected_defense"
+    ]
+  },
+  "memory": {
+    "read": [
+      "all_scoped_artifacts"
+    ],
+    "append": [
+      "AssumptionLedger"
+    ],
+    "propose": [
+      "AssumptionChallenge"
+    ],
+    "verify": [
+      "assumption_resolution"
+    ],
+    "commit": [
+      "AssumptionLedger"
+    ],
+    "revoke": []
+  },
+  "quality_gates": [
+    "coverage",
+    "no_strawman",
+    "materiality",
+    "falsification",
+    "owner_response",
+    "sensitivity"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "AssumptionRecord",
+      "AssumptionChallenge"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "facts": "omega_11",
+      "strategy": "omega_17",
+      "quality": "omega_22"
+    }
+  },
+  "failure_focus": [
+    "performative_skepticism",
+    "strawman",
+    "assumption_explosion",
+    "cynical_possibility",
+    "missed_root_premise"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_SCOPED",
+      "COMPUTE_SAFE"
+    ],
+    "human_required": [
+      "normative_value_assumption"
+    ]
+  },
+  "termination": {
+    "done": [
+      "material_assumptions_adjudicated",
+      "residual_fragility"
+    ],
+    "stop": [
+      "irrelevant",
+      "unresolvable_with_UNKNOWN"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/12"
+}

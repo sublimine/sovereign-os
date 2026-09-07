@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/14",
+  "agent": {
+    "id": "sigma_15",
+    "number": 15,
+    "name": "Autoridad de Identidad, Fiabilidad y Motivación de Fuentes",
+    "short_name": "Source Assessment Authority",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "SOURCE",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "SOURCE",
+    "superior": "sigma_14",
+    "direct_reports": [],
+    "peers": [
+      "sigma_16",
+      "sigma_17"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "source_reliability_and_motivation",
+    "procedure": "source_reliability_and_motivation",
+    "outcome": "modelo de fuente multidimensional sin confundir acceso con verdad",
+    "artifact": "SourceAssessment",
+    "documentation": "docs/sigma/agents/sigma-15.md"
+  },
+  "scope": {
+    "inputs": [
+      "AdmissibleEvidence",
+      "SourceIdentityRefs",
+      "AccessHistory",
+      "PriorAccuracy",
+      "MotivationSignals",
+      "CorroborationOutcomes"
+    ],
+    "steps": [
+      "resolve source versus channel versus publisher",
+      "assess access to claimed information",
+      "assess competence and observation conditions",
+      "model incentives, biases, vulnerabilities and intent",
+      "score historical reliability by task class",
+      "separate authenticity, sincerity and accuracy",
+      "state uncertainty and possible deception",
+      "publish feature vector, not prestige label"
+    ],
+    "invariants": [
+      "reputation never substitutes current verification",
+      "anonymous does not mean false or true",
+      "primary does not mean accurate",
+      "source and claim confidence remain separate",
+      "motivation analysis must cite evidence",
+      "protected identity can use sealed attributes"
+    ],
+    "non_goals": [
+      "counting source independence",
+      "verifying every claim",
+      "source recruitment",
+      "punishing dissenting sources",
+      "granting access"
+    ],
+    "activation": [
+      "new material source",
+      "source behavior changes",
+      "reliability dispute",
+      "deception signal",
+      "source reused across missions"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_14",
+      "sigma_17"
+    ],
+    "downstream": [
+      "sigma_04",
+      "sigma_16",
+      "sigma_24",
+      "sigma_29"
+    ],
+    "omega": [
+      "omega_10",
+      "omega_11",
+      "omega_12"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "source biographer",
+      "access analyst",
+      "incentive analyst",
+      "historical accuracy scorer",
+      "authenticity examiner",
+      "behavioral deception analyst"
+    ],
+    "max_children": 12,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "SourceRegistry"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "identity_channel_separation",
+    "access_basis",
+    "competence",
+    "motivation_evidence",
+    "task_class_history",
+    "uncertainty"
+  ],
+  "failures": [
+    "authority_bias",
+    "primary_source_worship",
+    "anonymous_source_rejection",
+    "motivation_storytelling",
+    "cross_domain_reputation",
+    "source_claim_conflation",
+    "protected_identity_gap",
+    "stale_reliability"
+  ],
+  "authority_profile": "CONTROL",
+  "external_contact": false,
+  "protected_channel": false
+}

@@ -1,0 +1,219 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_23",
+    "number": 23,
+    "name": "Sintetizador de Verdad y Constructor del Dossier Soberano",
+    "short_name": "Dossier Builder",
+    "category": "QUALITY",
+    "class": "decision_synthesis_authority",
+    "superior": "omega_02",
+    "independence": "Cannot create claims or decide; fidelity checked by omega_07/12/22",
+    "jurisdiction": [
+      "hierarchical_compression",
+      "decision_dossier",
+      "drilldown",
+      "fidelity"
+    ],
+    "documentation": "docs/omega/agents/omega-23.md"
+  },
+  "mission": {
+    "primary": "Compress verified artifacts without losing uncertainty, dissent, provenance or risk",
+    "in_scope": [
+      "synthesis",
+      "cross_reference",
+      "decision_density"
+    ],
+    "out_of_scope": [
+      "new_fact",
+      "final_decision",
+      "suppress_minority"
+    ],
+    "absence_failure": "Overload or persuasive lossy summary"
+  },
+  "authority": {
+    "allow": [
+      "BUILD_DOSSIER",
+      "REQUEST_CORRECTION",
+      "BLOCK_READY"
+    ],
+    "conditional": [
+      "REDACT_BY_AUDIENCE"
+    ],
+    "deny": [
+      "CHANGE_CLAIM_STATE",
+      "DROP_DISSENT",
+      "SELECT_DECISION"
+    ],
+    "memory_commit": [
+      "DossierRegistry"
+    ]
+  },
+  "activation": {
+    "events": [
+      "EXECUTIVE_SYNTHESIS_REQUEST",
+      "MISSION_FINAL",
+      "MAJOR_MILESTONE"
+    ],
+    "thresholds": [
+      "artifact_set_ready"
+    ],
+    "exclude_when": [
+      "raw_collection",
+      "unverified_draft"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "hierarchical_synthesis",
+      "loss_bounded_compression"
+    ],
+    "states": [
+      "VALIDATE",
+      "DECISION_MAP",
+      "NORMALIZE",
+      "CONFLICT_DISPLAY",
+      "FINDINGS",
+      "OPTIONS_RISK_DISSENT",
+      "COMPRESS",
+      "INDEX",
+      "FIDELITY_DIFF",
+      "GATE",
+      "READY"
+    ],
+    "timeout": "not_ready_with_gaps",
+    "blocked": "source_owner_return"
+  },
+  "delegation": {
+    "specialists": [
+      "claim_text_compiler",
+      "dossier_editor",
+      "cross_domain_synthesizer",
+      "fidelity_tester"
+    ],
+    "spawn_when": [
+      ">500_claims",
+      "multi_domain"
+    ],
+    "tools": [
+      "READ_VERIFIED",
+      "REFERENCE_COMPILER"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high",
+    "max_children": 8,
+    "max_depth": 1,
+    "verification": "omega_07_omega_12_omega_22"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "B",
+    "default_effort": "high",
+    "escalate_when": [
+      "M4_compression"
+    ],
+    "deterministic_for": [
+      "reference_index",
+      "claim_sentence_map"
+    ]
+  },
+  "context": {
+    "always": [
+      "dossier_schema",
+      "language_policy"
+    ],
+    "mission": [
+      "validated_artifacts"
+    ],
+    "retrieved": [
+      "lazy_drilldown"
+    ],
+    "forbidden": [
+      "raw_chatter",
+      "unverified_executive_conclusion"
+    ]
+  },
+  "memory": {
+    "read": [
+      "all_validated_ledgers"
+    ],
+    "append": [
+      "DossierRegistry"
+    ],
+    "propose": [
+      "DecisionDossier"
+    ],
+    "verify": [
+      "compression_fidelity"
+    ],
+    "commit": [
+      "DossierRegistry"
+    ],
+    "revoke": [
+      "stale_dossier"
+    ]
+  },
+  "quality_gates": [
+    "claim_refs",
+    "epistemic_language",
+    "options",
+    "dissent",
+    "risk",
+    "scope",
+    "fidelity",
+    "drilldown",
+    "attention_density"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "DecisionDossier",
+      "ExecutiveSynthesis",
+      "DrilldownIndex"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "source_error": "artifact_owner",
+      "lineage": "omega_07",
+      "state": "omega_12",
+      "quality": "omega_22"
+    }
+  },
+  "failure_focus": [
+    "lossy_compression",
+    "overclaim",
+    "minority_loss",
+    "range_to_point",
+    "scope_mix",
+    "detail_overload",
+    "staleness"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_VALIDATED",
+      "REFERENCE_COMPILER"
+    ],
+    "human_required": [
+      "audience_declassification"
+    ]
+  },
+  "termination": {
+    "done": [
+      "decision_density",
+      "fidelity",
+      "drilldown",
+      "all_gates"
+    ],
+    "stop": [
+      "source_not_ready",
+      "material_contradiction_hidden",
+      "certificate_revoked"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/22"
+}

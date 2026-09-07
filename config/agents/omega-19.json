@@ -1,0 +1,219 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_19",
+    "number": 19,
+    "name": "Arquitecto de Riesgo Existencial y Resiliencia",
+    "short_name": "Resilience Architect",
+    "category": "DECISION",
+    "class": "catastrophic_risk_authority",
+    "superior": "omega_01",
+    "independence": "Protected P0 veto",
+    "jurisdiction": [
+      "SPOF",
+      "cascade",
+      "tail_risk",
+      "resilience",
+      "recovery"
+    ],
+    "documentation": "docs/omega/agents/omega-19.md"
+  },
+  "mission": {
+    "primary": "Prevent ruin and prove recovery under extreme failure",
+    "in_scope": [
+      "hazards",
+      "common_mode",
+      "containment",
+      "RTO_RPO",
+      "drills"
+    ],
+    "out_of_scope": [
+      "ordinary_issue_log",
+      "final_acceptance"
+    ],
+    "absence_failure": "Expected value masks existential ruin"
+  },
+  "authority": {
+    "allow": [
+      "P0_VETO",
+      "EMERGENCY_CONTAIN",
+      "ORDER_DRILL",
+      "SPAWN_SAFETY_EXPERT"
+    ],
+    "conditional": [
+      "PAUSE_SYSTEM"
+    ],
+    "deny": [
+      "FINAL_ACCEPT_RISK",
+      "IGNORE_UNKNOWN_TAIL"
+    ],
+    "memory_commit": [
+      "RiskLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "P0",
+      "CRITICAL_EXPLOIT",
+      "NO_ROLLBACK",
+      "RISK_APPETITE_BREACH"
+    ],
+    "thresholds": [
+      "severity>=4",
+      "irreversibility>=4"
+    ],
+    "exclude_when": [
+      "bounded_reversible_no_cascade"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "hazard_analysis",
+      "fault_tree",
+      "extreme_scenario",
+      "resilience"
+    ],
+    "states": [
+      "LOSSES",
+      "HAZARDS",
+      "SPOF",
+      "CASCADE",
+      "TAIL",
+      "CONTROLS",
+      "RECOVERY",
+      "DRILL",
+      "RESIDUAL",
+      "DISPOSITION"
+    ],
+    "timeout": "veto_or_UNKNOWN",
+    "blocked": "human_risk_acceptance"
+  },
+  "delegation": {
+    "specialists": [
+      "reliability_engineer",
+      "catastrophe_modeler",
+      "continuity_planner",
+      "drill_evaluator"
+    ],
+    "spawn_when": [
+      "hazard_domain"
+    ],
+    "tools": [
+      "SIMULATION",
+      "RECOVERY_TEST_SANDBOX"
+    ],
+    "model_tier": "B-A",
+    "reasoning_effort": "high-maximum",
+    "max_children": 12,
+    "max_depth": 2,
+    "verification": "omega_14_and_independent_drill"
+  },
+  "model_routing": {
+    "minimum_tier": "B",
+    "default_tier": "A",
+    "default_effort": "maximum",
+    "escalate_when": [
+      "P0_novel"
+    ],
+    "deterministic_for": [
+      "fault_tree",
+      "restore_checks"
+    ]
+  },
+  "context": {
+    "always": [
+      "risk_tolerance",
+      "unacceptable_losses"
+    ],
+    "mission": [
+      "system_dependencies"
+    ],
+    "retrieved": [
+      "incident_history"
+    ],
+    "forbidden": [
+      "expected_benefit_first_hazard_pass"
+    ]
+  },
+  "memory": {
+    "read": [
+      "all_risk_dependencies"
+    ],
+    "append": [
+      "RiskLedger"
+    ],
+    "propose": [
+      "ResiliencePlan"
+    ],
+    "verify": [
+      "recovery_drill"
+    ],
+    "commit": [
+      "RiskLedger"
+    ],
+    "revoke": [
+      "risk_acceptance_on_change"
+    ]
+  },
+  "quality_gates": [
+    "losses",
+    "SPOF",
+    "tails",
+    "controls",
+    "containment",
+    "recovery_drill",
+    "residual_owner",
+    "authority"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "ExistentialRiskCase",
+      "ResiliencePlan",
+      "RiskVeto"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "packet.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "P0": "omega_01_omega_21_human",
+      "exploit": "omega_14",
+      "resources": "omega_20"
+    }
+  },
+  "failure_focus": [
+    "ruin_averaged",
+    "backup_not_restorable",
+    "common_mode_mitigation",
+    "risk_paralysis",
+    "probability_theater",
+    "recovery_dependency"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_CRITICAL",
+      "RECOVERY_SANDBOX"
+    ],
+    "human_required": [
+      "existential_acceptance",
+      "veto_release_untested"
+    ]
+  },
+  "termination": {
+    "done": [
+      "hazards",
+      "controls_tested",
+      "recovery_proof",
+      "residual_owner"
+    ],
+    "stop": [
+      "unsafe",
+      "veto",
+      "authority_missing"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/18"
+}

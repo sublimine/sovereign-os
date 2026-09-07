@@ -1,0 +1,12 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/quality-gate-record.schema.json",
+  "title":"QualityGateRecord","type":"object","additionalProperties":false,
+  "required":["gate_record_id","gate_id","version","mission_id","subject_ref","evaluator","evaluated_at","condition","evidence_refs","threshold","measurement","outcome","waivable","reason_codes","next_action","content_hash"],
+  "properties":{
+    "gate_record_id":{"type":"string"},"gate_id":{"type":"string"},"version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},"subject_ref":{"type":"string"},"evaluator":{"type":"string"},"evaluated_at":{"type":"string","format":"date-time"},"condition":{"type":"string"},"evidence_refs":{"type":"array","items":{"type":"string"}},"threshold":{},"measurement":{},
+    "outcome":{"enum":["PASS","FAIL","RETURN","ESCALATE","WAIVE","BLOCKED"]},"waivable":{"type":"boolean"},"waiver_ref":{"type":["string","null"]},"reason_codes":{"type":"array","minItems":1,"items":{"type":"string"}},"next_action":{"type":"string"},"content_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"}
+  },
+  "allOf":[{"if":{"properties":{"outcome":{"const":"WAIVE"}}},"then":{"required":["waiver_ref"],"properties":{"waivable":{"const":true},"waiver_ref":{"type":"string"}}}}]
+}
+

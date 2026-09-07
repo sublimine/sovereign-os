@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/verification-report.schema.json",
+  "title":"VerificationReport","type":"object","additionalProperties":false,
+  "required":["verification_id","version","mission_id","verifier","target_refs","method","independence","evidence_refs","verdicts","discrepancies","limitations","status","created_at"],
+  "properties":{
+    "verification_id":{"type":"string"},"version":{"type":"integer","minimum":1},
+    "mission_id":{"type":"string"},"verifier":{"type":"string"},
+    "target_refs":{"type":"array","minItems":1,"items":{"type":"string"}},
+    "method":{"type":"object"},"independence":{"type":"object"},
+    "evidence_refs":{"type":"array","items":{"type":"string"}},
+    "verdicts":{"type":"array","minItems":1,"items":{"type":"object","required":["claim_ref","verdict"],"properties":{"claim_ref":{"type":"string"},"verdict":{"enum":["SUPPORTED","PARTIAL","UNSUPPORTED","CONTRADICTED","REFUTED","UNKNOWN"]}}}},
+    "discrepancies":{"type":"array","items":{"type":"object"}},
+    "limitations":{"type":"array","items":{"type":"string"}},
+    "status":{"enum":["PASS","FAIL","PARTIAL","BLOCKED","UNKNOWN"]},
+    "created_at":{"type":"string","format":"date-time"}
+  }
+}
+

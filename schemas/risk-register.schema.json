@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://sovereign.local/schemas/risk-register.schema.json",
+  "title":"RiskRegister","type":"object","additionalProperties":false,
+  "required":["register_id","version","mission_id","unacceptable_losses","risks","dependency_graph_ref","resilience_plan_ref","status","created_at"],
+  "properties":{
+    "register_id":{"type":"string"},"version":{"type":"integer","minimum":1},"mission_id":{"type":"string"},
+    "unacceptable_losses":{"type":"array","items":{"type":"string"}},"dependency_graph_ref":{"type":"string"},
+    "risks":{"type":"array","items":{"type":"object","required":["risk_id","hazard","causal_path","likelihood","impact","velocity","detectability","controls","residual","owner","triggers","containment","recovery"],"properties":{"risk_id":{"type":"string"},"hazard":{"type":"string"},"causal_path":{"type":"array","items":{"type":"string"}},"likelihood":{"type":"object"},"impact":{"type":"object"},"velocity":{"type":"string"},"detectability":{"type":"string"},"controls":{"type":"array","items":{"type":"object"}},"residual":{"type":"object"},"owner":{"type":"string"},"triggers":{"type":"array","items":{"type":"string"}},"containment":{"type":"array","items":{"type":"string"}},"recovery":{"type":"object"}}}},
+    "resilience_plan_ref":{"type":"string"},"veto_ref":{"type":["string","null"]},"status":{"enum":["OPEN","CONDITIONAL","ACCEPTABLE","VETOED","STALE","SUPERSEDED"]},
+    "created_at":{"type":"string","format":"date-time"}
+  }
+}
+

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/sigma/sigma-release-certification.schema.json",
+  "title": "sigma-release-certification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "release_id",
+    "version",
+    "maturity",
+    "scope",
+    "status",
+    "certified_at",
+    "evidence",
+    "metrics",
+    "limitations",
+    "validation_debt",
+    "independent_audit"
+  ],
+  "properties": {
+    "release_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "maturity": {
+      "enum": [
+        "S0_DOCUMENTED",
+        "S1_STATIC_VALIDATED",
+        "S2_DETERMINISTIC_TESTED",
+        "S3_MODEL_EVALUATED",
+        "S4_SHADOW_VALIDATED",
+        "S5_OPERATIONALLY_CALIBRATED"
+      ]
+    },
+    "scope": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PENDING_VALIDATION",
+        "PASS",
+        "FAIL",
+        "CONDITIONAL"
+      ]
+    },
+    "certified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "sha256",
+          "status"
+        ],
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL"
+            ]
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "roles",
+        "capabilities",
+        "charters",
+        "authority_cells",
+        "relationship_edges",
+        "schemas",
+        "gate_sets",
+        "fmea_rows",
+        "effective_evals",
+        "simulations",
+        "simulation_events",
+        "artifacts",
+        "events",
+        "department_interfaces"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "roles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "capabilities": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "charters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "authority_cells": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relationship_edges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schemas": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gate_sets": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fmea_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "effective_evals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "simulations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "simulation_events": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifacts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "events": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "department_interfaces": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_debt": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "independent_audit": {
+      "enum": [
+        "NOT_PERFORMED",
+        "PASS",
+        "FAIL"
+      ]
+    }
+  }
+}

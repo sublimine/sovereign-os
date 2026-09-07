@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/31",
+  "agent": {
+    "id": "sigma_32",
+    "number": 32,
+    "name": "Jefe de Inteligencia Estimativa",
+    "short_name": "Estimative Intelligence Chief",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "ANALYSIS",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "ANALYSIS",
+    "superior": "sigma_24",
+    "direct_reports": [],
+    "peers": [
+      "sigma_25",
+      "sigma_26",
+      "sigma_27",
+      "sigma_28",
+      "sigma_29",
+      "sigma_31",
+      "sigma_34",
+      "sigma_35"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "estimative_intelligence",
+    "procedure": "estimative_intelligence",
+    "outcome": "estimación probabilística/horizonada con calibración y sensibilidad",
+    "artifact": "EstimateRecord",
+    "documentation": "docs/sigma/agents/sigma-32.md"
+  },
+  "scope": {
+    "inputs": [
+      "HypothesisSet",
+      "FusionMap",
+      "ActorModels",
+      "EnvironmentModel",
+      "CausalAssessment",
+      "BaseRates",
+      "CalibrationHistory"
+    ],
+    "steps": [
+      "define forecast question, resolution criteria and horizon",
+      "select reference class and prior where defensible",
+      "combine diagnostic evidence without double counting",
+      "produce distribution or bounded ordinal estimate",
+      "run sensitivity to key assumptions and regimes",
+      "state signposts that would update estimate",
+      "separate forecast, scenario and conditional projection",
+      "commit estimate before outcome and schedule resolution"
+    ],
+    "invariants": [
+      "probability requires resolution rule",
+      "no precision beyond method/calibration",
+      "scenario is not forecast",
+      "conditional forecast states condition",
+      "estimate version freezes before outcome",
+      "confidence language follows Ω12 ceiling"
+    ],
+    "non_goals": [
+      "issuing warning threshold",
+      "simulating without validation",
+      "choosing strategy",
+      "retroactive probability editing",
+      "hiding uncalibrated class"
+    ],
+    "activation": [
+      "future event/quantity material",
+      "decision horizon",
+      "warning input",
+      "estimate update trigger",
+      "prior estimate resolves"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_21",
+      "sigma_24",
+      "sigma_25",
+      "sigma_26",
+      "sigma_27",
+      "sigma_28",
+      "sigma_29",
+      "sigma_31"
+    ],
+    "downstream": [
+      "sigma_33",
+      "sigma_34",
+      "sigma_35",
+      "sigma_37",
+      "sigma_38",
+      "sigma_40"
+    ],
+    "omega": [
+      "omega_12",
+      "omega_16",
+      "omega_24"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "superforecaster",
+      "base-rate researcher",
+      "probabilistic modeler",
+      "calibration analyst",
+      "sensitivity analyst",
+      "resolution adjudicator"
+    ],
+    "max_children": 16,
+    "max_depth": 3,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "A",
+    "reasoning_effort": "maximum",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "EstimateLedger"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "resolvable_question",
+    "reference_class",
+    "dependency_adjustment",
+    "precision_ceiling",
+    "sensitivity",
+    "pre_outcome_commit"
+  ],
+  "failures": [
+    "false_precision",
+    "scenario_forecast_confusion",
+    "base_rate_neglect",
+    "double_counting",
+    "outcome_leak",
+    "conditionality_omission",
+    "calibration_transfer",
+    "hindsight_edit"
+  ],
+  "authority_profile": "ANALYSIS",
+  "external_contact": false,
+  "protected_channel": false
+}

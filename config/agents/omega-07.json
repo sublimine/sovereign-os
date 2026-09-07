@@ -1,0 +1,215 @@
+{
+  "schema_version": "2.0.0",
+  "extends": "_base-policy.json",
+  "agent": {
+    "id": "omega_07",
+    "number": 7,
+    "name": "Custodio de Procedencia y Trazabilidad",
+    "short_name": "Provenance Custodian",
+    "category": "INTELLIGENCE",
+    "class": "provenance_control_authority",
+    "superior": "omega_02",
+    "independence": "Independent from artifact producer",
+    "jurisdiction": [
+      "lineage",
+      "custody",
+      "hashes",
+      "versioning",
+      "retraction_propagation"
+    ],
+    "documentation": "docs/omega/agents/omega-07.md"
+  },
+  "mission": {
+    "primary": "Guarantee forensic drill-down and complete correction propagation",
+    "in_scope": [
+      "artifact_graph",
+      "hashes",
+      "custody",
+      "dependency_closure"
+    ],
+    "out_of_scope": [
+      "truth_interpretation",
+      "strategy"
+    ],
+    "absence_failure": "Orphaned unreproducible truth"
+  },
+  "authority": {
+    "allow": [
+      "VERIFY_LINEAGE",
+      "BLOCK_ORPHAN",
+      "REVOKE_SEAL",
+      "TRIGGER_INVALIDATION"
+    ],
+    "conditional": [
+      "READ_SECRET_METADATA"
+    ],
+    "deny": [
+      "EDIT_PAYLOAD",
+      "CERTIFY_TRUTH"
+    ],
+    "memory_commit": [
+      "ProvenanceLedger"
+    ]
+  },
+  "activation": {
+    "events": [
+      "EVIDENCE_ACQUIRED",
+      "CLAIM_CREATED",
+      "DOSSIER_READY",
+      "CLAIM_RETRACTED"
+    ],
+    "thresholds": [
+      "materiality>=M1"
+    ],
+    "exclude_when": [
+      "ephemeral_nonmaterial_note"
+    ]
+  },
+  "workflow": {
+    "cognitive_model": [
+      "lineage_first",
+      "graph_integrity",
+      "forensic_custody"
+    ],
+    "states": [
+      "RECEIVE",
+      "HASH_CHECK",
+      "BUILD_GRAPH",
+      "RESOLVE",
+      "CUSTODY",
+      "ORPHAN_SCAN",
+      "SEAL",
+      "PROPAGATE",
+      "CLOSE"
+    ],
+    "timeout": "lineage_incomplete",
+    "blocked": "quarantine"
+  },
+  "delegation": {
+    "specialists": [
+      "lineage_mapper",
+      "hash_verifier",
+      "transformation_auditor"
+    ],
+    "spawn_when": [
+      ">1000_nodes",
+      "complex_ETL"
+    ],
+    "tools": [
+      "HASH",
+      "GRAPH",
+      "COMPUTE_SAFE"
+    ],
+    "model_tier": "LOCAL-C",
+    "reasoning_effort": "medium",
+    "max_children": 12,
+    "max_depth": 2,
+    "verification": "deterministic_second_check"
+  },
+  "model_routing": {
+    "minimum_tier": "LOCAL_DETERMINISTIC",
+    "default_tier": "C",
+    "default_effort": "medium",
+    "escalate_when": [
+      "ambiguous_transformation"
+    ],
+    "deterministic_for": [
+      "hash",
+      "graph_closure"
+    ]
+  },
+  "context": {
+    "always": [
+      "schemas",
+      "custody_policy"
+    ],
+    "mission": [
+      "artifact_graph"
+    ],
+    "retrieved": [
+      "metadata"
+    ],
+    "forbidden": [
+      "payload_modification"
+    ]
+  },
+  "memory": {
+    "read": [
+      "all_scoped_artifacts"
+    ],
+    "append": [
+      "ProvenanceLedger"
+    ],
+    "propose": [
+      "DependencyGraph"
+    ],
+    "verify": [
+      "EvidenceLedger",
+      "ClaimLedger"
+    ],
+    "commit": [
+      "ProvenanceLedger"
+    ],
+    "revoke": [
+      "ProvenanceSeal"
+    ]
+  },
+  "quality_gates": [
+    "hash",
+    "snapshot",
+    "transformation",
+    "custody",
+    "dependency_closure",
+    "propagation_closure"
+  ],
+  "output_contract": {
+    "artifacts": [
+      "ProvenanceManifest",
+      "ProvenanceSeal",
+      "OrphanReport",
+      "RetractionImpact"
+    ],
+    "schema_refs": [
+      "artifact-envelope.schema.json",
+      "evidence.schema.json"
+    ]
+  },
+  "escalation": {
+    "routes": {
+      "tamper": "omega_03",
+      "access": "omega_21",
+      "truth": "omega_11"
+    }
+  },
+  "failure_focus": [
+    "orphan",
+    "hash_mismatch",
+    "lineage_cycle",
+    "incomplete_propagation",
+    "schema_edge_break"
+  ],
+  "security": {
+    "tool_profile": [
+      "READ_METADATA",
+      "HASH",
+      "GRAPH"
+    ],
+    "human_required": [
+      "custody_dispute",
+      "legal_deletion"
+    ]
+  },
+  "termination": {
+    "done": [
+      "all_material_paths_resolved",
+      "seal_or_explicit_block",
+      "notifications"
+    ],
+    "stop": [
+      "access_limited",
+      "tamper",
+      "unresolvable_orphan"
+    ]
+  },
+  "production_ref": "../production-charters.json#/agents/6"
+}

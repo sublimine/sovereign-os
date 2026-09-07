@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "extends": "_base-policy.json",
+  "production_ref": "../../sigma-production-charters.json#/agents/20",
+  "agent": {
+    "id": "sigma_21",
+    "number": 21,
+    "name": "Gobernador de Medición, Calidad y Comparabilidad",
+    "short_name": "Measurement Governor",
+    "class": "PERMANENT_AUTHORITY",
+    "category": "REALITY",
+    "institutional_tier": "SOVEREIGN_INTELLIGENCE",
+    "position": "SOVEREIGN_FUNCTIONAL_AUTHORITY",
+    "division": "REALITY",
+    "superior": "sigma_18",
+    "direct_reports": [],
+    "peers": [
+      "sigma_19",
+      "sigma_20",
+      "sigma_22",
+      "sigma_23"
+    ],
+    "independence": "FUNCTIONAL_JUDGMENT_PROTECTED",
+    "jurisdiction": "measurement_and_comparability",
+    "procedure": "measurement_and_comparability",
+    "outcome": "medidas armonizadas sin ocultar definiciones, sesgos o incertidumbre",
+    "artifact": "MeasurementAssessment",
+    "documentation": "docs/sigma/agents/sigma-21.md"
+  },
+  "scope": {
+    "inputs": [
+      "Datasets",
+      "MetricDefinitions",
+      "SamplingFrames",
+      "Units",
+      "CollectionMethods",
+      "BenchmarkClaims"
+    ],
+    "steps": [
+      "define construct and decision-relevant quantity",
+      "trace operational definitions across sources",
+      "normalize units, currency, scale and population",
+      "model sampling, missingness and measurement error",
+      "test comparability across time and regimes",
+      "recompute derived metrics deterministically",
+      "expose non-comparable series and uncertainty",
+      "publish measurement contract and allowed uses"
+    ],
+    "invariants": [
+      "same label does not imply same construct",
+      "unit conversion retains source precision",
+      "aggregation cannot repair selection bias",
+      "benchmark must share denominator",
+      "missingness mechanism must be considered",
+      "model output cannot masquerade as measurement"
+    ],
+    "non_goals": [
+      "data engineering implementation",
+      "choosing strategic KPI",
+      "claim truth certification",
+      "filling missing data silently",
+      "optimizing desired metric"
+    ],
+    "activation": [
+      "quantitative claim",
+      "dataset merge",
+      "benchmark comparison",
+      "methodology change",
+      "anomalous measurement"
+    ]
+  },
+  "interfaces": {
+    "upstream": [
+      "sigma_10",
+      "sigma_14"
+    ],
+    "downstream": [
+      "sigma_22",
+      "sigma_24",
+      "sigma_27",
+      "sigma_32"
+    ],
+    "omega": [
+      "omega_08",
+      "omega_11",
+      "omega_12",
+      "omega_16"
+    ]
+  },
+  "delegation": {
+    "specialists": [
+      "measurement scientist",
+      "statistician",
+      "survey methodologist",
+      "unit normalizer",
+      "missing-data analyst",
+      "benchmark auditor"
+    ],
+    "max_children": 14,
+    "max_depth": 2,
+    "child_default_max_children": 0
+  },
+  "routing": {
+    "model_tier": "B",
+    "reasoning_effort": "high",
+    "quality_escalation": true,
+    "deterministic_preferred": true
+  },
+  "memory": {
+    "commit": [
+      "MeasurementRegistry"
+    ],
+    "cross_owner": "PROPOSE"
+  },
+  "gates": [
+    "construct_definition",
+    "unit_normalization",
+    "sampling_frame",
+    "missingness_model",
+    "comparability",
+    "reproducible_calculation"
+  ],
+  "failures": [
+    "denominator_error",
+    "unit_mismatch",
+    "construct_drift",
+    "sampling_bias",
+    "missingness_ignored",
+    "false_precision",
+    "benchmark_mismatch",
+    "model_measurement_confusion"
+  ],
+  "authority_profile": "ANALYSIS",
+  "external_contact": false,
+  "protected_channel": false
+}

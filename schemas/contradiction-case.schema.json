@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.local/schemas/contradiction-case.schema.json",
+  "title": "ContradictionCase",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case_id", "version", "claim_refs", "evidence_refs", "provenance_refs",
+    "chronology", "possible_explanations", "resolution_plan", "owner",
+    "materiality", "status", "created_at"
+  ],
+  "properties": {
+    "case_id": {"type": "string", "minLength": 8},
+    "version": {"type": "integer", "minimum": 1},
+    "claim_refs": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "provenance_refs": {"type": "array", "items": {"type": "string"}},
+    "chronology": {"type": "array", "items": {"type": "object"}},
+    "possible_explanations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "resolution_plan": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "owner": {"type": "string"},
+    "materiality": {"enum": ["M0", "M1", "M2", "M3", "M4"]},
+    "status": {"enum": ["OPEN", "INVESTIGATING", "RECONCILED", "ONE_REFUTED", "BOTH_PARTIAL", "TEMPORAL_CHANGE", "SCOPE_SPLIT", "UNRESOLVED", "SUPERSEDED"]},
+    "resolution": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "closed_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}
+
