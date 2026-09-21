@@ -1,0 +1,37 @@
+[Unit]
+Description=Sublimine Console local control surface
+Wants=sovereign-factory.service
+After=sovereign-factory.service
+
+[Service]
+Type=simple
+# Copy console.env.example to %h/.config/sublimine/console.env and set the
+# two absolute executable paths for this host. Nothing here is tied to the
+# workstation that produced the template.
+EnvironmentFile=-%h/.config/sublimine/console.env
+WorkingDirectory=%h/openclaw-workspace/sovereign-os
+Environment=HOME=%h
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+Environment=SOVEREIGN_CONSOLE_HOST=127.0.0.1
+Environment=SOVEREIGN_CONSOLE_PORT=4177
+# A future qualified PDF/DOCX parser receives only this service-owned private
+# scratch root.  It is not a general upload directory and is created by
+# systemd with restrictive ownership before the console starts.
+Environment=SUBLIMINE_DOCUMENT_EXTRACTION_RUNTIME_DIR=/run/user/%U/sublimine-document-extraction
+ExecCondition=/usr/bin/env ${SUBLIMINE_NODE_BIN} %h/openclaw-workspace/sovereign-os/dashboard/bin/check-console-service-scope.mjs
+ExecStart=/usr/bin/env ${SUBLIMINE_NODE_BIN} %h/openclaw-workspace/sovereign-os/dashboard/server.mjs
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+UMask=0077
+RuntimeDirectory=sublimine-document-extraction
+RuntimeDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=%h/.local/state/sovereign-console
+
+[Install]
+WantedBy=default.target

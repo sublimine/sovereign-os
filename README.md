@@ -1,4 +1,8 @@
-# Sovereign OS — Departamento Ω v2
+# Sublimine — fábrica institucional de agentes
+
+> **Nombre de producto:** Sublimine. Algunas rutas, protocolos y la CLI interna
+> conservan el identificador histórico `sovereign` para no invalidar estados,
+> recibos ni releases ya sellados; no son la marca que se presenta al operador.
 
 Especificación institucional y técnica de una cúspide multiagente soberana,
 independiente del runtime. Este repositorio es una especificación ejecutable:

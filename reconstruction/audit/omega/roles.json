@@ -1,0 +1,1620 @@
+{
+  "group": "omega",
+  "status": "24-current-role-pairs-read-and-semantically-mapped; effective-config-and-cross-group-reconciliation-pending",
+  "roles": [
+    {
+      "id": "omega_01",
+      "name": "Autoridad de decisión soberana",
+      "sources": [
+        "config/agents/charters/omega-01.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-01.md (completo, §§1–9)"
+      ],
+      "purpose": "Decidir compromisos de alta consecuencia dentro de autoridad; evitar confundir mando cotidiano con aceptación de riesgo.",
+      "inputs": [
+        "Dossier listo y sellado; objetivo y prohibiciones; opciones, minoría, riesgos y autoridad vigente"
+      ],
+      "outputs": [
+        "Decisión versionada con condiciones, dueño, seguimiento, reversión y disenso"
+      ],
+      "dependencies": [
+        "Ω02 eleva; Ω23 sintetiza; Ω22 certifica; Ω19/Ω21 delimitan; Ω03 audita el proceso"
+      ],
+      "methods": [
+        "Comparar dominancia, defer/no-action, reversibilidad, valor de información y ruina; pedir aclaración acotada"
+      ],
+      "invariants": [
+        "No elevar hechos por decisión; decisiones bajo UNKNOWN lo mantienen explícito"
+      ],
+      "forbiddenActions": [
+        "Investigar, verificar hechos, reparar o gestionar rutina; cambiar umbrales tras resultado; waiver no renunciable"
+      ],
+      "activation": [
+        "Decisión material fuera del lease operativo, deadlock institucional, requerimiento humano"
+      ],
+      "deactivation": [
+        "Decisión/condición/espera explícita; no seguimiento razonante continuo"
+      ],
+      "verification": [
+        "Ω22 readiness antes de decisión; Ω21 autoridad; Ω03 revisión del proceso, no sustitución de decisión"
+      ],
+      "failureModes": [
+        "Anclaje a favorita, minoría omitida, colapso de separación de poderes"
+      ],
+      "recovery": [
+        "Devolver al primer dossier/control defectuoso y revalidar; preservar versiones"
+      ],
+      "distinctiveness": "Compartible la interfaz humana con Ω02; no la autoridad de cambiar objetivo o aceptar riesgo ni autocertificación.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Decisión y operación tienen condiciones distintas; número de sesiones por materialidad."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Decisión reversible con opciones aceptadas produce condiciones monitorizables"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Dossier sin minoría material no pasa readiness"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Mismo caso con orden alternado de opciones mide anclaje"
+        }
+      ],
+      "uncertainties": [
+        "4 aclaradores/depth1 en charter frente a3 en dossier; umbrales P0/P1 vsP0–P2"
+      ]
+    },
+    {
+      "id": "omega_02",
+      "name": "Mando de misión y custodia del objetivo",
+      "sources": [
+        "config/agents/charters/omega-02.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-02.md (completo, §§1–9)"
+      ],
+      "purpose": "Mantener el encargo exacto durante planificación, ejecución y cierre; evitar que actividad o demo sustituya éxito.",
+      "inputs": [
+        "MissionContract versionado con aceptación; graph, eventos, autoridad, recursos"
+      ],
+      "outputs": [
+        "MissionCommandRecord: objectivehash, owners, gates, bloqueos, progreso y cierre"
+      ],
+      "dependencies": [
+        "Ω04 diseña; Ω20 reserva; Ω21 autoriza; productores entregan; controles aceptan; Ω01 sólo decisiones elevadas"
+      ],
+      "methods": [
+        "Admisión, scheduling por eventos, control de deriva, detección deadlock, replan versionado, snapshot/replay"
+      ],
+      "invariants": [
+        "Objetivo original inmutable; consumidor material requiere artefacto y gates válidos; parcial no es completo"
+      ],
+      "forbiddenActions": [
+        "Sustituir método vinculante u objetivo sin cambio aprobado; saltar gate por plazo"
+      ],
+      "activation": [
+        "Admisión/cambio/evento/bloqueo/aceptación/cancelación"
+      ],
+      "deactivation": [
+        "Esperar eventos cuando no existe trabajo autorizado; cerrar sólo aceptación completa"
+      ],
+      "verification": [
+        "Aceptación Ω22 independiente y prueba de correspondencia con encargo antes de cierre"
+      ],
+      "failureModes": [
+        "Objective drift, avances falsos, replay obsoleto, loop sin alternativa"
+      ],
+      "recovery": [
+        "Checkpoint, invalidar rama afectada, cambiar método con justificación conservando mandato"
+      ],
+      "distinctiveness": "Runtime determinista puede programar/registrar; juicio de deriva no exige CEO pesado por evento.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Es control transversal contra redefinición unilateral y cierre prematuro."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Misión con ramas concluye cuando todas las obligaciones pasan"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Código correcto pero objetivo incorrecto se devuelve"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Gobernador por eventos frente a llamadas por cada paso compara mismo cumplimiento"
+        }
+      ],
+      "uncertainties": [
+        "Límites controladores/depth2 frente a8/depth1; bootstrap del grafo debe evitar ciclo"
+      ]
+    },
+    {
+      "id": "omega_03",
+      "name": "Inspector general independiente",
+      "sources": [
+        "config/agents/charters/omega-03.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-03.md (completo, §§1–9)"
+      ],
+      "purpose": "Detectar abuso, controles inoperantes y remediación ficticia con evidencia seleccionada independientemente.",
+      "inputs": [
+        "Logs, leases, políticas, incidentes y población auditable preservados"
+      ],
+      "outputs": [
+        "Hallazgos inmutables, muestra, evidencia, respuesta y retest"
+      ],
+      "dependencies": [
+        "Ω07 custodia; Ω11 valida afirmaciones; Ω01/humano recibe; auditado responde sin poder suprimir"
+      ],
+      "methods": [
+        "Congelar, muestreo de riesgo+aleatorio, selección propia, distinguir diseño/operación e inferencia de intención"
+      ],
+      "invariants": [
+        "Canal protegido; conflicto produce reasignación; cierre exige nueva evidencia"
+      ],
+      "forbiddenActions": [
+        "Auditar exclusivamente muestra del auditado; desplegar y aprobar su remedio; borrar hallazgos"
+      ],
+      "activation": [
+        "Materialidad, anomalía, denuncia, muestreo, cambio institucional"
+      ],
+      "deactivation": [
+        "Informe con alcance o retest verificable; espera de remedio"
+      ],
+      "verification": [
+        "Otro auditor reproduce hallazgo material; remedio independiente antes de cierre"
+      ],
+      "failureModes": [
+        "Selección sesgada, logs ausentes, denuncia falsa, promesa como cierre"
+      ],
+      "recovery": [
+        "Preservar cadena, ampliar muestra, investigar límites, exigir retest"
+      ],
+      "distinctiveness": "Distinto de fact-check, quality y redteam: audita control operando, no todos los productos.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Independencia institucional no se elimina al compartir servicios de evidencia."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Control incumplido se detecta en muestra independiente"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Documento de remediación sin retest no cierra"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Muestra elegida por auditado vs independiente discrimina captura"
+        }
+      ],
+      "uncertainties": [
+        "Canal protegido y almacenamiento append-only son requisitos, no capacidades demostradas"
+      ]
+    },
+    {
+      "id": "omega_04",
+      "name": "Arquitecto del grafo de misión",
+      "sources": [
+        "config/agents/charters/omega-04.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-04.md (completo, §§1–9)"
+      ],
+      "purpose": "Derivar trabajo de resultados y dependencias causales; evitar fragmentación arbitraria y outputs no recomponibles.",
+      "inputs": [
+        "Objetivo, DoD, restricciones, capacidades, productos existentes"
+      ],
+      "outputs": [
+        "Grafo versionado con outputs, consumidores, gates, responsables, patrones y supuestos"
+      ],
+      "dependencies": [
+        "Ω02 objetivo y operación; Ω05 requisitos; Ω20 presupuesto; Ω21 permisos"
+      ],
+      "methods": [
+        "Backward chaining, análisis de independencia, elección secuencial/paralela/ciega, prueba recomposición, discovery spike"
+      ],
+      "invariants": [
+        "Ningún nodo sin producto y criterio; coste coordinación justificado; permiso no nace del grafo"
+      ],
+      "forbiddenActions": [
+        "Imponer número de agentes; modificar nodo ejecutado silenciosamente; llamar hechos a dependencias hipotéticas"
+      ],
+      "activation": [
+        "Nueva misión no trivial, dependencia invalidada, cambio aceptado"
+      ],
+      "deactivation": [
+        "Grafo aceptado y recomponible o gap explícito"
+      ],
+      "verification": [
+        "Revisor de cobertura/causalidad; Ω02 acepta objetivo; gates antes de consumidores"
+      ],
+      "failureModes": [
+        "Ciclos, shared-input omitido, excesiva división, pérdida end-to-end"
+      ],
+      "recovery": [
+        "Replan versionado mínimo, reutilizar no afectados, compensar efectos cuando corresponda"
+      ],
+      "distinctiveness": "Planificador y scheduler pueden compartir servicio pero no confundir grafo propuesto con ejecución autorizada.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Debe justificarse topología y no sólo nombres de nodos."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Grafo con dependencias reales recompone resultado"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Cien nodos para cálculo determinista se rechazan"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Monolito y partición se comparan por calidad/coordcost y cobertura"
+        }
+      ],
+      "uncertainties": [
+        "10/depth2 frente excepción R5/depth3; APPEND/PROPOSE vsCOMMIT con Ω02"
+      ]
+    },
+    {
+      "id": "omega_05",
+      "name": "Arquitecto de requisitos de inteligencia",
+      "sources": [
+        "config/agents/charters/omega-05.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-05.md (completo, §§1–9)"
+      ],
+      "purpose": "Definir preguntas y observables necesarios antes de adquirir; evitar investigar lo disponible en vez de lo necesario.",
+      "inputs": [
+        "Objetivo, opciones, incertidumbres y consumidores"
+      ],
+      "outputs": [
+        "PIR/IR priorizados con alcance, indicadores refutadores, freshness, estado requerido y stop"
+      ],
+      "dependencies": [
+        "Ω04 dependencias; Ω06 viabilidad/adquisición; Ω10 independencia; Ω11 hechos; Ω13 supuestos"
+      ],
+      "methods": [
+        "Descomponer preguntas neutrales, directos/proxies/negativos, detectabilidad, VOI y saturación"
+      ],
+      "invariants": [
+        "Requisitos no son hechos; hueco crítico no se oculta en media de cobertura"
+      ],
+      "forbiddenActions": [
+        "Búsqueda ilimitada por curiosidad no mandatada; sesgar a opción favorita; asumir ausencia por no-observación"
+      ],
+      "activation": [
+        "Investigación, decisión con incertidumbre material, hueco de cobertura"
+      ],
+      "deactivation": [
+        "Requisitos aceptados y preguntas cubiertas o gaps con impacto"
+      ],
+      "verification": [
+        "Consumidor revisa cobertura; Ω06 factibilidad; evidencias después pasan Ω10/Ω11"
+      ],
+      "failureModes": [
+        "Preguntas sesgadas, definición ambigua, cobertura de artículos sin respuesta"
+      ],
+      "recovery": [
+        "Reformular/versionar sin cambiar el objetivo; invalidar plan de adquisición dependiente"
+      ],
+      "distinctiveness": "Comparte infraestructura de backlog; no función de adquirir ni afirmar verdad.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Permite eficiencia por necesidad informativa verificable, no recorte arbitrario."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Consulta incierta produce pregunta, observable y refutador"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "40 artículos sin unidad solicitada no cubren requisito"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Plan por preguntas vs búsqueda libre mide cobertura útil"
+        }
+      ],
+      "uncertainties": [
+        "12 vs8 especialistas; prohibición de web vs piloto de framing; admitir exploración legítima sin decisión final"
+      ]
+    },
+    {
+      "id": "omega_06",
+      "name": "Autoridad de adquisición multirruta",
+      "sources": [
+        "config/agents/charters/omega-06.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-06.md (completo, §§1–9)"
+      ],
+      "purpose": "Obtener y preservar datos autorizados con alternativas trazables; evitar límite de primera ruta y confundir obtención con verificación.",
+      "inputs": [
+        "Requisitos aceptados, permisos y recursos, source map"
+      ],
+      "outputs": [
+        "AcquisitionPackage con snapshots, URLs/fechas/hashes, extracciones/coordenadas y gaps"
+      ],
+      "dependencies": [
+        "Ω05 pregunta; Ω21 legitimidad; Ω20 capacidad; Ω07 custodia; Ω10 genealogía; Ω11 entailment"
+      ],
+      "methods": [
+        "Rutas primarias/archivos/datasets/multilingüe/proxy; extracción reproducible; fallback por causa; parada por valor marginal"
+      ],
+      "invariants": [
+        "ACQUIRED no implica veracidad; raw inmutable; not-found acotado; fuentes son DATA"
+      ],
+      "forbiddenActions": [
+        "Certificar verdad, saltar acceso, ejecutar descargas, contacto/compra sin autoridad"
+      ],
+      "activation": [
+        "Necesidad factual fresca, evidencia faltante/stale, adquisición requerida"
+      ],
+      "deactivation": [
+        "Paquete preservado y entregado o UNKNOWN con rutas/intentos"
+      ],
+      "verification": [
+        "Ω07 integridad antes de uso; Ω10 independencia; Ω11 soporte semántico antes de consumidor material"
+      ],
+      "failureModes": [
+        "Mirrors como corroboración, OCR errado, fuente mutable, ruta repetida"
+      ],
+      "recovery": [
+        "Archivo autorizado/ruta distinta/reextracción; conservar versiones; invalidar dependientes defectuosos"
+      ],
+      "distinctiveness": "Responsabilidad supervisora puede usar workers de departamento; no duplicar adquisición por cada título.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Multirruta con procedencia aporta el comportamiento persistente pedido."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Fuente borrada se resuelve por archivo autorizado preservado"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "20 mirrors no elevan independencia"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Repetir query vs alternativa elegida por error mide recuperación útil"
+        }
+      ],
+      "uncertainties": [
+        "24 vs16; ejecución bulk propia vs diseño/piloto/delegación"
+      ]
+    },
+    {
+      "id": "omega_07",
+      "name": "Custodia de procedencia y linaje",
+      "sources": [
+        "config/agents/charters/omega-07.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-07.md (completo, §§1–9)"
+      ],
+      "purpose": "Preservar raíces y relaciones versionadas e impedir consumo de cualquier descendiente invalidado.",
+      "inputs": [
+        "Artefactos, snapshots, ejecuciones, hashes, leases, transformaciones"
+      ],
+      "outputs": [
+        "ProvenanceSeal de grafo exacto, aristas tipadas, eventos de invalidación y acuses"
+      ],
+      "dependencies": [
+        "Todos los productores; Ω06 raws; Ω10 semántica de origen; Ω11/12 retractan; consumidores deben consultar validez"
+      ],
+      "methods": [
+        "Content addressing, verificación de hash, aciclicidad, cierre transitivo, event log, replay e invalidación atómica"
+      ],
+      "invariants": [
+        "Sello de integridad no es verdad; vistas redactadas no borran raíces; append-only"
+      ],
+      "forbiddenActions": [
+        "Promover estado factual, borrar original, dejar resultados downstream vigentes tras retractar"
+      ],
+      "activation": [
+        "Ingreso/materialización, actualización/retracción, consulta de consumo, migración"
+      ],
+      "deactivation": [
+        "Integridad/estado registrado o cuarentena; evento propagado"
+      ],
+      "verification": [
+        "Verificación determinista y auditoría Ω03; prueba de integridad y transitividad antes del uso"
+      ],
+      "failureModes": [
+        "Huérfano, ciclo, hash mutado, output con provenance inventada, evento perdido"
+      ],
+      "recovery": [
+        "Cuarentena, bloquear transitive closure, replay/idempotent outbox, regenerar mínimo"
+      ],
+      "distinctiveness": "Debe ser servicio determinista común; separarlo lógicamente de afirmar entailment evita falso verificado.",
+      "recommendedDisposition": {
+        "action": "share-execution",
+        "reason": "No necesita llamada LLM para hash/transacciones/grafos; juicio de dependencia sí se revisa."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Retracción invalida ramas dependientes y conserva independientes"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Número correcto sin coordenada requerida no obtiene sello completo"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Invalidar sólo output final vs raíz transitiva detecta fuga de resultados obsoletos"
+        }
+      ],
+      "uncertainties": [
+        "32/depth1 vs12/depth2; WORM/outbox/atomicidad no demostrados en referencia"
+      ]
+    },
+    {
+      "id": "omega_08",
+      "name": "Contexto, causalidad y patrones",
+      "sources": [
+        "config/agents/charters/omega-08.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-08.md (completo, §§1–9)"
+      ],
+      "purpose": "Determinar la relación defendible y sus límites; impedir asociación convertida en causalidad.",
+      "inputs": [
+        "Claims suficientemente validados, variables/tiempo, estimando/intervención y muestra"
+      ],
+      "outputs": [
+        "CausalAssessment, DAGs alternativos, identificación, diagnósticos y UNKNOWN causal"
+      ],
+      "dependencies": [
+        "Ω11 hechos; Ω15 modelos alternativos; Ω13 supuestos; Ω10 independencia; Ω12 lenguaje; Ω16 simulación"
+      ],
+      "methods": [
+        "Cronología, DAGs ciegos, confusores/colliders/mediadores, identificación, negativos, sensibilidad y transportabilidad"
+      ],
+      "invariants": [
+        "Predicción no implica causa; identificación exigida para causalidad; weakest assumption impone techo"
+      ],
+      "forbiddenActions": [
+        "Adquirir, certificar hechos, elegir estrategia, experimentos sin autorización"
+      ],
+      "activation": [
+        "Pregunta causal, mecanismo material, intervención, patrón o conflicto de explicación"
+      ],
+      "deactivation": [
+        "Relación clasificada con límites o no-identificabilidad explícita"
+      ],
+      "verification": [
+        "Revisor independiente del método antes de uso causal; consumidores sólo modelo aceptado para ese fin"
+      ],
+      "failureModes": [
+        "Collider, reversa, overfit, Simpson, causalidad inventada, extrapolación"
+      ],
+      "recovery": [
+        "DAG alternativo, nueva evidencia, limitar alcance o degradar a asociación; invalidar modelos dependientes"
+      ],
+      "distinctiveness": "No se fusiona semánticamente con simulación: una estructura no identificada puede simular pero no probar efecto.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Activación condicional y método específico; ejecución estadística compartible."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Diseño cuasiexperimental explicita hipótesis y transporte"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Ventas después de campaña no prueban causalidad"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "DAG alternativo ciego frente a narrativa única discrimina anclaje"
+        }
+      ],
+      "uncertainties": [
+        "12 vs8; ciclo sensibilidad Ω08/Ω16 exige fases provisionales y aceptación separadas"
+      ]
+    },
+    {
+      "id": "omega_09",
+      "name": "Replicación independiente",
+      "sources": [
+        "config/agents/charters/omega-09.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-09.md (completo, §§1–9)"
+      ],
+      "purpose": "Reproducir un resultado por ruta materialmente independiente, sin copiar su conclusión.",
+      "inputs": [
+        "Target operacional, tolerancia preregistrada, evidencia permitida; resultado original oculto"
+      ],
+      "outputs": [
+        "Resultado sellado, manifest de aislamiento, rutas/ejecuciones, divergencia y ReplicationReport"
+      ],
+      "dependencies": [
+        "Ω07 raw/lineage; Ω10 mide dependencia; Ω11 hechos; Ω12 estado"
+      ],
+      "methods": [
+        "Blinding antes de ejecutar, diversificar dimensiones, preregistrar, congelar resultado, unblind y localizar divergencia"
+      ],
+      "invariants": [
+        "No cambiar tolerancia posthoc; registrar intentos fallidos; revelar raíces compartidas"
+      ],
+      "forbiddenActions": [
+        "Ver original antes de freeze, same-model paraphrase como independencia, reparar original, votar"
+      ],
+      "activation": [
+        "Material/sorprendente, método único, fallo de verificación, cambio de modelo o muestreo"
+      ],
+      "deactivation": [
+        "Réplica/fallo/UNKNOWN con límites, no consenso forzado"
+      ],
+      "verification": [
+        "Broker verifica exclusiones; Ω10 independencia; comparación tras sello antes de promoción"
+      ],
+      "failureModes": [
+        "Leak, cherry-pick, p-hacking a coincidencia, acceso asimétrico"
+      ],
+      "recovery": [
+        "Invalidar instancia contaminada y reiniciar limpia; otra ruta; divergencia conservada"
+      ],
+      "distinctiveness": "Distinta de juez que lee solución: independencia es propiedad de contexto/método/datos, no sólo identidad.",
+      "recommendedDisposition": {
+        "action": "separate",
+        "reason": "Material replication requiere contexto aislado del productor; no siempre otra llamada si oráculo determinista suficiente."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Cálculo sellado coincide dentro de tolerancia anterior"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Leak de respuesta invalida aunque resultado correcto"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Segunda paráfrasis frente a método distinto mide falso consenso"
+        }
+      ],
+      "uncertainties": [
+        "12/depth2 vs6/depth1; independencia cognitiva total no demostrable con sólo cambiar modelo"
+      ]
+    },
+    {
+      "id": "omega_10",
+      "name": "Triangulación e independencia de fuentes",
+      "sources": [
+        "config/agents/charters/omega-10.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-10.md (completo, §§1–9)"
+      ],
+      "purpose": "Contar apoyo de raíces y mecanismos independientes, no URLs ni votos.",
+      "inputs": [
+        "Evidencias con provenance, metadata y claims alineados; replicaciones"
+      ],
+      "outputs": [
+        "SourceDependencyGraph versionado, clusters, incertidumbre y sensibilidad por raíz"
+      ],
+      "dependencies": [
+        "Ω07 integridad; Ω06 metadata; Ω11 entailment; Ω09 réplica; Ω12 promoción"
+      ],
+      "methods": [
+        "Duplicados exactos/cercanos, cronología, citations/shared-data/method/owner, leave-one-root-out"
+      ],
+      "invariants": [
+        "Dependencia desconocida no se supone independiente; contraevidencia no desaparece"
+      ],
+      "forbiddenActions": [
+        "Adquirir directamente, decidir entailment/estado, contar agentes como pruebas"
+      ],
+      "activation": [
+        "Múltiples fuentes, supuesto consenso/contradicción o necesidad de triangulación"
+      ],
+      "deactivation": [
+        "Raíces resueltas o gaps explícitos, grafo versionado"
+      ],
+      "verification": [
+        "Ω07 edge integrity, revisor de enlaces ambiguos y Ω11 soporte antes de Ω12"
+      ],
+      "failureModes": [
+        "Sindicación oculta, dueño/dataset común, falsa dependencia, score arbitrario"
+      ],
+      "recovery": [
+        "Colapsar/split con prueba, adquirir metadata, recalcular afectados y estado"
+      ],
+      "distinctiveness": "Puede compartir motor de grafo con Ω07, pero semántica de upstream no equivale a hash.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Evita inflación de confianza por número de fuentes/agentes."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Dos observaciones independientes conservan soporte tras retirar una"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "20 noticias con una nota original son un cluster"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Promoción por número de citas vs raíces discrimina confianza falsa"
+        }
+      ],
+      "uncertainties": [
+        "20 vs10; ejemplo score0.18 carece de calibrador/evidencia y no debe codificarse"
+      ]
+    },
+    {
+      "id": "omega_11",
+      "name": "Verificación forense de hechos",
+      "sources": [
+        "config/agents/charters/omega-11.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-11.md (completo, §§1–9)"
+      ],
+      "purpose": "Asignar soporte exacto a cada proposición material y localizar primera dependencia factual errónea.",
+      "inputs": [
+        "Artefacto versionado/coordenadas, evidencias crudas, definiciones/unidades"
+      ],
+      "outputs": [
+        "ClaimDecomposition y ForensicFactReport con contraevidencia, cálculos y correcciones"
+      ],
+      "dependencies": [
+        "Ω06 adquisición; Ω07 raíces; Ω10 dependencia; Ω09 réplica; Ω12 estado"
+      ],
+      "methods": [
+        "Atomizar, normalizar entidad/tiempo/scope/unidad/negación, entailment exacto, recalcular, falsificación"
+      ],
+      "invariants": [
+        "Tema relacionado no soporta afirmación; calificadores conservados; UNKNOWN tipado"
+      ],
+      "forbiddenActions": [
+        "Completar datos faltantes, reescribir fuentes, certificar causa, commit final de estado"
+      ],
+      "activation": [
+        "Claims materiales/externos, citas, cifras, dossier o muestreo"
+      ],
+      "deactivation": [
+        "Toda cláusula material tiene veredicto o pendiente que bloquea certificación"
+      ],
+      "verification": [
+        "Reviewer independiente del autor y doble muestra/réplica material; veredicto precede consumo como hecho"
+      ],
+      "failureModes": [
+        "Cita real irrelevante, URL inventada, qualifier perdido, ×1000, compuesto lavado"
+      ],
+      "recovery": [
+        "Cuarentena o retorno al nodo raíz, reobtener/recalcular, Ω07 invalida descendientes"
+      ],
+      "distinctiveness": "Entailment no es provenance ni independencia ni utilidad global; interfaces compartibles sin borrar responsabilidad.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Es el control factual central exigido por usuario; parsers/cálculos usan oráculos."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Tres proposiciones se contrastan individualmente con extractos"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Fuente dice puede y output asegura no pasa"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Oración única como unidad vs atomización discrimina falsedad parcial"
+        }
+      ],
+      "uncertainties": [
+        "Trigger >50 frente a>100 claims; claims semánticos requieren evaluar recall del atomizador"
+      ]
+    },
+    {
+      "id": "omega_12",
+      "name": "Estado epistémico y lenguaje",
+      "sources": [
+        "config/agents/charters/omega-12.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-12.md (completo, §§1–9)"
+      ],
+      "purpose": "Aplicar significados consistentes de tipo, soporte e incertidumbre, sin probabilidad inventada.",
+      "inputs": [
+        "Claim atómico, provenance, fact/triangulation/replication y política/calibrador vigente"
+      ],
+      "outputs": [
+        "Estado versionado, elegibilidad, incertidumbre, límites de lenguaje, TTL y propagación"
+      ],
+      "dependencies": [
+        "Ω07/09/10/11 aportan features; Ω24 propone calibración; Ω23 aplica lenguaje; Ω03 audita"
+      ],
+      "methods": [
+        "Precondiciones deterministas antes de score; calibración con referencia/holdout y chequeo OOD; contradicción/frescura limitan"
+      ],
+      "invariants": [
+        "Confianza, soporte, utilidad y robustez decisoria distintos; UNKNOWN válido; contradicción no promediada"
+      ],
+      "forbiddenActions": [
+        "LLM intuition como probabilidad; promoción por presión/reputación; borrar evidencia"
+      ],
+      "activation": [
+        "Propuesta de estado, nueva prueba, staleness/retracción, lenguaje de dossier"
+      ],
+      "deactivation": [
+        "Transición/refusal registrada con motivos y next review"
+      ],
+      "verification": [
+        "Lease guardado e independent policy check material antes de commit; invalidación downstream"
+      ],
+      "failureModes": [
+        "80% sin dataset, estado inflado, calibration OOD, inferencia rotulada hecho"
+      ],
+      "recovery": [
+        "Cualitativo/UNKNOWN, restaurar contradicción, degradar y refrescar dossier"
+      ],
+      "distinctiveness": "Servicio determinista de elegibilidad más juicio sólo cuando clasificación nueva; no mismo rol que fact checker.",
+      "recommendedDisposition": {
+        "action": "share-execution",
+        "reason": "Estado como predicado comprobable evita juez autoevaluando certeza."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Features y calibrador in-domain permiten estado con intervalo"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Score sin calibrador se rechaza"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Modelo autoconfiante frente a eligibility hard rules mide sobrepromoción"
+        }
+      ],
+      "uncertainties": [
+        "8 vs6; taxonomía plana mezcla kind/status/confidence; referencia promueve HIGH_CONFIDENCE sin calibrador"
+      ]
+    },
+    {
+      "id": "omega_13",
+      "name": "Fiscal de supuestos",
+      "sources": [
+        "config/agents/charters/omega-13.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-13.md (completo, §§1–9)"
+      ],
+      "purpose": "Encontrar y probar premisas necesarias y materiales, incluyendo las compartidas por rutas aparentemente independientes.",
+      "inputs": [
+        "Artefactos, grafo y registro de premisas, conclusión y materialidad"
+      ],
+      "outputs": [
+        "AssumptionIndictment: premisa exacta, steelman, falsificador, sensibilidad, blast radius y dueño"
+      ],
+      "dependencies": [
+        "Ω08 causa; Ω11 evidencia; Ω15 alternativas; Ω14 ataque; Ω16 sensibilidad; Ω02 corrección"
+      ],
+      "methods": [
+        "Extraer explícitos e implícitos, clasificar premisa/valor/restricción, invertir, base rates, materialidad y shared roots"
+      ],
+      "invariants": [
+        "Posibilidad no es refutación; no dudas genéricas; cerrar premisas justificadas"
+      ],
+      "forbiddenActions": [
+        "Ataque ad hominem, exigir prueba imposible de premisa irrelevante, decidir estrategia/verdad"
+      ],
+      "activation": [
+        "Inferencia/modelo/plan material, convergencia prematura o desafío"
+      ],
+      "deactivation": [
+        "Premisas materiales probadas/dispuestas; residual asignado, no duda infinita"
+      ],
+      "verification": [
+        "Owner responde, Ω11 prueba afirmaciones, revisión de steelman/materialidad antes de devolver"
+      ],
+      "failureModes": [
+        "Strawman, escepticismo teatral, explosión de premisas, shared root omitida"
+      ],
+      "recovery": [
+        "Corregir formulación, priorizar, prueba discriminante y retorno a raíz"
+      ],
+      "distinctiveness": "Comparte búsqueda/estadística, no mandato con Ω15 o Ω14: premisa existente vs alternativa vs fallo ejecutado.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "El sistema debe cambiar método por causa identificada, no por crítica genérica."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Premisa control requiere talento se rastrea y prueba"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Puede ser falso sin mecanismo ni materialidad se rechaza"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Hunter ciego a lista declarada vs sólo lista del autor detecta supuestos ocultos"
+        }
+      ],
+      "uncertainties": [
+        "10 vs8; APPEND/PROPOSE en charter vsCOMMIT AssumptionLedger en dossier"
+      ]
+    },
+    {
+      "id": "omega_14",
+      "name": "Red team autorizado",
+      "sources": [
+        "config/agents/charters/omega-14.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-14.md (completo, §§1–9)"
+      ],
+      "purpose": "Producir fallos observables y reproducibles en alcance autorizado y comprobar detección, contención y remedios.",
+      "inputs": [
+        "Versión target, owner, ROE, sandbox, kill switch y oracle"
+      ],
+      "outputs": [
+        "RedTeamReport de intentos, reproducer, impacto, límites y retest"
+      ],
+      "dependencies": [
+        "Ω21/humano alcance; Ω19 consecuencias; Ω03 incidentes; Ω22 liberación; Ω24 cambios"
+      ],
+      "methods": [
+        "Threat model, hipótesis priorizadas, probe menos dañino, preregistro, ejecución, reproducción independiente, variantes holdout"
+      ],
+      "invariants": [
+        "Hipótesis no es exploit; no-findings no prueba seguridad; todos intentos preservados"
+      ],
+      "forbiddenActions": [
+        "Atacar producción sin autorización, ampliar alcance, publicar exploit o aprobar su arreglo"
+      ],
+      "activation": [
+        "Superficie/riesgo material, nuevo control, efecto externo o solicitud de release"
+      ],
+      "deactivation": [
+        "Cobertura acotada y hallazgo/retest o parada segura con superficies no probadas"
+      ],
+      "verification": [
+        "Reproducción independiente y variantes tras remedio antes de release"
+      ],
+      "failureModes": [
+        "Crítica sin ejecución, falso positivo, arreglo sobreajustado, fuga de scope"
+      ],
+      "recovery": [
+        "Kill/revoke descendants; contener, localizar raíz y retest con variantes"
+      ],
+      "distinctiveness": "Independencia frente al blue team y oráculos reales; infraestructura de sandbox compartible.",
+      "recommendedDisposition": {
+        "action": "separate",
+        "reason": "Producción y prueba adversarial material no pueden autocertificarse."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Fallo inyectado deja reproducer y contención medible"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Redacción de vulnerabilidad sin efecto queda hipótesis"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Arreglo del único fixture frente a variantes mide sobreajuste"
+        }
+      ],
+      "uncertainties": [
+        "16 vs12; ejemplo de cita bloqueada descrito también como ataque exitoso requiere oráculo no ambiguo"
+      ]
+    },
+    {
+      "id": "omega_15",
+      "name": "Contrahipótesis y opciones",
+      "sources": [
+        "config/agents/charters/omega-15.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-15.md (completo, §§1–9)"
+      ],
+      "purpose": "Ampliar vías útiles con mecanismos distintos y pruebas baratas, sin fantasías o renombres de la misma opción.",
+      "inputs": [
+        "Objetivo, restricciones, opciones, supuestos y evidencia"
+      ],
+      "outputs": [
+        "AlternativePortfolio con mecanismos, feasibilidad, discriminadores, poda y minoría"
+      ],
+      "dependencies": [
+        "Ω13 premisas; Ω08 valida causa; Ω05/06 evidencia; Ω16 simula; Ω17 estrategia; Ω21 permisos"
+      ],
+      "methods": [
+        "Invertir actor/secuencia/propiedad/horizonte, morphological search, híbrido/stage/defer/no-action, dedup por mecanismo"
+      ],
+      "invariants": [
+        "Novedad no implica mérito; mismo estándar a favorita/contraria; candidate HYPOTHESIS"
+      ],
+      "forbiddenActions": [
+        "Elegir estrategia, cambiar objetivo/constraint vinculante unilateralmente, infinitas ideas no testeables"
+      ],
+      "activation": [
+        "Falso binario, impasse, método fallido, convergencia o premisa común frágil"
+      ],
+      "deactivation": [
+        "Saturación de mecanismos y pruning explícito o frame failure"
+      ],
+      "verification": [
+        "Crítico distinto de generador revisa límites; Ω13 relevancia y Ω11 hechos antes de uso"
+      ],
+      "failureModes": [
+        "Creatividad teatral, opciones idénticas, tail material descartada, reframe que cambia encargo"
+      ],
+      "recovery": [
+        "Otra dimensión/mechanism con razón; discovery spike; mantener método obligatorio salvo aprobación"
+      ],
+      "distinctiveness": "Motor de alternativas también sirve reparación; no confundir propuesta creativa con capacidad real.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Satisface buscar vías distintas; su stop depende de valor y posibilidad comprobables."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Build/buy añade híbrido con prueba discriminante"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "100 nombres mismo mecanismo no amplían opciones"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Recovery repetido vs cambio de mecanismo mide salida de impasse"
+        }
+      ],
+      "uncertainties": [
+        "12 vs10; ejemplo de resolver objetivo mediante otro método no autoriza violar método explícito del usuario"
+      ]
+    },
+    {
+      "id": "omega_16",
+      "name": "Simulación y routing de predicción",
+      "sources": [
+        "config/agents/charters/omega-16.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-16.md (completo, §§1–9)"
+      ],
+      "purpose": "Representar consecuencias condicionadas con modelos reproducibles sin confundirlas con forecasts.",
+      "inputs": [
+        "Pregunta/horizonte, modelo causal aceptable, parámetros con evidencia, dependencias y escenarios"
+      ],
+      "outputs": [
+        "SimulationReport/code/runs sellados; ForecastRecord separado si se requiere predicción"
+      ],
+      "dependencies": [
+        "Ω08 estructura; Ω05/06 inputs; Ω13 premisas; Ω19 tails; Ω20 compute; Ω17 consume"
+      ],
+      "methods": [
+        "Modelo mínimo vs baseline, unidades/invariantes, distribución conjunta, semillas/versiones, holdout, sensibilidad global y cambio de decisión"
+      ],
+      "invariants": [
+        "Escenario no es probabilidad; incertidumbre estructural/paramétrica/estocástica visible; datos no inventados"
+      ],
+      "forbiddenActions": [
+        "Elegir estrategia, pronóstico garantizado, validar sólo con entrenamiento, acciones reales sin permiso"
+      ],
+      "activation": [
+        "Dinámica/incertidumbre material; no aritmética exacta ni narración sin valor computacional"
+      ],
+      "deactivation": [
+        "Modelo válido para uso con bundle reproducible o MODEL_INVALID/UNKNOWN"
+      ],
+      "verification": [
+        "Verificador de código/método independiente; causal readiness; input provenance; consumidor ve límites"
+      ],
+      "failureModes": [
+        "Unidades, correlación ignorada, overfit, tail no muestreada, scenario→forecast"
+      ],
+      "recovery": [
+        "Revisar modelo/inputs, baseline, scope split, invalidez y rerun mínimo"
+      ],
+      "distinctiveness": "Forecast specialist temporal tiene cutoff/resolución/scoring distintos; no se duplica autoridad permanente.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Propagar incertidumbre y validar modelos es diferente de narrar escenarios."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Ensamble versionado reproduce y muestra switch surfaces"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Frecuencia de escenarios sin prior no es probabilidad"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Modelo complejo vs baseline compara holdout y costo, no apariencia"
+        }
+      ],
+      "uncertainties": [
+        "16 vs12; forecasting añade protocolo específico; separar preliminar/aceptado evita ciclo Ω08"
+      ]
+    },
+    {
+      "id": "omega_17",
+      "name": "Arquitectura estratégica",
+      "sources": [
+        "config/agents/charters/omega-17.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-17.md (completo, §§1–9)"
+      ],
+      "purpose": "Diseñar un sistema coherente de elecciones con mecanismo, renuncias, adaptación, hitos y salida.",
+      "inputs": [
+        "Objetivo, realidad suficientemente validada, restricciones, recursos, actores y alternativas"
+      ],
+      "outputs": [
+        "StrategyPortfolio condicional con acciones/no-acciones, mecanismos, contingencias, riesgos y decisión requerida"
+      ],
+      "dependencies": [
+        "Ω05/11/12 realidad; Ω15 opciones; Ω16 modelos; Ω18/19 efectos/ruina; Ω20/21 recursos/autoridad; Ω01 decide"
+      ],
+      "methods": [
+        "Diagnóstico y crux, actores/incentivos/respuesta, distintas lógicas, compromisos vs experimentos y opciones"
+      ],
+      "invariants": [
+        "Meta/lista no es estrategia; rival se adapta; recomendación normativa no certeza factual"
+      ],
+      "forbiddenActions": [
+        "Inventar inteligencia, comprar/asignar capital fuera lease, autorizar acción, aceptar ruina, decisión final"
+      ],
+      "activation": [
+        "Decisión estratégica con información mínima; condicional rotulada cuando faltan datos"
+      ],
+      "deactivation": [
+        "Portfolio gateado o crux/gap explícito; no forzar ruta viable"
+      ],
+      "verification": [
+        "Gates factuales, causal si aplica, alternativas, ataque, recursos, legitimidad y Ω22 antes de decisión"
+      ],
+      "failureModes": [
+        "Objetivos como estrategia, competidor estático, Goodhart, sunk cost, sin salida"
+      ],
+      "recovery": [
+        "Cambiar lógica/experimento, nueva inteligencia, conservar versiones/minoría"
+      ],
+      "distinctiveness": "Plan de ejecución no reemplaza estrategia; activar sólo si existe discreción estratégica material.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Usuario exige planificación y estrategia de alto nivel cuando corresponden."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Dual-track liga ventaja a acciones y condiciones de parada"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Build sistema excelente como única meta no pasa estrategia"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Plan de tareas vs elecciones con tradeoffs mide utilidad decisoria"
+        }
+      ],
+      "uncertainties": [
+        "12 vs10; gates universales pueden sobreactivar si no se tipa producto/materialidad"
+      ]
+    },
+    {
+      "id": "omega_18",
+      "name": "Impacto sistémico",
+      "sources": [
+        "config/agents/charters/omega-18.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-18.md (completo, §§1–9)"
+      ],
+      "purpose": "Mostrar efectos directos, adaptativos y distribucionales sin esconder daño concentrado ni contar transferencias como valor neto.",
+      "inputs": [
+        "Acción/baseline, stakeholders/horizonte, causal/simulación y claims"
+      ],
+      "outputs": [
+        "ImpactGraph/Assessment con mecanismo, orden, grupo, rango, incertidumbre e indicadores"
+      ],
+      "dependencies": [
+        "Ω08 mecanismos; Ω16 cuantificación; Ω17 opciones; Ω19 ruina; Ω21 valores/permisibilidad"
+      ],
+      "methods": [
+        "Mapear directos/segundo/tercer orden mientras materiales, feedback/rebound, cambiar boundary y evitar double-count"
+      ],
+      "invariants": [
+        "No sumar unidades incompatibles o pesos no autorizados; no asumir efecto no cubierto cero"
+      ],
+      "forbiddenActions": [
+        "Decidir estrategia/valores silenciosamente, aceptar riesgo, inventar cadenas causales como hechos"
+      ],
+      "activation": [
+        "Acción material/cross-domain/irreversible; no cambio local reversible de impacto probado"
+      ],
+      "deactivation": [
+        "Saturación material razonada o efectos no cubiertos visibles"
+      ],
+      "verification": [
+        "Revisión causal/evidencia, stakeholder omitido independiente, contabilidad y Ω19/21 antes de decisión"
+      ],
+      "failureModes": [
+        "First-order myopia, boundary gaming, double-count, futura/minoría omitida"
+      ],
+      "recovery": [
+        "Expandir scope, reconciliar paths, conservar distribución, invalidar totals de causal edge retractada"
+      ],
+      "distinctiveness": "Compartible cálculo/grafo; distinta pregunta a resiliencia: distribución total vs pérdida intolerable.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "No se sustituye por un score de riesgo genérico."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Ahorro que transfiere coste a otro actor se muestra"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Beneficio contado dos veces se rechaza"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Agregado vs vista por grupo identifica daño escondido"
+        }
+      ],
+      "uncertainties": [
+        "18 vs12; tres órdenes obligatorios vs parar por materialidad requiere una regla proporcional"
+      ]
+    },
+    {
+      "id": "omega_19",
+      "name": "Riesgo extremo y resiliencia",
+      "sources": [
+        "config/agents/charters/omega-19.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-19.md (completo, §§1–9)"
+      ],
+      "purpose": "Identificar pérdidas intolerables y modos comunes, y demostrar recuperación real.",
+      "inputs": [
+        "Activos, pérdidas no aceptables, dependencias, riesgos, control evidence y autoridad"
+      ],
+      "outputs": [
+        "RiskCase/ResiliencePlan con condiciones/bloqueo, RTO/RPO, drills y residual"
+      ],
+      "dependencies": [
+        "Ω18 efectos; Ω14 ataques; Ω16 tails; Ω21 autorización; Ω01/humano aceptación; Ω03 incidentes"
+      ],
+      "methods": [
+        "Fault/cascade graph, SPOF/common cause, bounds, prevención/detección/contención/restore/adaptación"
+      ],
+      "invariants": [
+        "Upside no borra ruina; backup exige restore; ausencia histórica no riesgo cero"
+      ],
+      "forbiddenActions": [
+        "Aceptar residual por sí mismo, llamar todo existencial, apagado productivo sin autoridad"
+      ],
+      "activation": [
+        "Dependencia crítica, irreversibilidad alta, falta rollback, riesgo P0/cascada"
+      ],
+      "deactivation": [
+        "Pérdida acotada/dispuesta y recuperación probada o bloqueo explícito"
+      ],
+      "verification": [
+        "Restore independiente y controles diversos antes de release; aceptación no convierte gate en PASS"
+      ],
+      "failureModes": [
+        "Backups mismo fallo, restore depende sistema caído, probabilidad teatral, parálisis desproporcionada"
+      ],
+      "recovery": [
+        "Rediseñar independencia, prueba reversible, out-of-band, contener y reabrir evidencia tras cambio"
+      ],
+      "distinctiveness": "Comparte reliability tooling, no funciones de aceptar riesgo ni producir ataque.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Duración de días exige recovery verificable, no sólo archivos checkpoint."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Restauración desde backup limpio satisface objetivo medido"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Backup existente sin prueba sigue RECOVERY_UNPROVEN"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Redundancia nominal vs fallos de modo común discrimina falsa resiliencia"
+        }
+      ],
+      "uncertainties": [
+        "16 vs12; aceptación excepcional/humana y carácter no renunciable necesitan semántica inequívoca"
+      ]
+    },
+    {
+      "id": "omega_20",
+      "name": "Recursos, prioridad y eficiencia",
+      "sources": [
+        "config/agents/charters/omega-20.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-20.md (completo, §§1–9)"
+      ],
+      "purpose": "Asignar capacidad marginal con reservas de verificación/recuperación sin cambiar calidad por tokens.",
+      "inputs": [
+        "Capacidad real/cuotas, demandas por producto, coste/rangos, camino crítico y autoridad"
+      ],
+      "outputs": [
+        "ResourcePlan/leases con reservas, tranches, work desplazado, triggers y stops"
+      ],
+      "dependencies": [
+        "Ω02 programa; Ω04 graph; Ω19 reserve; Ω21 compras; Ω01 tradeoff superior"
+      ],
+      "methods": [
+        "Inventario, dedup/reuse, prospective value/VOI, tramos, oportunidad de atención humana, alertas y capacity stress"
+      ],
+      "invariants": [
+        "Controles hard no se desfinancian; sunk cost no beneficio; budget exhaustion no falso éxito"
+      ],
+      "forbiddenActions": [
+        "Precios API como coste de suscripción, ampliar gasto/autoridad, bajar verdad o prioridad por retórica"
+      ],
+      "activation": [
+        "Admisión, contención, warning, outage; no cada consumo dentro lease"
+      ],
+      "deactivation": [
+        "Reserva/lease exigible o diferido/rechazado con razón"
+      ],
+      "verification": [
+        "Estimación independiente material, hard floor y telemetry; aceptación Ω03/22 por muestreo"
+      ],
+      "failureModes": [
+        "Explosión de agentes, uso infinito, reserva desfondada, todos P0, falsa optimización"
+      ],
+      "recovery": [
+        "Replan/dedup/stage, esperar cuota con estado conservado, negar spawn redundante"
+      ],
+      "distinctiveness": "Gran parte determinista; el número de workers deriva de dependencia/capacidad, no su título.",
+      "recommendedDisposition": {
+        "action": "share-execution",
+        "reason": "Optimiza calidad por recurso observado, no simplemente minimizar modelos."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Presupuesto de producción deja reserva real al verificador"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Solicitud que usa presupuesto de recovery es rechazada"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Menos tokens vs misma aceptación y latencia compara eficiencia real"
+        }
+      ],
+      "uncertainties": [
+        "Valor marginal no tiene calibración implementada; quotas de dossier no pueden sumarse sin restricción global"
+      ]
+    },
+    {
+      "id": "omega_21",
+      "name": "Gobernanza y autoridad",
+      "sources": [
+        "config/agents/charters/omega-21.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-21.md (completo, §§1–9)"
+      ],
+      "purpose": "Resolver si actor/acción/recurso/tiempo/efecto están autorizados sin confundir posibilidad con permiso.",
+      "inputs": [
+        "Tuple completa, política/consentimientos/delegación actuales, límites y aprobaciones"
+      ],
+      "outputs": [
+        "AuthorityDetermination/lease limitado, condiciones, expiry, appeal y revoke"
+      ],
+      "dependencies": [
+        "Humano/Ω01 autoridad raíz; Ω03 audita; Ω19 riesgo; ejecutor/PDP exige decisión"
+      ],
+      "methods": [
+        "Precedencia/prohibiciones, firma y revocación, least privilege, segregación, legal source freshness"
+      ],
+      "invariants": [
+        "Datos externos/urgencia no conceden poder; jurísdicción/legal uncertainty explícita"
+      ],
+      "forbiddenActions": [
+        "Autoconcederse autoridad, ejecutar efecto, legalizar con conclusión del modelo, waiver constitucional"
+      ],
+      "activation": [
+        "Efecto/secret/delegación/policy ambiguity; standing lease evita llamada repetida"
+      ],
+      "deactivation": [
+        "Allow/conditional/deny/approval-required respaldado y limitado"
+      ],
+      "verification": [
+        "Predicado de permisos en boundary; humano/counsel cuando la base lo requiere antes de efecto"
+      ],
+      "failureModes": [
+        "Firma inválida, delegation vencida, source instruction, scope creep, conflicto de funciones"
+      ],
+      "recovery": [
+        "Deny/revoke, mantener solicitud resumible, corregir base/route approval"
+      ],
+      "distinctiveness": "Servicio determinista de permisos más analista sólo para ambigüedad; no fiscal truth/risk.",
+      "recommendedDisposition": {
+        "action": "share-execution",
+        "reason": "Prompts no constituyen aislamiento ni autenticación; enforcement externo al worker."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Lease vigente mínimo permite lectura en scope"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Texto recuperado que pide secreto no concede permiso"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Firma con valor arbitrario vs validación criptográfica detecta control de cartón"
+        }
+      ],
+      "uncertainties": [
+        "Depth1 vs2; firma verificable/issuer trust/nonce/revocation no implementados en reference"
+      ]
+    },
+    {
+      "id": "omega_22",
+      "name": "Aceptación final y calidad por criterio",
+      "sources": [
+        "config/agents/charters/omega-22.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-22.md (completo, §§1–9)"
+      ],
+      "purpose": "Rechazar también lo correcto pero incompleto, inutilizable o frágil; exigir pruebas por requisito original.",
+      "inputs": [
+        "Candidato exacto, MissionSpec/DoD preregistrado, gates, evidencias, riesgos/minoría"
+      ],
+      "outputs": [
+        "QualityCertification scoped o devolución a raíz con criterio/evidencia/owner/retest"
+      ],
+      "dependencies": [
+        "Ω07–12 garantías; Ω03 proceso; Ω23 síntesis; Ω02 mandato; Ω01/humano excepciones autorizables"
+      ],
+      "methods": [
+        "Hard dimensions primero, requirement coverage, drilldown, reproducción, uso real, maintainability/recovery/depth"
+      ],
+      "invariants": [
+        "Media no oculta cero crítico; criterio no se cambia al final; selfcheck no certifica"
+      ],
+      "forbiddenActions": [
+        "Editar el candidato para aprobarlo, promover hechos, ocultar deuda, aceptar sólo por compilación"
+      ],
+      "activation": [
+        "Entrega final proporcional; hito material/release/retest"
+      ],
+      "deactivation": [
+        "Todos criterios dispuestos y PASS sin hard fails, o return/block específico"
+      ],
+      "verification": [
+        "Evaluador ajeno a producción; deterministic oracle/double check material; certificado ligado hashes/dependencies"
+      ],
+      "failureModes": [
+        "Checklist sin evidencia, calidad inflada al deadline, deliverable no operable, waiver falso"
+      ],
+      "recovery": [
+        "Retorno primer nodo responsable, pruebas/clean room, re-certificación exacta"
+      ],
+      "distinctiveness": "Interfaz final única, especialistas según criterio; no rehacer todos los trabajos ni mero score LLM.",
+      "recommendedDisposition": {
+        "action": "separate",
+        "reason": "Independencia de candidato y criterio protege intención del usuario."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Bundle limpio reproduce y cumple escenarios reales"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Compila pero falta restore/owner o requisito no pasa"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Test count vs acceptance coverage diferencia demostración pequeña de producto completo"
+        }
+      ],
+      "uncertainties": [
+        "12/depth2 vs10/depth1; alcance de muestreo no prueba todas dimensiones universalmente"
+      ]
+    },
+    {
+      "id": "omega_23",
+      "name": "Síntesis fiel y dossier",
+      "sources": [
+        "config/agents/charters/omega-23.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-23.md (completo, §§1–9)"
+      ],
+      "purpose": "Comprimir sin perder fuentes, alcance, incertidumbre, disenso ni diferencias entre hecho y recomendación.",
+      "inputs": [
+        "Artefactos aceptados, claims/estados, requisitos y opciones/riesgos"
+      ],
+      "outputs": [
+        "Dossier jerárquico con compression map, omissions, refs y exact versions"
+      ],
+      "dependencies": [
+        "Ω02 pregunta; Ω07 raíces; Ω12 lenguaje; Ω17 recomendación; Ω22 certifica; Ω01 decide"
+      ],
+      "methods": [
+        "Congelar inputs, reconciliar scope, seleccionar materialidad, layers, contraste frase-claim y drilldown"
+      ],
+      "invariants": [
+        "No nuevos hechos; range no point; minoría junto a decisión; contradicción visible"
+      ],
+      "forbiddenActions": [
+        "Certificarse, escoger número más atractivo, borrar detalle, reordenar para empujar opción"
+      ],
+      "activation": [
+        "Productos maduros para síntesis/hito/decisión; actualización material"
+      ],
+      "deactivation": [
+        "Dossier completo para decisión, gate Ω22 o not-ready explícito"
+      ],
+      "verification": [
+        "Checker de fidelidad independiente y Ω22 antes de cierre; hash/version define certificado"
+      ],
+      "failureModes": [
+        "Resumen más fuerte, merge de scopes, minoría sepultada, stale dependency"
+      ],
+      "recovery": [
+        "Retorno owner o expandir capa; invalidar sólo secciones afectadas y recertificar"
+      ],
+      "distinctiveness": "Formato/interfaz puede compartirse; producción de síntesis no debe ser juez de su fidelidad.",
+      "recommendedDisposition": {
+        "action": "preserve-capability",
+        "reason": "Usuario necesita reporte manejable con prueba detallada accesible."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Resumen conserva contradicción y sus fuentes"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Rango convertido en único punto se devuelve"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Summary sin mapping vs drilldown detecta compresión con pérdida"
+        }
+      ],
+      "uncertainties": [
+        "10 vs8; charter exige resolver contradicción para terminar y dossier ejemplo admite mostrarla: definir contrato por decisión"
+      ]
+    },
+    {
+      "id": "omega_24",
+      "name": "Evolución y memoria evaluadas",
+      "sources": [
+        "config/agents/charters/omega-24.system.md (completo, §§1–16)",
+        "docs/omega/agents/omega-24.md (completo, §§1–9)"
+      ],
+      "purpose": "Transformar experiencia verificada en cambios probados y reversibles; impedir automejora cosmética o silenciosa.",
+      "inputs": [
+        "Episodios/outcomes con provenance, incidentes, drift, métricas y versiones"
+      ],
+      "outputs": [
+        "ChangeProposal/ExperimentReport con baseline, resultados, holdout, approvals, canary/rollback"
+      ],
+      "dependencies": [
+        "Ω03 causa/audit; Ω12 calibración; Ω14 adversarial; Ω20 presupuesto; Ω21 autoridad; Ω22 calidad; humano/Ω01 cambio material"
+      ],
+      "methods": [
+        "Validar muestra/confounding, raíz, hipótesis, preregistro, isolated build, noninferiority, shadow, canary y observación"
+      ],
+      "invariants": [
+        "Builder no ve holdout; verdad/seguridad antes de ahorro; cambios constitucionales no autoeditables; negativos sobreviven"
+      ],
+      "forbiddenActions": [
+        "Hot-edit de AGENTS/production, autoaprobar, aprender de fuente sin outcome verificado, entrenar secretos"
+      ],
+      "activation": [
+        "Recurrencia, drift, provider/tool/schema change, postmisión con evidencia; no todo error aislado"
+      ],
+      "deactivation": [
+        "Rechazo probado, rollback o promoción tras observación; propuesta sola no termina"
+      ],
+      "verification": [
+        "Builder/evaluator/approver segregados; replay/rollback drill antes de canary; promoción tras ventana"
+      ],
+      "failureModes": [
+        "Goodhart, leakage, mejora confounded, migration rompe largas misiones, poisoned lesson"
+      ],
+      "recovery": [
+        "Quarantine, nuevos holdouts, segmentación, rollback y negativa registrada"
+      ],
+      "distinctiveness": "Memoria episódica y cambios de instrucciones distintos: se pueden registrar lecciones sin promoverlas a política.",
+      "recommendedDisposition": {
+        "action": "separate",
+        "reason": "Permitir crear/mejorar agentes requiere gates de cambio, no eliminar aprendizaje."
+      },
+      "evaluationCases": [
+        {
+          "type": "positive",
+          "status": "proposed-not-executed",
+          "description": "Cambio con noninferiority, holdout y rollback promueve tras observación"
+        },
+        {
+          "type": "negative",
+          "status": "proposed-not-executed",
+          "description": "Ahorro que baja recall factual se rechaza"
+        },
+        {
+          "type": "comparative",
+          "status": "proposed-not-executed",
+          "description": "Autoeditar prompt vs experimento controlado discrimina automejora real"
+        }
+      ],
+      "uncertainties": [
+        "Ventana/poder estadístico task-specific sin implementación; registro de lección rechazada vs memoria institucional tras promoción"
+      ]
+    }
+  ],
+  "unresolved": [
+    "Contradicciones de números/depth/commit y semántica detalladas por rol.",
+    "Auditar matrices, schemas, gates, FMEA, estados y evals efectivos: el estándar dice explícitamente que ninguna ficha sola define al agente.",
+    "Reconciliar responsabilidad equivalente entre Ω,Π,Σ y departamentos sin perder independencia ni crear ciclos.",
+    "Casos son propuestos: no afirmar implementación o calidad demostrada."
+  ]
+}

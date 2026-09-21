@@ -1,37 +1,46 @@
-# Release Manifest — Ω Architecture 2.0.0
+# Sublimine — manifiesto de publicación pública
 
-**Status:** D2_DETERMINISTIC_TESTED  
-**Date:** 2026-08-14  
-**Scope:** institutional architecture, production charters, reference enforcement,
-machine contracts and deterministic evaluations. Provider adapters and durable
-production services remain outside this design release.
+**Alcance:** arquitectura institucional, fábrica ejecutable, panel de operación,
+contratos, fichas, pruebas y documentación publicables.
+**Principio:** un commit de fuente debe ser reproducible sin convertir GitHub en
+una copia de la memoria privada de una misión.
 
-## Included
+## Incluido en el repositorio
 
-- Constitution, 17 numbered architecture documents and v2 Definition of Done.
-- 24 conceptual specifications, 24 overlays and 24 production system charters.
-- Signed-hash production kernel and charter catalog.
-- 28 JSON Schema contracts including lease, context, gate, state, release certification and 24-way output.
-- 30 artifact types, 47 events and runtime TypeScript ports.
-- 24×24 relationship matrix and 24×19 action matrix.
-- 24 machine state paths, 24 gate sets and 192 effective role FMEA rows.
-- Six diagrams and seven simulations represented by 98 validated events.
-- 576 effective eval cases: 16 common + 8 role-specific per Ω.
-- Reference enforcement for prompt hashes, leases, authority, blind context,
-  epistemic ceilings, gates and transitive retraction.
-- Ten-pass v2 adversarial audit with correction ledger and explicit validation debt.
-- Final integrity gate for encoding, JSON, schema IDs, version links and metric reconciliation.
+- Constitución, arquitectura, charters, matrices, contratos y evaluaciones
+  deterministas de Ω, Σ y Π.
+- Fábrica ejecutable: planificación, catálogo de roles, adquisición controlada,
+  revisión, límites de presupuesto, recuperación y ejecución aislada.
+- Panel Sublimine, contratos de espacios de proyecto y pruebas de su bóveda de
+  documentos.
+- Adaptadores de proveedor, comandos de operación portables y plantilla de
+  servicio sin rutas personales fijadas.
+- Pruebas de runtime, fábrica y panel, junto con fixtures sintéticas,
+  selladas y autocontenidas para validar compatibilidad sin publicar un
+  historial operativo real.
 
-## Validation command
+## Retenido fuera del repositorio público
 
-~~~powershell
-npm.cmd test
-~~~
+- Peticiones, adjuntos, conversaciones, documentos subidos, respuestas de
+  modelo, recibos y estados SQLite de proyectos reales.
+- Grafos derivados, cachés, bytecode, capturas, perfiles y copias de releases
+  locales.
+- Registros de ejecución y diagnósticos de una VPS concreta que puedan revelar
+  rutas, identificadores operativos o datos de uso.
 
-## Known boundaries
+Esos materiales permanecen en el almacenamiento privado de la instalación. No
+son una omisión del producto: separarlos es necesario para que una publicación
+pública no exponga el contexto de los proyectos del operador.
 
-This is not a running production platform and does not claim D3 model evidence,
-D4 shadow assurance, D5 calibration or external independent certification.
-Provider adapters, persistence, sandbox, cryptographic anchors and lower
-departments must be implemented against the ports. These are `VALIDATION_DEBT`,
-not permission to describe unexecuted behavior as proven.
+## Verificación
+
+```sh
+NODE_BIN="${NODE_BIN:-node}"
+"$NODE_BIN" --test dashboard/test/*.test.mjs
+"$NODE_BIN" --test tests/factory/*.test.mjs
+pnpm test
+```
+
+Las suites deterministas validan contratos y regresiones conocidas. No acreditan
+por sí solas calidad universal, operación continua, seguridad absoluta ni
+resultados de modelos en dominios no evaluados.

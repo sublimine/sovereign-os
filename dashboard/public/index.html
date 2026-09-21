@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#090d17">
+    <title>Sublimine · espacio de trabajo</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body class="sublimine-console">
+    <div class="ambient ambient-indigo" aria-hidden="true"></div>
+    <div class="ambient ambient-mint" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <aside class="rail" id="rail" aria-label="Navegación de Sublimine">
+        <div class="brand-row">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <div class="brand-copy"><strong>Sublimine</strong><span>espacios de trabajo</span></div>
+          <button class="icon-button mobile-rail-close" id="close-rail" type="button" aria-label="Cerrar navegación">×</button>
+        </div>
+
+        <div class="section-label-row">
+          <p class="section-label">Espacios</p>
+          <button class="tiny-action" id="new-project-rail" type="button" title="Crear espacio" aria-label="Crear espacio">+</button>
+        </div>
+        <div class="project-switcher"><div class="project-list" id="project-list" role="list"></div></div>
+
+        <nav class="nav-stack" aria-label="Área del proyecto">
+          <p class="section-label">Workspace</p>
+          <button class="nav-link active" type="button" data-view="home"><span class="nav-glyph">⌂</span><span>Visión general</span></button>
+          <button class="nav-link" type="button" data-view="operations"><span class="nav-glyph">◉</span><span>Operaciones</span></button>
+          <button class="nav-link" type="button" data-view="conversation"><span class="nav-glyph">◌</span><span>Conversación</span><span class="nav-count" id="conversation-count">0</span></button>
+          <button class="nav-link" type="button" data-view="missions"><span class="nav-glyph">↗</span><span>Misiones</span><span class="nav-count" id="mission-count">0</span></button>
+          <button class="nav-link" type="button" data-view="memory"><span class="nav-glyph">◇</span><span>Memoria &amp; vault</span></button>
+          <button class="nav-link" type="button" data-view="agents"><span class="nav-glyph">◈</span><span>Roles</span></button>
+          <button class="nav-link" type="button" data-view="system"><span class="nav-glyph">⊙</span><span>Sistema &amp; modelos</span></button>
+        </nav>
+
+        <div class="rail-bottom">
+          <div class="local-boundary"><i aria-hidden="true"></i><div><strong>Local y privado</strong><span id="rail-sync">Sincronizando</span></div></div>
+          <div class="rail-version"><span>Sublimine Console</span><span>v1</span></div>
+        </div>
+      </aside>
+
+      <main class="main-stage">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button class="icon-button mobile-only" id="open-rail" type="button" aria-label="Abrir navegación">☰</button>
+            <div class="crumbs"><span id="crumb-client">Portfolio</span><span aria-hidden="true">/</span><strong id="crumb-project">Selecciona un espacio</strong></div>
+          </div>
+          <div class="topbar-actions">
+            <span class="live-status" id="stream-status"><i aria-hidden="true"></i><span>Conectando…</span></span>
+            <button class="quiet-button" id="refresh-button" type="button">Actualizar</button>
+            <button class="quiet-button" id="open-project" type="button">Nuevo espacio</button>
+            <button class="primary-button" id="open-mission" type="button"><span>＋</span> Nueva misión</button>
+          </div>
+        </header>
+
+        <p class="notice-bar is-hidden" id="notice-bar" role="alert"></p>
+
+        <section class="empty-workspace" id="empty-workspace">
+          <div class="empty-orb" aria-hidden="true"></div>
+          <p class="eyebrow">SUBLIMINE · CONTROL DE PROYECTOS</p>
+          <h1>Un espacio aislado para cada trabajo serio.</h1>
+          <p>Memoria, archivos, misiones, evidencia y entregables se mantienen dentro del proyecto correcto. Crea el primero para abrir su bóveda privada.</p>
+          <div class="empty-actions"><button class="primary-button large" id="empty-create-project" type="button">Crear mi primer espacio</button><span>La fábrica no mezcla clientes ni contexto entre espacios.</span></div>
+        </section>
+
+        <section class="empty-workspace workspace-loading" id="workspace-loading" hidden aria-live="polite">
+          <div class="empty-orb" aria-hidden="true"></div>
+          <p class="eyebrow">SUBLIMINE · ABRIENDO ESPACIO</p>
+          <h1>Verificando la frontera privada.</h1>
+          <p>Se está recuperando sólo el proyecto seleccionado, su memoria sellada y la cola que le corresponde.</p>
+        </section>
+
+        <div class="workspace" id="workspace" hidden>
+          <section class="view active" data-view-panel="home">
+            <div class="project-hero">
+              <div><p class="eyebrow" id="home-eyebrow">ESPACIO ACTIVO</p><h1 id="home-title">—</h1><p class="hero-copy" id="home-description">Cargando el contexto del espacio…</p></div>
+              <div class="hero-actions"><button class="quiet-button" id="edit-project-identity" type="button">Editar espacio</button><button class="quiet-button" id="hero-voice" type="button">Abrir conversación</button><button class="primary-button" id="hero-mission" type="button">Nueva misión</button></div>
+            </div>
+            <section class="home-command-deck surface" aria-labelledby="home-command-title">
+              <div class="home-command-intro">
+                <div class="home-command-orb" aria-hidden="true"><span></span><span></span><span></span></div>
+                <p class="eyebrow">PUNTO DE ENTRADA DEL ESPACIO</p>
+                <h2 id="home-command-title">¿Qué quieres construir?</h2>
+                <p>Empieza una conversación, añade contexto o prepara archivos sin salir de este proyecto.</p>
+              </div>
+              <form class="home-command-form" id="home-command-form">
+                <label class="sr-only" for="home-command-text">Nueva instrucción para este espacio</label>
+                <textarea id="home-command-text" maxlength="262144" placeholder="Escribe una petición, una decisión o el siguiente objetivo…"></textarea>
+                <div class="home-command-tools">
+                  <input id="home-command-asset-input" type="file" multiple hidden>
+                  <button class="attachment-button" id="home-command-attach" type="button"><span aria-hidden="true">⌇</span> Adjuntar archivos</button>
+                  <div class="attachment-list compact" id="home-command-attachment-list" aria-live="polite"></div>
+                  <span class="home-command-hint" id="home-command-upload-status" aria-live="polite">TXT, Markdown, CSV y JSON se sellan para análisis; PDF y Office quedan en la bóveda hasta tener extractor aislado.</span>
+                  <button class="primary-button home-command-submit" type="submit">Continuar en conversación <span aria-hidden="true">→</span></button>
+                </div>
+              </form>
+            </section>
+            <div class="signal-grid">
+              <article class="signal-card"><span class="signal-label">INTEGRIDAD</span><strong id="signal-integrity">—</strong><p id="signal-integrity-detail">Leyendo cadena local</p></article>
+              <article class="signal-card"><span class="signal-label">MEMORIA</span><strong id="signal-memory">—</strong><p>entradas con procedencia</p></article>
+              <article class="signal-card"><span class="signal-label">MISIÓN ACTIVA</span><strong id="signal-runs">—</strong><p id="signal-runs-detail">Leyendo runtime</p></article>
+              <article class="signal-card"><span class="signal-label">COSTE</span><strong id="signal-budget">—</strong><p>no se estima sin recibo verificable</p></article>
+            </div>
+            <div class="home-grid">
+              <section class="surface activity-surface"><div class="surface-header"><div><p class="eyebrow">TRAZA RECIENTE</p><h2>Actividad del espacio</h2></div><span class="verification-badge">AISLADA</span></div><ol class="activity-feed" id="activity-feed"></ol></section>
+              <section class="surface protocol-surface"><div class="surface-header"><div><p class="eyebrow">CONTRATO</p><h2>Orden de contexto</h2></div><span class="privacy-chip">por proyecto</span></div><ol class="protocol-list" id="protocol-list"></ol><p class="surface-note" id="boundary-summary"></p></section>
+            </div>
+          </section>
+
+          <section class="view" data-view-panel="operations" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">SALA DE OPERACIONES</p><h1>Actividad confirmada del espacio</h1><p>Una proyección visual de misiones, cola y entregas basada únicamente en estados y recibos públicos confirmados. No representa mensajes internos ni razonamiento privado.</p></div><div class="view-heading-actions"><button class="quiet-button" id="operations-open-missions" type="button">Abrir misiones</button></div></div>
+            <div class="operations-room" id="operations-room" aria-live="polite"></div>
+          </section>
+
+          <section class="view" data-view-panel="conversation" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">CONVERSACIÓN AISLADA</p><h1>Contexto y decisiones</h1><p>Guarda sólo la información que corresponde a este espacio. El dictado se procesa en el navegador y se presenta para revisión antes de enviarlo.</p></div><div class="view-heading-actions"><button class="quiet-button" id="new-conversation" type="button">Nuevo hilo</button></div></div>
+            <div class="conversation-layout">
+              <aside class="surface conversation-rail"><div class="surface-header"><div><p class="eyebrow">HILOS</p><h2><span id="thread-total">0</span> conversaciones</h2></div></div><div class="conversation-list" id="conversation-list"></div></aside>
+              <section class="surface chat-surface"><header class="chat-header"><div><p class="eyebrow">HILO ACTIVO</p><h2 id="chat-title">Nuevo contexto</h2></div><span class="privacy-chip">sólo este espacio</span></header><div class="message-list" id="message-list" aria-live="polite"></div>
+                <form class="composer" id="composer-form"><div class="composer-topline"><span id="voice-status">Texto local. Revisa antes de guardar.</span><span id="composer-count">0 / 262.144 bytes</span></div><textarea id="composer-text" maxlength="262144" placeholder="Escribe una decisión, contexto, requisito o instrucción para este espacio…"></textarea><div class="composer-attachments"><input id="composer-asset-input" type="file" multiple hidden><button class="attachment-button" id="composer-attach" type="button"><span aria-hidden="true">⌇</span> Adjuntar</button><div class="attachment-list compact" id="composer-attachment-list" aria-live="polite"></div></div><div class="composer-actions"><button class="voice-button" id="voice-button" type="button" aria-pressed="false"><span aria-hidden="true">●</span><span>Voz</span></button><span class="composer-disclosure">El original queda aislado. Para TXT, Markdown, CSV y JSON, la misión recibe una copia UTF‑8 sellada y no verificada; PDF y Office no se fingen como leídos.</span><div class="composer-submit"><button class="quiet-button" id="save-context" type="submit" data-compose-action="save">Guardar contexto</button><button class="primary-button" id="run-from-composer" type="submit" data-compose-action="run">Guardar y ejecutar</button></div></div></form>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" data-view-panel="missions" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">EJECUCIÓN AISLADA</p><h1>Misiones de este proyecto</h1><p>La cola y los workspaces usan la raíz privada del espacio. Ningún dato de otro cliente aparece ni puede abrirse aquí.</p></div><div class="view-heading-actions"><button class="primary-button" id="missions-create" type="button">Nueva misión</button></div></div>
+            <div class="mission-layout"><section class="surface mission-list-surface"><div class="surface-header"><div><p class="eyebrow">COLA DEL ESPACIO</p><h2>Misiones</h2></div><span class="status-pill" id="project-runtime-state">—</span></div><div class="project-mission-list" id="project-mission-list"></div></section><section class="surface mission-inspector" id="mission-detail"></section></div>
+          </section>
+
+          <section class="view" data-view-panel="memory" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">MEMORIA &amp; DOCUMENTACIÓN</p><h1>Vault del proyecto</h1><p>Consulta la memoria local y verifica cómo se aísla la información. Cada original adjunto conserva hash, recibo y frontera por espacio; no se presenta como evidencia ni como contenido leído por un agente sin un contrato explícito.</p></div><span class="verification-badge" id="memory-integrity">—</span></div>
+            <div class="memory-layout"><section class="surface memory-search-surface"><div class="surface-header"><div><p class="eyebrow">RECUPERACIÓN</p><h2>Buscar en memoria</h2></div></div><form class="search-form" id="memory-search-form"><input id="memory-query" type="search" maxlength="1000" placeholder="Buscar sólo en este proyecto"><button class="primary-button" type="submit">Buscar</button></form><div class="memory-results" id="memory-results"></div></section><section class="surface vault-surface"><div class="surface-header"><div><p class="eyebrow">LÍMITE DEL ESPACIO</p><h2>Contrato de aislamiento</h2></div><span class="privacy-chip">privado</span></div><div class="vault-contract" id="vault-contract"></div><div class="vault-assets-section"><div class="vault-assets-header"><div><p class="eyebrow">ORIGINALES DEL PROYECTO</p><strong>Bóveda documental</strong></div><input id="asset-upload-input" type="file" multiple hidden><button class="primary-button" id="asset-upload-button" type="button">⌇ Subir archivos</button></div><p class="asset-upload-status" id="asset-upload-status">Los originales se guardan con hash y quedan aislados dentro de este proyecto.</p><p class="vault-asset-summary" id="vault-asset-summary"></p><div class="vault-asset-list" id="vault-asset-list"></div></div><div class="vault-deliverables-section"><div class="vault-deliverables-header"><div><p class="eyebrow">PRODUCTOS ACEPTADOS</p><strong>Entregas finales verificadas</strong></div><span class="verification-badge">SELLADAS</span></div><p class="vault-deliverable-summary" id="vault-deliverable-summary"></p><div class="vault-deliverable-list" id="vault-deliverable-list"></div></div><div class="vault-inbox-section"><div class="vault-deliverables-header"><div><p class="eyebrow">BUZÓN OPERATIVO</p><strong>Entregas sin hilo</strong></div><span class="privacy-chip">sin inventar chat</span></div><p class="vault-inbox-summary" id="vault-inbox-summary"></p><div class="vault-inbox-list" id="vault-inbox-list"></div></div></section></div>
+          </section>
+
+          <section class="view" data-view-panel="agents" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">CATÁLOGO DE ROLES</p><h1>Fichas y responsabilidades</h1><p id="roles-note">Cargando catálogo…</p></div><div class="search-field"><input id="role-search" type="search" maxlength="160" placeholder="Buscar rol o capacidad"></div></div>
+            <div class="roles-layout"><section class="surface role-grid-surface"><div class="role-groups" id="role-groups"></div><div class="role-grid" id="role-grid"></div></section><section class="surface role-detail" id="role-detail"></section></div>
+          </section>
+
+          <section class="view" data-view-panel="system" hidden>
+            <div class="view-heading-row"><div><p class="eyebrow">POLÍTICA Y RUNTIME</p><h1>Sistema &amp; modelos</h1><p>Los modelos son una política explícita por espacio. Una admisión congela el target; no reescribe misiones existentes.</p></div><div class="view-heading-actions"><button class="quiet-button" id="start-runtime" type="button">Activar runtime</button><button class="primary-button" id="edit-model-policy" type="button">Editar política</button></div></div>
+            <div class="system-layout"><section class="surface model-policy-surface"><div class="surface-header"><div><p class="eyebrow">POLÍTICA DEL ESPACIO</p><h2>Target de admisión</h2></div><span class="status-pill" id="policy-status">—</span></div><div class="model-policy-detail" id="model-policy-detail"></div></section><section class="surface model-inventory-surface"><div class="surface-header"><div><p class="eyebrow">PROVEEDOR</p><h2 id="provider-state">—</h2></div></div><div class="model-inventory" id="model-inventory"></div></section><section class="surface routing-fact-surface"><div class="surface-header"><div><p class="eyebrow">EJECUCIÓN DECLARADA</p><h2>Targets disponibles</h2></div></div><div class="execution-targets" id="execution-targets"></div></section></div>
+          </section>
+        </div>
+      </main>
+
+      <aside class="inspector" aria-label="Inspector del espacio">
+        <div class="inspector-header"><div><p class="eyebrow">INSPECTOR</p><h2>Estado del espacio</h2></div></div>
+        <div class="inspector-project" id="inspector-project"></div>
+        <section class="inspector-section"><div class="inspector-label"><span>POLÍTICA</span><button class="text-action" id="inspector-edit-policy" type="button">Editar</button></div><div class="policy-summary" id="inspector-policy"></div></section>
+        <section class="inspector-section"><div class="inspector-label"><span>FRONTERA</span><span class="mini-good">AISLADA</span></div><div class="boundary-stack" id="inspector-boundary"></div></section>
+        <section class="inspector-section"><div class="inspector-label"><span>USO &amp; PRESUPUESTO</span></div><div class="budget-stack" id="inspector-budget"></div></section>
+        <section class="inspector-section inspector-bottom"><div class="inspector-label"><span>RUNTIME</span></div><div class="runtime-stack" id="inspector-runtime"></div></section>
+      </aside>
+    </div>
+
+    <div class="mobile-scrim" id="mobile-scrim" hidden></div>
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <template id="empty-row-template"><div class="empty-row"><div class="empty-orb small" aria-hidden="true"></div><strong></strong><p></p></div></template>
+
+    <dialog class="dialog project-dialog" id="project-dialog"><form id="project-form" novalidate>
+      <header class="dialog-header"><div><p class="eyebrow">NUEVO ESPACIO</p><h2>Crear proyecto aislado</h2></div><button class="icon-button" type="button" data-close-dialog="project-dialog" aria-label="Cerrar">×</button></header>
+      <div class="dialog-body"><p class="dialog-intro">Sublimine creará una raíz independiente para memoria, Vault, Graphify y estado de Factory. Elige una política inicial sólo si quieres apartarte del default verificado.</p><div class="form-grid"><label class="field"><span>Nombre del proyecto</span><input id="project-name" name="name" maxlength="160" required autocomplete="off" placeholder="Ej. Portal de cliente"></label><label class="field"><span>Cliente o cartera</span><input id="project-client" name="client" maxlength="160" autocomplete="organization" placeholder="Ej. Operación interna"></label></div><label class="field"><span>Objetivo</span><input id="project-objective" name="objective" maxlength="1000" required placeholder="Qué resultado debe producir este espacio"></label><label class="field"><span>Contexto inicial</span><textarea id="project-description" name="description" maxlength="8000" placeholder="Alcance, límites, datos que no deben mezclarse…"></textarea></label><details class="advanced"><summary>Política inicial de modelo (opcional)</summary><div class="form-grid"><label class="field"><span>Modelo</span><select id="project-model"></select></label><label class="field"><span>Razonamiento</span><select id="project-effort"></select></label></div></details><p class="form-error" id="project-form-error" role="alert"></p></div>
+      <footer class="dialog-footer"><button class="quiet-button" type="button" data-close-dialog="project-dialog">Cancelar</button><button class="primary-button" type="submit">Crear espacio</button></footer>
+    </form></dialog>
+
+    <dialog class="dialog small-dialog" id="project-identity-dialog"><form id="project-identity-form" novalidate>
+      <header class="dialog-header"><div><p class="eyebrow">IDENTIDAD DEL ESPACIO</p><h2>Renombrar proyecto</h2></div><button class="icon-button" type="button" data-close-dialog="project-identity-dialog" aria-label="Cerrar">×</button></header>
+      <div class="dialog-body"><p class="dialog-intro">Actualiza el nombre visible de este espacio y sus proyecciones gestionadas. Las conversaciones, admisiones y evidencias históricas no se reescriben.</p><label class="field"><span>Nombre visible</span><input id="project-identity-name" maxlength="120" required autocomplete="off"></label><p class="form-error" id="project-identity-error" role="alert"></p></div>
+      <footer class="dialog-footer"><button class="quiet-button" type="button" data-close-dialog="project-identity-dialog">Cancelar</button><button class="primary-button" type="submit">Guardar nombre</button></footer>
+    </form></dialog>
+
+    <dialog class="dialog" id="mission-dialog"><form id="mission-form" novalidate>
+      <header class="dialog-header"><div><p class="eyebrow">NUEVA MISIÓN</p><h2>Mandato verificable</h2></div><button class="icon-button" type="button" data-close-dialog="mission-dialog" aria-label="Cerrar">×</button></header>
+      <div class="dialog-body"><p class="dialog-intro" id="mission-project-scope"></p><label class="field"><span>Mandato</span><textarea id="mission-text" maxlength="262144" required placeholder="Describe el resultado, los criterios de aceptación y las restricciones relevantes."></textarea><small id="mission-count-text">0 / 262.144 bytes</small></label><section class="mission-attachments"><div><p class="eyebrow">ADJUNTOS SELLADOS</p><p>Los originales permanecen en la bóveda privada. TXT, Markdown, CSV y JSON UTF‑8 de hasta 256 KiB por archivo (512 KiB en total) se admiten como copias selladas y no verificadas; PDF y Office quedan bloqueados hasta disponer de un extractor aislado.</p></div><input id="mission-asset-input" type="file" multiple hidden><button class="attachment-button" id="mission-attach" type="button">⌇ Añadir archivos</button><div class="attachment-list" id="mission-attachment-list" aria-live="polite"></div></section><div class="form-grid"><label class="field"><span>Modo de entrada</span><select id="mission-entry-mode"><option value="planned">Planificada</option><option value="closed-response-v3">Respuesta cerrada</option></select></label><label class="field"><span>Preset de routing</span><select id="mission-preset"><option value="adaptive-v2">Adaptativo v2</option><option value="adaptive-v3">Adaptativo v3</option></select></label></div><div class="form-grid"><label class="field"><span>Override de modelo</span><select id="mission-model"></select></label><label class="field"><span id="mission-effort-label">Override de razonamiento</span><select id="mission-effort"></select><small id="mission-effort-note"></small></label></div><details class="advanced"><summary>Límites de ejecución (opcional)</summary><div class="form-grid"><label class="field"><span>Paralelismo máximo</span><input id="mission-parallel" type="number" min="1" max="4" inputmode="numeric" placeholder="Sin override"><small>De 1 a 4 ejecuciones concurrentes.</small></label><label class="field"><span>Presupuesto de llamadas</span><input id="mission-call-limit" type="number" min="1" max="1000" inputmode="numeric" placeholder="Sin override"><small>De 1 a 1.000 llamadas.</small></label><label class="field"><span>Rondas de recuperación</span><input id="mission-recovery-rounds" type="number" min="1" max="100" inputmode="numeric" placeholder="Sin override"><small>De 1 a 100; déjalo vacío para no enviarlo.</small></label></div></details><p class="form-error" id="mission-form-error" role="alert"></p></div>
+      <footer class="dialog-footer"><button class="quiet-button" type="button" data-close-dialog="mission-dialog">Cancelar</button><button class="primary-button" id="submit-mission" type="submit">Registrar misión</button></footer>
+    </form></dialog>
+
+    <dialog class="dialog small-dialog" id="policy-dialog"><form id="policy-form" novalidate>
+      <header class="dialog-header"><div><p class="eyebrow">POLÍTICA DE MODELO</p><h2>Próximas admisiones</h2></div><button class="icon-button" type="button" data-close-dialog="policy-dialog" aria-label="Cerrar">×</button></header>
+      <div class="dialog-body"><p class="dialog-intro">Este cambio no altera misiones ya admitidas. Cada misión congela su propio target verificable.</p><label class="field"><span>Modelo</span><select id="policy-model"></select></label><label class="field"><span>Razonamiento</span><select id="policy-effort"></select></label><p class="form-error" id="policy-form-error" role="alert"></p></div>
+      <footer class="dialog-footer"><button class="quiet-button" type="button" data-close-dialog="policy-dialog">Cancelar</button><button class="primary-button" type="submit">Guardar política</button></footer>
+    </form></dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
