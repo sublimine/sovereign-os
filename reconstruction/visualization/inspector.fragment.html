@@ -1,0 +1,295 @@
+<div id="sovereign-proof-inspector">
+  <h2>Ejecuciones y pruebas de Sovereign</h2>
+  <div class="text-small" data-field="capture"></div>
+  <div class="viz-controls">
+    <div data-field="mission-picker"><label class="form-label">Ejecución registrada<select class="form-select" data-field="mission" aria-label="Ejecución registrada"></select></label></div>
+    <label class="form-label">Proceso material<select class="form-select" data-field="stage" aria-label="Proceso material"></select></label>
+  </div>
+  <div class="viz-row" data-field="metrics" aria-live="polite"></div>
+  <div class="text-small" data-field="mission-id"></div>
+  <div data-field="case-classification"></div>
+  <div data-field="audit-finding"></div>
+  <h3 data-field="graph-heading">Ruta registrada · no es una escala de tiempo</h3>
+  <div class="sov-graph" data-field="graph" role="group" aria-label="Productos del plan y sus dependencias"></div>
+  <section data-field="material-sequence-section" hidden><h3>Orden comprobado en el registro</h3><ol data-field="material-sequence"></ol></section>
+  <details><summary>Petición original y resultado registrado</summary><div data-field="intent"></div><div data-field="result"></div></details>
+  <details data-field="closed-section" hidden><summary>Réplica cerrada · entrada, sello y aperturas registradas</summary><div data-field="closed-experiments"></div></details>
+  <hr>
+  <div data-field="stage-detail" aria-live="polite"></div>
+  <details><summary>Secuencia realmente registrada</summary><ol data-field="timeline"></ol></details>
+  <details><summary>Fuentes recuperadas y versiones</summary><div data-field="sources"></div></details>
+  <details><summary>Recorridos HTTP registrados</summary><div data-field="acquisitions"></div></details>
+  <details><summary>Identidad de esta comprobación</summary><div data-field="identity"></div></details>
+  <details data-field="recovery-section" hidden><summary>Cambios de runtime y resultados históricos</summary><div data-field="recovery-records"></div></details>
+  <div class="viz-row"><button type="button" class="btn" data-field="investigate">Pedir auditoría de este proceso</button><span class="text-small" data-field="action-status" aria-live="polite"></span></div>
+</div>
+<style>
+#sovereign-proof-inspector { overflow-wrap:anywhere; }
+#sovereign-proof-inspector details { margin-block:12px; }
+#sovereign-proof-inspector summary { cursor:pointer; }
+#sovereign-proof-inspector dl { display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,4fr);gap:8px 16px; }
+#sovereign-proof-inspector dt { font-weight:500; }
+#sovereign-proof-inspector dd { margin:0; }
+#sovereign-proof-inspector pre { white-space:pre-wrap;overflow-wrap:anywhere; }
+#sovereign-proof-inspector ol { padding-inline-start:24px; }
+#sovereign-proof-inspector li { margin-block:8px; }
+#sovereign-proof-inspector .sov-graph { position:relative; }
+#sovereign-proof-inspector .sov-graph svg { position:absolute;inset:0;width:100%;height:100%;pointer-events:none; }
+#sovereign-proof-inspector .sov-level { display:flex;justify-content:space-evenly;gap:8px;padding-block:18px;position:relative; }
+#sovereign-proof-inspector .sov-node { min-width:0; }
+@media(max-width:460px) { #sovereign-proof-inspector dl { grid-template-columns:1fr; } }
+</style>
+<script type="application/json" id="sovereign-proof-data">@@SOVEREIGN_DATA@@</script>
+<script>
+(() => {
+  const root=document.getElementById('sovereign-proof-inspector');
+  const data=JSON.parse(document.getElementById('sovereign-proof-data').textContent);
+  const field=name=>root.querySelector('[data-field="'+name+'"]');
+  const el=(tag,text,css)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(css)node.className=css;return node;};
+  const number=n=>typeof n==='number'?n.toLocaleString('es-ES'):'desconocido';
+  const pretty=value=>typeof value==='string'?value:JSON.stringify(value,null,2);
+  const detail=(title,body)=>{const d=el('details');d.append(el('summary',title),body);return d;};
+  const pairs=items=>{const dl=el('dl');for(const [name,value]of items){dl.append(el('dt',name),el('dd',pretty(value)));}return dl;};
+  const date=value=>value?new Date(value).toISOString().replace('T',' ').replace('Z',' UTC'):'sin fecha';
+  const options=(select,items)=>select.replaceChildren(...items.map(([value,label])=>{const o=el('option',label);o.value=value;return o;}));
+  let mission=data.missions[0],stage=mission.stages.at(-1);
+  let redrawGraph=()=>{};
+  field('capture').textContent='Snapshot '+date(data.capturedAt)+' · Sin revalidación externa · Mandato global pendiente';
+  options(field('mission'),data.missions.map((m,i)=>[String(i),m.label]));
+  field('mission-picker').hidden=data.missions.length===1;
+  field('mission').value=String(data.initialMissionIndex??0);
+  function proofView(proof){
+    const container=el('div');container.append(pairs([['Tipo',proof.kind],['ID',proof.id],['SHA256',proof.hash]]),el('pre',proof.quote));return container;
+  }
+  function roleView(id){
+    const card=data.roles[id],content=el('div');
+    content.append(el('div','Ficha del catálogo al capturar el inspector; las instrucciones históricas, cuando están retenidas, se muestran por separado.','text-small'));
+    content.append(pairs([['Propósito',card.purpose],['Activación',card.activation],['Métodos',card.methods],
+      ['Entradas',card.inputContract],['Salidas',card.outputContract],['Finalización',card.completion],
+      ['Prohibiciones',card.forbiddenActions],['Recuperación',card.failureRecovery],['Independencia',card.independence],
+      ['Límites',card.limitations],['Origen de la ficha',card.sourceRefs]]));
+    content.append(detail('Ficha íntegra y metadatos de procedencia',el('pre',pretty(card))));
+    return detail(id+' · '+card.title,content);
+  }
+  function renderStage(){
+    stage=mission.stages[Number(field('stage').value)];const host=field('stage-detail');host.replaceChildren();
+    field('investigate').disabled=!stage;
+    for(const button of field('graph').querySelectorAll('button'))button.setAttribute('aria-pressed',String(button.dataset.stageId===stage?.id));
+    if(!stage){host.textContent='Sin proceso material registrado.';return;}
+    host.append(el('h3',stage.title+' · '+stage.status));
+    const rationale=el('div');rationale.append(pairs([['Método declarado',stage.method.id],['Motivo declarado',stage.method.rationale]]));
+    if(stage.execution)rationale.append(pairs([['Adaptador registrado',stage.execution.kind],['Frontera de las dependencias','Vínculos privados del controlador. No equivalen a datos expuestos al agente ni a una entrada ya aceptada.']]));
+    if(stage.dependencies.length){for(const d of stage.dependencies)rationale.append(pairs([[stage.execution?'Prerrequisito privado del controlador':'Entrada requerida por el plan',d.nodeId+' · '+d.purpose],['Razón del orden',d.reason]]));}
+    else rationale.append(el('div',stage.id==='planning'?'Entrada: petición del usuario. No es verificación factual.':stage.id==='closed-entry'?'Decisión de entrada. Un candidato sólo se entrega después de revisión independiente; FALLBACK no es entrega.':'Sin otro producto previo declarado. Las adquisiciones se consultan en la secuencia registrada.'));
+    if(stage.method.alternatives.length)rationale.append(pairs([['Alternativas declaradas',stage.method.alternatives]]));
+    if(stage.instructions)rationale.append(detail('Instrucciones exactas del proceso',el('pre',stage.instructions)));
+    if(stage.disposition)rationale.append(detail('Derivación registrada · no es entrega',el('pre',pretty(stage.disposition))));
+    if(stage.requiredEffects.length)rationale.append(detail('Archivos y ejecuciones obligatorias',el('pre',pretty(stage.requiredEffects))));
+    host.append(rationale);
+    if(stage.planningRecovery){
+      const recovery=stage.planningRecovery,content=el('div');content.dataset.field='planning-recovery';
+      content.append(pairs([['Intentos registrados',recovery.attempts],['Fallos de calidad registrados',recovery.qualityFailures],['ID del registro',recovery.recordId],['SHA256 del registro',recovery.recordHash]]));
+      for(const rejected of recovery.structuredRejections){
+        const failure=el('div');failure.append(pairs([['Productor',rejected.runId],['Solicitud',rejected.requestHash],['Código',rejected.code],['Diagnóstico',rejected.message],['SHA256 del registro',rejected.recordHash],['Respuesta conservada',rejected.payloadCaptured]]));
+        if(rejected.payloadCaptured)failure.append(detail('Propuesta íntegra rechazada',el('pre',pretty(rejected.payload))));
+        else failure.append(pairs([['Motivo de omisión registrado',rejected.omissionReason]]));
+        content.append(detail(rejected.code+' · '+rejected.recordId,failure));
+      }
+      host.append(detail('Intentos de planificación y rechazos del controlador',content));
+    }
+    const productHost=el('div');
+    for(const entry of stage.products??[]){
+      const product=data.products[entry.key],content=el('div');
+      content.append(pairs([['ID',product.id],['SHA256',product.hash],['Finalidad',product.purpose],['Referencias de entrada',product.inputRefs]]),el('pre',product.body));
+      productHost.append(detail(entry.status+' · '+product.kind,content));
+    }
+    host.append(detail('Productos conservados: '+(stage.products?.length??0),productHost));
+    if(stage.producerExposures?.length){
+      const exposures=el('div');exposures.dataset.field='producer-exposures';
+      for(const producer of stage.producerExposures){
+        const content=el('div');content.append(pairs([['Productor',producer.runId],['Formato de contexto',producer.producerContext],['Formato de fichas',producer.cardEncoding],['SHA256 del registro',producer.recordHash]]));
+        for(const view of producer.views){
+          const contract=el('div');contract.append(pairs([['Plan original',view.artifactId],['SHA256 del plan original',view.artifactHash],['SHA256 de la vista',view.viewHash],['Requisitos recibidos',view.view.requirements.map(r=>r.id)]]));
+          contract.append(detail('Contrato íntegro recibido por este productor',el('pre',pretty(view.view))));
+          contract.append(detail('Solicitudes capturadas antes del proveedor: '+view.providerRequests.length,el('pre',pretty(view.providerRequests))));
+          contract.append(el('div','Separación del contrato del plan; no garantiza ceguera semántica de todo el contexto.','text-small'));
+          content.append(contract);
+        }
+        exposures.append(detail(producer.runId,content));
+      }
+      host.append(detail('Contexto de producción: vistas exactas del plan',exposures));
+    }
+    const roles=el('div');roles.append(el('h3',stage.execution?.kind==='closed-blind-comparison-v1'?'Comparador determinista · sin inferencia productora':'Producción asignada: fichas completas'));stage.roleIds.forEach(id=>roles.append(roleView(id)));
+    if(stage.controllerExecutions?.length){
+      const own=el('div');own.dataset.field='controller-charter';
+      for(const c of stage.controllerExecutions){
+        own.append(pairs([['Actor',c.runId],['Origen',c.binding.origin],['Contrato',c.binding.contract],['Configuración SHA256',c.configHash]]));
+        own.append(detail('Contrato propio íntegro registrado · no es un rol del catálogo',el('pre',pretty(c.binding))));
+      }
+      roles.append(detail('Producción · contrato propio del controlador',own));
+    }
+    if(stage.specialist){
+      const c=stage.specialist,own=el('div');own.dataset.field='specialist-charter';
+      own.append(pairs([['Pregunta',c.question],['Métodos',c.methods],['Falsificador',c.falsifier],['Aporte esperado',c.expectedBenefit],['Cierre de la ficha',c.completion]]));
+      own.append(detail('Ficha propia íntegra',el('pre',pretty(c))));
+      own.append(detail('Vinculaciones registradas de ejecución: '+(stage.specialistExecutions?.length??0),el('pre',pretty(stage.specialistExecutions??[]))));
+      roles.append(detail(stage.specialistMode==='standalone'?'Especialista de misión · sin rol de catálogo':'Especialista complementario',own));
+    }
+    roles.append(el('h3','Revisión asignada: fichas completas'));stage.reviewerRoleIds.forEach(id=>roles.append(roleView(id)));
+    if(stage.proposedRoleIds?.length){
+      const proposed=el('div');stage.proposedRoleIds.forEach(id=>proposed.append(roleView(id)));
+      roles.append(detail('Roles propuestos en los planes · no implica ejecución',proposed));
+    }
+    host.append(detail('Fichas: '+stage.roleIds.length+' de catálogo para producción'+(stage.specialist?' + 1 propia':stage.controllerExecutions?.length?' + contrato propio':'')+' · '+stage.reviewerRoleIds.length+' de revisión',roles));
+    if(stage.assignedInstructions?.length){
+      const captured=el('div');captured.dataset.field='assigned-instructions';
+      for(const c of stage.assignedInstructions)captured.append(detail(c.mode+' · '+c.runId,
+        pairs([['Configuración SHA256',c.recordHash],['Instrucciones SHA256',c.prefixHash],['Roles asignados',c.roleIds],['Instrucciones históricas íntegras',c.instructions]])));
+      host.append(detail('Instrucciones históricas recibidas: '+stage.assignedInstructions.length,captured));
+    }
+    const reviews=el('div');
+    for(const review of stage.reviews){
+      const r=el('div');r.append(pairs([['Juicio',review.result.decision],['Fecha',date(review.reviewedAt)],['Revisor',review.reviewerRunId],['Artefacto',review.artifactId],['SHA256',review.result.artifactHash]]));
+      for(const check of review.result.checks){
+        const criterion=stage.criteria.find(c=>c.id===check.criterionId),c=el('div');
+        c.append(pairs([['Criterio',criterion?.text??check.criterionId],['Evaluador',criterion?.evaluation??'content'],['Motivo registrado',check.reason]]));
+        for(const id of check.evidenceIds){const proof=data.evidence[id];c.append(detail('Prueba '+proof.kind+' · '+proof.id,proofView(proof)));}
+        r.append(detail(check.verdict+' · '+check.criterionId,c));
+      }
+      if(review.result.findings.length)r.append(detail('Hallazgos y recuperación',el('pre',pretty(review.result.findings))));
+      if(review.result.uncertainty)r.append(pairs([['Incertidumbre declarada',review.result.uncertainty]]));
+      reviews.append(detail(review.result.decision+' · '+date(review.reviewedAt)+' · '+review.result.checks.length+' criterios',r));
+    }
+    if(!stage.reviews.length)reviews.append(el('div','No hay juicio registrado para este producto.'));
+    host.append(detail('Juicios conservados: '+stage.reviews.length,reviews));
+    const rejected=mission.validationFailures.filter(r=>stage.products.some(p=>data.products[p.key].id===r.artifactId));
+    if(rejected.length){
+      const content=el('div');content.dataset.field='rejected-reviews';
+      for(const r of rejected){
+        const entry=el('div');entry.append(pairs([['Código',r.code],['Actor',r.runId],['Candidato',r.artifactId],['Respuesta SHA256',r.responseHash],['Estado','Rechazada por el controlador; no es un juicio admitido.']]));
+        if(r.response)entry.append(detail('Respuesta original íntegra · no admitida',el('pre',pretty(r.response))));
+        if(r.expanded)entry.append(detail('Expansión verificable de citas · mismo juicio rechazado',el('pre',pretty(r.expanded))));
+        if(r.encoding)entry.append(detail('Catálogo y vínculos exactos del transporte',el('pre',pretty(r.encoding))));
+        content.append(detail(r.code+' · '+r.runId,entry));
+      }
+      host.append(detail('Respuestas de revisión rechazadas por el controlador: '+rejected.length,content));
+    }
+    if(stage.history.length)host.append(detail('Intentos y devoluciones conservados',el('pre',pretty(stage.history))));
+    field('action-status').textContent='';
+  }
+  function renderGraph(){
+    const graph=field('graph');graph.replaceChildren();
+    const byId=new Map(mission.stages.map(s=>[s.id,s])),levels=new Map(),entryIds=['sourced-response-entry','bounded-read-entry','closed-entry'],entryId=entryIds.find(id=>byId.has(id)),parents=s=>entryIds.includes(s.id)?[]:s.dependencies.length?s.dependencies.map(d=>d.nodeId):s.id==='planning'?(entryId?[entryId]:[]):byId.has('planning')?['planning']:[];
+    const level=id=>{if(levels.has(id))return levels.get(id);const s=byId.get(id),p=s?parents(s):[];const value=p.length?1+Math.max(...p.map(level)):0;levels.set(id,value);return value;};
+    const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('aria-hidden','true');graph.append(svg);
+    const groups=new Map();mission.stages.forEach((s,i)=>{const depth=level(s.id);if(!groups.has(depth))groups.set(depth,[]);groups.get(depth).push({s,i});});
+    const boxes=new Map();
+    for(const depth of [...groups.keys()].sort((a,b)=>a-b)){
+      const row=el('div',undefined,'sov-level');
+      for(const {s,i} of groups.get(depth)){
+        const wrapper=el('div',undefined,'sov-node'),button=el('button',s.shortLabel??(s.id.length>16?s.id.slice(0,15)+'…':s.id),'btn');button.type='button';button.dataset.stageId=s.id;
+        button.setAttribute('aria-label',s.title+' · '+s.status);button.setAttribute('data-tooltip',s.title);
+        button.addEventListener('click',()=>{field('stage').value=String(i);renderStage();});wrapper.append(button,el('div',s.status,'text-small'));row.append(wrapper);boxes.set(s.id,wrapper);
+      }
+      graph.append(row);
+    }
+    redrawGraph=()=>{
+      const bounds=graph.getBoundingClientRect();svg.setAttribute('viewBox','0 0 '+bounds.width+' '+bounds.height);svg.replaceChildren();
+      for(const s of mission.stages)for(const parentId of parents(s)){
+        if(!boxes.has(parentId)||!boxes.has(s.id))continue;
+        const a=boxes.get(parentId).getBoundingClientRect(),b=boxes.get(s.id).getBoundingClientRect();
+        const x1=a.x+a.width/2-bounds.x,y1=a.bottom-bounds.y+2,x2=b.x+b.width/2-bounds.x,y2=b.top-bounds.y-2,mid=(y1+y2)/2;
+        const path=document.createElementNS(ns,'path');path.setAttribute('d','M'+x1+','+y1+' C'+x1+','+mid+' '+x2+','+mid+' '+x2+','+y2);path.setAttribute('stroke','var(--border)');path.setAttribute('stroke-width','1.5');path.setAttribute('fill','none');svg.append(path);
+      }
+    };
+    redrawGraph();
+  }
+  function renderMission(){
+    mission=data.missions[Number(field('mission').value)];
+    options(field('stage'),mission.stages.map((n,i)=>[String(i),n.title+' · '+n.status]));
+    const activeIndex=mission.stages.findLastIndex(s=>['RUNNING','REVIEW_PENDING','CANDIDATE'].includes(s.status));
+    const returnedIndex=mission.stages.findLastIndex(s=>['RETURNED','INVALIDATED'].includes(s.status));
+    field('stage').value=String(mission.mission.status==='COMPLETED'?mission.stages.length-1:activeIndex>=0?activeIndex:returnedIndex>=0?returnedIndex:mission.stages.length-1);
+    const metrics=mission.metrics,usage=metrics.providerUsage;
+    field('metrics').replaceChildren(el('span','Estado registrado: '+mission.mission.status),
+      el('span',number(metrics.completed)+' inferencias completadas · '+number(metrics.failed)+' fallidas','tabular-nums'),
+      el('span',number(usage.byFieldObserved.totalTokens)+' tokens observados','tabular-nums'));
+    field('mission-id').textContent=mission.mission.id;
+    field('case-classification').replaceChildren();
+    field('material-sequence-section').hidden=!mission.caseClassification;
+    field('graph-heading').hidden=!!mission.caseClassification&&mission.stages.length===1;
+    field('graph').hidden=field('graph-heading').hidden;
+    if(mission.caseClassification){
+      const c=mission.caseClassification;
+      field('case-classification').append(el('div',number(c.realCompleted)+' llamadas reales · '+number(c.simulatedCompleted)+' simuladas · '+number(c.unknownClassification)+' sin clasificación'),
+        detail('Alcance exacto de este caso',pairs([['Caso',c.scope],['Auditoría',c.auditScope],['Fecha de auditoría',date(c.auditedAt)],['Resumen SHA256',c.summaryHash]])));
+    }
+    const sequenceLabels={'source.acquired':'Fuente adquirida','candidate.created':'Candidato producido','reviewer.created':'Juez independiente creado',
+      'review.committed':'Dictamen registrado','sourced-entry.accepted':'Entrada aceptada','sourced-entry.fallback':'Derivación al plan · sin entrega'};
+    field('material-sequence').replaceChildren(...mission.timeline.filter(e=>sequenceLabels[e.kind]).map(e=>{
+      const item=el('li');item.dataset.kind=e.kind;item.append(el('span',sequenceLabels[e.kind]+(e.status?' · '+e.status:'')),
+        el('div','#'+e.seq+' · '+date(e.at),'text-small'));return item;
+    }));
+    field('audit-finding').replaceChildren();
+    if(mission.auditFinding){
+      const a=mission.auditFinding;
+      field('audit-finding').append(el('div','Auditoría posterior: '+a.status+' · '+(a.roleId??a.target),'text-destructive'),
+        detail(a.roleId?'Contraste con la ficha asignada':'Causa del bloqueo contrastada',pairs([['Observación',a.observation],['Juicio original',a.reviewId],['Cita exacta',a.quote],['Registro de auditoría',a.document],['SHA256',a.documentHash],['Alcance',a.scope]])));
+    }
+    if(metrics.correctionRequests)field('metrics').append(el('span',number(metrics.correctionRequests.total)+' correcciones de salida/control solicitadas','tabular-nums'));
+    if(metrics.reviewDecisions)field('metrics').append(el('span',number((metrics.reviewDecisions.RETURN??0)+(metrics.reviewDecisions.UNKNOWN??0))+' juicios RETURN/UNKNOWN','tabular-nums'));
+    field('intent').replaceChildren(el('h3','Petición intacta'),el('pre',mission.mission.intent));
+    field('result').replaceChildren(el('h3','Resultado registrado'),el('pre',mission.final?.body??pretty(mission.mission.pending)));
+    field('closed-section').hidden=!mission.closedExperiments?.length;
+    field('closed-experiments').replaceChildren(...(mission.closedExperiments??[]).map(experiment=>{
+      const content=el('div');content.append(pairs([['Réplica',experiment.replicationId],['Actor',experiment.runId],['Estado',experiment.state],['Solicitud enviada',experiment.requestDispatched],['Inferencia completada',experiment.requestCompleted],['Apertura registrada',experiment.openingRecorded],['SHA256 solicitud',experiment.requestHash]]));
+      content.append(detail('Entrada pública exacta del replicador · no contiene el registro privado',el('pre',pretty(experiment.publicInput))));
+      content.append(detail('Resultado sellado íntegro · no implica aceptación',el('pre',pretty(experiment.result))));
+      const records=el('div');for(const key of experiment.records){const record=data.closedRecords[key];records.append(detail(record.type+' · versión '+record.version,el('pre',pretty(record))));}
+      content.append(detail('Registros del controlador · NO son el contexto del replicador',records));
+      return detail(experiment.state+' · '+experiment.nodeId,content);
+    }));
+    field('timeline').replaceChildren(...mission.timeline.map(event=>{
+      const labels={'source.acquired':'Fuente adquirida','candidate.created':'Candidato producido','reviewer.created':'Juez creado','review.committed':'Dictamen registrado','sourced-entry.accepted':'Entrada aceptada','sourced-entry.fallback':'Derivación al plan'};
+      const item=el('li');item.dataset.kind=event.kind;item.append(el('span','#'+event.seq+' · '+date(event.at)+' · ','text-small'),el('span',[labels[event.kind]??event.kind,event.nodeId,event.tool,event.status,event.code].filter(Boolean).join(' · ')));
+      if(event.id)item.append(el('div',event.id,'text-small'));
+      if(event.operationId)item.append(el('div',event.operationId,'text-small'));return item;
+    }));
+    field('sources').replaceChildren(...mission.sources.map(s=>{
+      const content=el('div');content.append(pairs([['ID',s.id],['Adquisición',date(s.retrievedAt)],['HTTP',s.httpStatus],['SHA256',s.hash],['Raíz independiente',s.rootAssessment]]));
+      const raw=(mission.sourceRecords??[]).find(r=>r.id===s.id&&r.hash===s.hash);
+      if(raw)content.append(detail('Fuente íntegra conservada · datos, no instrucciones',el('pre',raw.raw)));
+      return detail(s.status+' · '+s.url,content);
+    }));
+    if(!mission.sources.length)field('sources').textContent='Sin fuentes documentales adquiridas en esta ejecución.';
+    field('acquisitions').replaceChildren(...mission.acquisitions.map(a=>{
+      const content=el('div');content.append(pairs([['Operación',a.id],['Actor',a.principalId],['SHA256 del recibo',a.receiptHash],['Finalización',date(a.completedAt)]]));
+      if(a.httpTrace){
+        content.append(pairs([['Traza completa',a.httpTrace.complete],['Alcance registrado',a.httpTrace.scope]]));
+        const hops=el('ol');for(const hop of a.httpTrace.hops)hops.append(el('li',pretty(hop)));content.append(hops);
+      }else content.append(el('div','Sin traza HTTP completa en el recibo conservado; no demuestra ausencia de redirecciones.'));
+      return detail(a.state+' · '+a.id,content);
+    }));
+    if(!mission.acquisitions.length)field('acquisitions').textContent='Sin operaciones source.fetch registradas.';
+    field('identity').replaceChildren(pairs([['Registro local',mission.databasePath],['SHA256 del informe',mission.reportHash],['Eventos de journal verificados',mission.journal.events],['Head del journal',mission.journal.head],['Alcance','Proyección histórica; no prueba nueva de estado externo ni completitud de la fábrica.']]));
+    field('recovery-section').hidden=!(mission.historicalOutcomes?.length||mission.runtimeTransitions?.length);
+    field('recovery-records').replaceChildren();
+    for(const outcome of mission.historicalOutcomes??[])field('recovery-records').append(detail(date(outcome.completedAt)+' · '+outcome.status,el('pre',pretty(outcome))));
+    for(const transition of mission.runtimeTransitions??[])field('recovery-records').append(detail('Cambio registrado · '+date(transition.at),el('pre',pretty(transition))));
+    if(mission.oracleAudit)field('recovery-records').append(detail('Auditoría del comprobador · '+(mission.oracleAudit.passed?'PASS':'FAIL'),el('pre',pretty(mission.oracleAudit))));
+    renderGraph();renderStage();
+  }
+  field('mission').addEventListener('change',renderMission);field('stage').addEventListener('change',renderStage);
+  field('investigate').addEventListener('click',async()=>{
+    const status=field('action-status');
+    if(!stage)return;
+    if(!window.openai?.sendFollowUpMessage){status.textContent='Acción disponible en la conversación de Codex.';return;}
+    try{
+      await window.openai.sendFollowUpMessage({title:'Auditar el proceso registrado',prompt:'Audita sólo en lectura el proceso '+stage.id+' de la misión '+mission.mission.id+' en '+mission.databasePath+'. Contrasta su mandato, método, dependencias, fichas, juicios y pruebas; señala lo no demostrado. No inicies una misión ni cambies registros por esta consulta.'});
+      status.textContent='Solicitud enviada a la conversación.';
+    }catch{status.textContent='La solicitud no se envió. Los registros no han cambiado.';}
+  });
+  renderMission();
+  new ResizeObserver(()=>redrawGraph()).observe(field('graph'));
+})();
+</script>

@@ -1,0 +1,114 @@
+{
+  "kind": "AUDIT_COUNTEREXAMPLES_NOT_ACCEPTANCE",
+  "sourceRoot": "/home/cardeex/openclaw-workspace/sovereign-os/",
+  "executedAt": "2026-09-09T09:55:52.939Z",
+  "sourceHashes": {
+    "src/reference/omega-kernel.mjs": "1fe791f1d14fb6970b4738af20c78a3c55671fcb3bab8b6446a032711203e380",
+    "src/eval/eval-harness.mjs": "becfcded365a288ecd38fc8aa19630174b07bb969f259b8f9daaa2041bbca77b",
+    "config/authority-actions.json": "926a85ad6b62eadf884f1907d140bc566a9314a61f59398960312115bdefba54",
+    "tests/omega/eval-battery-v2.json": "87f2c34e242d7b043cf614a3348853a2098ee6320010704e88f40c4ead7f87b3"
+  },
+  "results": [
+    {
+      "id": "forged-signature",
+      "correctControlWould": "Validate cryptographic signature and trusted issuer, or reject.",
+      "actual": {
+        "ok": true
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "invalid-dates",
+      "correctControlWould": "Reject malformed timestamps before temporal comparison.",
+      "actual": {
+        "ok": true
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "classification-unknown",
+      "correctControlWould": "Reject unknown classification rather than compare undefined.",
+      "actual": {
+        "effect": "ALLOW",
+        "reason": "ROLE_AND_LEASE_ALLOW"
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "missing-actor-attestation",
+      "correctControlWould": "Require an actual caller identity separate from lease subject.",
+      "actual": {
+        "effect": "ALLOW",
+        "reason": "ROLE_AND_LEASE_ALLOW"
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "resource-not-in-lease",
+      "correctControlWould": "Reject a resource outside the lease.",
+      "actual": {
+        "effect": "ALLOW",
+        "reason": "ROLE_AND_LEASE_ALLOW"
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "nonexistent-gate-evidence",
+      "correctControlWould": "Resolve evidence, exact target and criterion before accepting PASS.",
+      "actual": {
+        "ok": true
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "uncalibrated-high-confidence",
+      "correctControlWould": "Keep confidence qualitative/unassigned without validated calibration.",
+      "actual": {
+        "state": "HIGH_CONFIDENCE",
+        "reason": "SINGLE_ROOT_CEILING"
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "caller-dependent-blinding",
+      "correctControlWould": "Use enforced access/context construction, not a caller-supplied leak flag.",
+      "actual": {
+        "ok": true,
+        "tokens": 10
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "role-grader-reason-code-only",
+      "correctControlWould": "Fail a response that executes a forbidden action despite correct reason code.",
+      "actual": {
+        "pass": true,
+        "failures": []
+      },
+      "deficientBehaviorObserved": true
+    },
+    {
+      "id": "incomplete-eval-perfect-rate",
+      "correctControlWould": "Report incomplete coverage, not an undifferentiated perfect score.",
+      "actual": {
+        "total": 1,
+        "passed": 1,
+        "rate": 1,
+        "byAgent": {
+          "omega_01": {
+            "passed": 1,
+            "total": 1
+          }
+        }
+      },
+      "deficientBehaviorObserved": true
+    }
+  ],
+  "observed": 10,
+  "total": 10,
+  "limits": [
+    "In-memory original reference only; no production exploit, network, real secret or user data used.",
+    "No new runtime is tested by this audit.",
+    "A fixed source may stop reproducing a finding; investigate rather than keeping the deficient expectation."
+  ]
+}

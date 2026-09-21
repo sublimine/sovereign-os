@@ -1,0 +1,233 @@
+{
+  "schema": "sovereign.isolation-preflight.v1",
+  "observedAt": "2026-09-09T13:23:06.421Z",
+  "simulation": false,
+  "passed": true,
+  "codex": "/home/cardeex/.codex/packages/standalone/releases/0.153.4-x86_64-unknown-linux-musl/bin/codex",
+  "fixtures": {
+    "base": "/tmp/sovereign-isolation-check-MZCRlv",
+    "homeBase": "/home/cardeex/codex-workspace/isolation-canary-F5C7Fg",
+    "job": "/tmp/sovereign-isolation-check-MZCRlv/job"
+  },
+  "scriptSha256": "dfe31b46d2f65470473c41edaf913405aa79699e2b2815cb0569f7b7cd4949e3",
+  "sandboxArgs": [
+    "sandbox",
+    "-P",
+    "post_install",
+    "-c",
+    "permissions.post_install.filesystem={\":minimal\"=\"read\",\"/tmp/sovereign-isolation-check-MZCRlv/job\"=\"write\",\"/home/cardeex/.codex/packages/standalone/releases/0.153.4-x86_64-unknown-linux-musl/bin/codex\"=\"read\",\"/tmp/sovereign-isolation-check-MZCRlv/outside/read-only.txt\"=\"read\"}",
+    "-c",
+    "permissions.post_install.network.enabled=false",
+    "-C",
+    "/tmp/sovereign-isolation-check-MZCRlv/job",
+    "--"
+  ],
+  "hostControls": {
+    "outsideReadable": true,
+    "homeCanaryReadable": true,
+    "tcpReachable": true,
+    "udpReachable": true,
+    "unixReachable": true
+  },
+  "startup": {
+    "code": 0,
+    "signal": null,
+    "stopReason": null,
+    "stdout": "",
+    "stderr": ""
+  },
+  "execution": {
+    "code": 0,
+    "signal": null,
+    "stopReason": null,
+    "stderr": ""
+  },
+  "parseError": null,
+  "details": {
+    "checks": [
+      {
+        "name": "read_allowed_job",
+        "passed": true,
+        "observed": "SYNTHETIC-ISOLATION-CANARY\n"
+      },
+      {
+        "name": "read_explicit_readonly",
+        "passed": true,
+        "observed": "SYNTHETIC-ISOLATION-CANARY\n"
+      },
+      {
+        "name": "write_allowed_job",
+        "passed": true,
+        "observed": "SYNTHETIC-OUTPUT\n"
+      },
+      {
+        "name": "read_denied_outside",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "read_denied_home_canary",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "write_denied_outside",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "write_denied_readonly",
+        "passed": true,
+        "observed": {
+          "errno": 30,
+          "error": "Read-only file system"
+        }
+      },
+      {
+        "name": "read_denied_symlink_escape",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "write_denied_symlink_escape",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "hardlink_import_denied",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "proc_self_root_escape_denied",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "proc_host_root_escape_denied",
+        "passed": true,
+        "observed": {
+          "errno": 2,
+          "error": "No such file or directory"
+        }
+      },
+      {
+        "name": "subprocess_inherits_read_denial",
+        "passed": true,
+        "observed": 13
+      },
+      {
+        "name": "tcp_ipv4_denied",
+        "passed": true,
+        "observed": {
+          "errno": 1,
+          "error": "Operation not permitted"
+        }
+      },
+      {
+        "name": "udp_ipv4_denied",
+        "passed": true,
+        "observed": {
+          "errno": 1,
+          "error": "Operation not permitted"
+        }
+      },
+      {
+        "name": "unix_outside_path_denied",
+        "passed": true,
+        "observed": {
+          "errno": 1,
+          "error": "Operation not permitted"
+        }
+      },
+      {
+        "name": "pid_namespace_distinct",
+        "passed": true,
+        "observed": {
+          "host": "pid:[4026531836]",
+          "sandbox": "pid:[4026532362]"
+        }
+      },
+      {
+        "name": "net_namespace_distinct",
+        "passed": true,
+        "observed": {
+          "host": "net:[4026531840]",
+          "sandbox": "net:[4026532419]"
+        }
+      },
+      {
+        "name": "mnt_namespace_distinct",
+        "passed": true,
+        "observed": {
+          "host": "mnt:[4026531841]",
+          "sandbox": "mnt:[4026532360]"
+        }
+      },
+      {
+        "name": "user_namespace_distinct",
+        "passed": true,
+        "observed": {
+          "host": "user:[4026531837]",
+          "sandbox": "user:[4026532439]"
+        }
+      },
+      {
+        "name": "no_new_privileges",
+        "passed": true,
+        "observed": "1"
+      },
+      {
+        "name": "no_effective_capabilities",
+        "passed": true,
+        "observed": "0000000000000000"
+      },
+      {
+        "name": "seccomp_filter_active",
+        "passed": true,
+        "observed": "2"
+      }
+    ],
+    "environmentKeys": [
+      "CODEX_SANDBOX_NETWORK_DISABLED",
+      "LANG",
+      "LC_ALL",
+      "PATH",
+      "PWD"
+    ]
+  },
+  "hostPostchecks": {
+    "outsideUnchanged": true,
+    "homeCanaryUnchanged": true,
+    "readOnlyUnchanged": true,
+    "allowedOutputObserved": true
+  },
+  "limits": [
+    "Synthetic bounded probes only; not a production runner accreditation.",
+    "Environment and FDs sanitized by this harness; no claim about arbitrary callers.",
+    "No test of pre-existing hardlinks, hostile mounts, same-UID races or kernel exploits.",
+    "No IPv6, abstract UNIX, descriptor injection, process escape, resource exhaustion or OS-crash suite.",
+    "No real credentials accessed; no model calls, external requests, sudo or persisted policy changes."
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "mission": {
+    "createdAt": "2026-09-09T11:51:57.926Z",
+    "finalArtifactId": "artifact:27fc8620-5782-4748-8d3c-14143581f755",
+    "history": [
+      {
+        "at": "2026-09-09T11:51:57.953Z",
+        "status": "PLANNING"
+      },
+      {
+        "at": "2026-09-09T11:55:42.932Z",
+        "status": "RUNNING"
+      },
+      {
+        "at": "2026-09-09T12:00:55.502Z",
+        "status": "COMPLETED"
+      }
+    ],
+    "id": "mission:50a277cb-4702-4618-a6d7-8dc6690ca9cc",
+    "intent": "Lee https://example.com y dime en español cuál es el título de su página y qué uso del dominio describe. Cita pasajes exactos de la fuente recuperada. No crees archivos ni ejecutes código; esta es una comprobación factual breve, no requiere estrategia.",
+    "intentHash": "f30d9f89f0d5b2afab273f64c25d273fceb4149200b3bea4fa7bba3501822c94",
+    "pending": [],
+    "policy": {
+      "allowedTools": [
+        "source.fetch",
+        "workspace.list",
+        "workspace.read",
+        "workspace.write",
+        "execution.run"
+      ],
+      "maxNodeAttempts": 4,
+      "maxPlanAttempts": 4,
+      "model": "gpt-6-astra",
+      "reasoningEffort": "ultra"
+    },
+    "status": "COMPLETED",
+    "updatedAt": "2026-09-09T12:00:55.502Z"
+  },
+  "metrics": {
+    "dispatched": 6,
+    "completed": 6,
+    "failed": 0,
+    "liveCompleted": 6,
+    "simulatedCompleted": 0,
+    "unclassifiedCompleted": 0,
+    "bytes": {
+      "inputObserved": 121222,
+      "instructionsObserved": 70036,
+      "schemaObserved": 9237,
+      "fullInstrumentationCalls": 6
+    },
+    "providerUsage": {
+      "observedCompletedCalls": 6,
+      "byFieldObserved": {
+        "inputTokens": 90046,
+        "outputTokens": 16758,
+        "cachedInputTokens": 0,
+        "reasoningOutputTokens": 6963,
+        "totalTokens": 106804
+      },
+      "caveat": "Only supplied completed-call counters. Missing and rejected-call usage is unknown; not a bill or complete account usage."
+    }
+  },
+  "nodes": [
+    {
+      "id": "respuesta",
+      "status": "ACCEPTED",
+      "attempts": 2,
+      "roles": [
+        "omega_23"
+      ],
+      "reviewers": [
+        "omega_11"
+      ],
+      "dependencies": [],
+      "criteria": [
+        {
+          "evaluation": "content",
+          "id": "fuente_observada",
+          "text": "Existe una respuesta real de source.fetch para https://example.com, conservada en contexto y vinculada mediante su referencia real. Un error de acceso no cuenta como contenido de la página."
+        },
+        {
+          "evaluation": "content",
+          "id": "hechos_y_fidelidad",
+          "text": "La respuesta identifica el título y explica en español el uso que describe la página. Ambas afirmaciones están sustentadas por la versión recuperada; un encabezado no sustituye silenciosamente al título."
+        },
+        {
+          "evaluation": "content",
+          "id": "citas_verificables",
+          "text": "El título y el uso descrito tienen pasajes de apoyo reproducidos literalmente, sin traducir las citas ni alterar su sentido, y una referencia a https://example.com vinculada a la adquisición observada."
+        },
+        {
+          "evaluation": "content",
+          "id": "alcance_y_limites",
+          "text": "La respuesta es breve, carece de estrategia y limita sus afirmaciones a lo que describe la fuente. La falta de adquisición o de soporte se declara como UNKNOWN y deja pendiente el resultado afectado."
+        },
+        {
+          "evaluation": "runtime.independent_review",
+          "id": "revision_independiente",
+          "text": "El runtime verifica la independencia efectiva de la revisión factual y de fidelidad del candidato en el commit atómico anterior a su entrega."
+        },
+        {
+          "evaluation": "runtime.no_file_writes",
+          "id": "sin_archivos",
+          "text": "Los registros del runtime confirman que no se escribieron archivos."
+        },
+        {
+          "evaluation": "runtime.no_code_execution",
+          "id": "sin_codigo",
+          "text": "Los registros del runtime confirman que no se ejecutó código."
+        },
+        {
+          "evaluation": "content",
+          "id": "req.r_fuente.r_fuente_c1",
+          "text": "La evidencia procede de una recuperación real de https://example.com realizada para esta comprobación, identificada mediante la respuesta observada."
+        },
+        {
+          "evaluation": "content",
+          "id": "req.r_respuesta.r_respuesta_c1",
+          "text": "La explicación está en español e identifica tanto el título de la página como el uso del dominio que esta describe, con soporte para ambos datos."
+        },
+        {
+          "evaluation": "content",
+          "id": "req.r_citas.r_citas_c1",
+          "text": "Los pasajes citados aparecen literalmente en la fuente adquirida y sustentan los datos comunicados; la traducción explicativa no se presenta como cita literal."
+        },
+        {
+          "evaluation": "runtime.no_file_writes",
+          "id": "req.r_sin_archivos.r_sin_archivos_c1",
+          "text": "No se registran escrituras de archivos durante el trabajo."
+        },
+        {
+          "evaluation": "runtime.no_code_execution",
+          "id": "req.r_sin_codigo.r_sin_codigo_c1",
+          "text": "No se registra ejecución de código durante el trabajo."
+        },
+        {
+          "evaluation": "content",
+          "id": "req.r_alcance.r_alcance_c1",
+          "text": "La respuesta se limita a los dos datos solicitados, sus citas y cualquier limitación material; no contiene estrategia ni recomendaciones."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "source:run:5d834e36-5b27-4210-af99-866ab737c9fd:step:0",
+      "url": "https://example.com/",
+      "hash": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+      "retrievedAt": "2026-09-09T11:55:53.618Z",
+      "httpStatus": 200,
+      "status": "ADMITTED",
+      "rootAssessment": "UNKNOWN"
+    }
+  ],
+  "effects": [
+    {
+      "id": "run:5d834e36-5b27-4210-af99-866ab737c9fd:step:0",
+      "tool": "source.fetch",
+      "principalId": "run:5d834e36-5b27-4210-af99-866ab737c9fd",
+      "state": "SUCCEEDED",
+      "argsHash": "5dc5c505a79bfc2eb22d0e45eff415c6ecf0c965c3d53d6e3e02c1bda74b0927",
+      "receiptHash": "1471a61c1ee525e8d532fd6ad4be7cf3af4412ada81fdc61a2c50c1e477ae805"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "review:39df5d6d-a785-4844-ad78-41e42f50ca05",
+      "artifactId": "artifact:27fc8620-5782-4748-8d3c-14143581f755",
+      "reviewerRunId": "run:b9c2cb9c-f4b8-469e-8f36-c27606471883",
+      "decision": "ACCEPT",
+      "checks": [
+        {
+          "id": "fuente_observada",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "tool",
+            "tool"
+          ]
+        },
+        {
+          "id": "hechos_y_fidelidad",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "source",
+            "source"
+          ]
+        },
+        {
+          "id": "citas_verificables",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "source",
+            "source"
+          ]
+        },
+        {
+          "id": "alcance_y_limites",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact"
+          ]
+        },
+        {
+          "id": "req.r_fuente.r_fuente_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "tool",
+            "tool"
+          ]
+        },
+        {
+          "id": "req.r_respuesta.r_respuesta_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "source",
+            "source"
+          ]
+        },
+        {
+          "id": "req.r_citas.r_citas_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "source",
+            "source",
+            "artifact"
+          ]
+        },
+        {
+          "id": "req.r_alcance.r_alcance_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact"
+          ]
+        },
+        {
+          "id": "revision_independiente",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "control"
+          ]
+        },
+        {
+          "id": "sin_archivos",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "control"
+          ]
+        },
+        {
+          "id": "sin_codigo",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "control"
+          ]
+        },
+        {
+          "id": "req.r_sin_archivos.r_sin_archivos_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "control"
+          ]
+        },
+        {
+          "id": "req.r_sin_codigo.r_sin_codigo_c1",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "control"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "review:e59a0ca2-6cce-4e6b-b4dc-4628eb4ce42d",
+      "artifactId": "artifact:484a57a6-18eb-43ca-897b-75965788c7fe",
+      "reviewerRunId": "run:1482b48b-a1c5-4e5f-9bb9-0dba81be7bed",
+      "decision": "ACCEPT",
+      "checks": [
+        {
+          "id": "intent",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "artifact"
+          ]
+        },
+        {
+          "id": "causal-order",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "artifact"
+          ]
+        },
+        {
+          "id": "capability-fit",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "artifact"
+          ]
+        },
+        {
+          "id": "authority",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "artifact"
+          ]
+        },
+        {
+          "id": "acceptance",
+          "verdict": "PASS",
+          "evidenceKinds": [
+            "artifact",
+            "artifact",
+            "artifact"
+          ]
+        }
+      ]
+    }
+  ],
+  "final": {
+    "id": "artifact:27fc8620-5782-4748-8d3c-14143581f755",
+    "status": "ACCEPTED",
+    "hash": "6e9952d67d056b46aff8c30fa553eef74686f4be155317349462b4369d0681ea",
+    "body": "El título es «Example Domain».\n\nLa página describe el dominio para ejemplos en documentación sin necesidad de permiso e indica evitar su uso en operaciones: «This domain is for use in documentation examples without needing permission. Avoid use in operations.»\n\nFuente: [example.com](https://example.com/)."
+  },
+  "scope": "A real factual smoke test, not full factory acceptance; all provider inference receipts simulation:false. Initial failed predecessor retained in same database."
+}
