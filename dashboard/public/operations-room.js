@@ -70,15 +70,24 @@ export function publicOperationsProjection(input = {}) {
   const deliveries = list(input.deliverables);
   const deliveryMissionIds = new Set(deliveries.map(delivery => record(delivery).missionId).filter(value => typeof value === 'string'));
   const queueByMission = new Map(list(runtime.queue).map(job => [record(job).missionId, record(job)]));
-  const selectedData = record(record(input.selectedMission).status?.data);
+  const selectedDetail = record(input.selectedMission);
+  const selectedData = record(selectedDetail.status?.data);
   const selected = record(selectedData.mission);
+  // While the inspector is reading its verified detail, retain only the
+  // already-public selected identifier. This preserves the operator's visual
+  // focus without inventing nodes, reasoning or a lifecycle from a stale
+  // detail response.
+  const requestedSelectedId = typeof input.selectedMissionId === 'string' ? input.selectedMissionId : null;
+  const selectedId = typeof selected.id === 'string' ? selected.id : requestedSelectedId;
+  const selectedLoading = selectedDetail.loading === true && Boolean(selectedId);
+  const selectedQueue = selectedId ? queueByMission.get(selectedId) : null;
   const titleForMission = typeof input.titleForMission === 'function' ? input.titleForMission : null;
   const sourcedProgress = publicSourcedRouteProgress(selected.sourcedRouteProgress);
   const missions = mappings.slice(0, 12).map((mapping, index) => {
     const safe = record(mapping);
     const id = typeof safe.missionId === 'string' ? safe.missionId : null;
     const queue = id ? queueByMission.get(id) : null;
-    const lifecycle = state(queue?.lifecycle?.status ?? queue?.status ?? (id === selected.id ? selected.status : null));
+    const lifecycle = state(queue?.lifecycle?.status ?? queue?.status ?? (id === selectedId ? selected.status : null));
     const presentation = missionPresentation(safe, id, titleForMission);
     return {
       id,
@@ -89,7 +98,7 @@ export function publicOperationsProjection(input = {}) {
       lifecycle,
       terminal: terminal.has(lifecycle),
       delivery: Boolean(id && deliveryMissionIds.has(id)),
-      selected: Boolean(id && id === selected.id),
+      selected: Boolean(id && id === selectedId),
     };
   }).filter(mission => mission.id);
   const reconciliation = record(input.deliveryReconciliation);
@@ -112,10 +121,11 @@ export function publicOperationsProjection(input = {}) {
       deliveries: deliveries.length,
     },
     missions,
-    selected: selected.id ? {
-      id: selected.id,
-      lifecycle: state(selected.status),
+    selected: selectedId ? {
+      id: selectedId,
+      lifecycle: state(selected.status ?? selectedQueue?.lifecycle?.status ?? selectedQueue?.status),
       nodes: declarationNodes(input.selectedMission),
+      ...(selectedLoading ? {loading: true} : {}),
       ...(sourcedProgress ? {
         sourcedRoute: {
           phase: sourcedProgress.phase,
@@ -207,6 +217,9 @@ function flowSvg(missions) {
 }
 
 function selectedTopology(selected) {
+  if (selected?.loading) {
+    return element('div', {className: 'operations-empty', textContent: 'Leyendo la topología y los recibos publicados de la misión seleccionada. No se muestran nodos estimados mientras la lectura no esté confirmada.'});
+  }
   if (selected?.sourcedRoute) {
     const route = selected.sourcedRoute;
     const checkpoints = [
@@ -297,7 +310,7 @@ export function renderOperationsRoom(input = {}) {
     ]),
     element('section', {className: 'surface operations-topology'}, [
       element('div', {className: 'surface-header'}, [
-        element('div', {}, [element('p', {className: 'eyebrow', textContent: 'TOPOLOGÍA DE LA MISIÓN'}), element('h2', {textContent: projection.selected?.sourcedRoute ? 'Hitos públicos confirmados' : projection.selected ? 'Nodos y handoffs publicados' : 'Sin misión seleccionada'})]),
+        element('div', {}, [element('p', {className: 'eyebrow', textContent: 'TOPOLOGÍA DE LA MISIÓN'}), element('h2', {textContent: projection.selected?.loading ? 'Leyendo proyección verificable' : projection.selected?.sourcedRoute ? 'Hitos públicos confirmados' : projection.selected ? 'Nodos y handoffs publicados' : 'Sin misión seleccionada'})]),
         projection.selected ? statePill(projection.selected.lifecycle) : null,
       ]),
       selectedTopology(projection.selected),

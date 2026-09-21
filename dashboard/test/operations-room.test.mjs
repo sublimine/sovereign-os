@@ -168,6 +168,26 @@ test('operations projection uses an in-memory title only after the selected deta
   assert.doesNotMatch(JSON.stringify(projection), /PRIVATE_MAPPING_DO_NOT_RENDER/);
 });
 
+test('operations projection retains only the selected public identity while its detail is loading', () => {
+  const sentinel = 'PRIVATE_LOADING_DETAIL_DO_NOT_PROJECT';
+  const projection = publicOperationsProjection({
+    project: {id: 'project:loading', name: 'Lectura'},
+    runtime: {state: 'ACTIVE', queue: [{missionId: 'mission:loading', lifecycle: {status: 'RUNNING'}}]},
+    mappings: [{missionId: 'mission:loading', privatePrompt: sentinel}],
+    selectedMissionId: 'mission:loading',
+    selectedMission: {loading: true, missionId: 'mission:loading', privateDetail: sentinel},
+  });
+
+  assert.equal(projection.missions[0].selected, true);
+  assert.deepEqual(projection.selected, {
+    id: 'mission:loading',
+    lifecycle: 'RUNNING',
+    nodes: [],
+    loading: true,
+  });
+  assert.doesNotMatch(JSON.stringify(projection), new RegExp(sentinel));
+});
+
 test('operations projection converts a valid sourced receipt into finite public checkpoints', () => {
   const projection = publicOperationsProjection({
     project: {id: 'project:receipt', name: 'Recibo'},

@@ -5,6 +5,7 @@ import {renderOfficeObservatory} from './office-observatory.js';
 import {createLocalUiSessionRecovery} from './local-ui-session.js';
 import {missionSelectionAfterProjectReload} from './project-refresh-selection.js';
 import {missionIntentPresentation, missionTitlePresentation} from './mission-presentation.js';
+import {createMissionRequestSlot} from './mission-request-slot.js';
 
 const state = {
   token: null,
@@ -29,7 +30,6 @@ const state = {
   missionTitles: new Map(),
   missionAction: null,
   missionActionError: null,
-  missionStatusRefresh: null,
   projectReadRefresh: null,
   assets: [],
   deliverables: [],
@@ -60,6 +60,8 @@ const exportObjectUrlRetentionMs = 60_000;
 const livePollIntervalMs = 5_000;
 const livePollTimeoutMs = 20_000;
 const projectSelectionTimeoutMs = 45_000;
+const missionDetailTimeoutMs = 45_000;
+const missionStatusTimeoutMs = 20_000;
 
 // The token intentionally lives only in this page and is invalidated whenever
 // the local console process restarts. Rebinding happens only after the server
@@ -69,6 +71,27 @@ const localUiSessionRecovery = createLocalUiSessionRecovery({
     state.token = bootstrap.token;
     state.overview = bootstrap.overview;
   },
+});
+
+// Detail and status polling use independent, bounded owners. A late response
+// may still arrive after aborting a browser fetch, but it can no longer mutate
+// the mission selected by the operator.
+const missionDetailRequests = createMissionRequestSlot({
+  timeoutMs: missionDetailTimeoutMs,
+  onTimeout: request => {
+    if (!ownsSelectedMission(request.projectId, request.missionId)) return;
+    state.selectedMission = {status: {ok: false, error: {
+      message: 'La lectura de esta misión superó 45 segundos. No se muestra actividad estimada; actualiza cuando el runtime local vuelva a responder.',
+    }}};
+    renderMissions();
+    renderOperations();
+  },
+});
+
+const missionStatusRequests = createMissionRequestSlot({
+  timeoutMs: missionStatusTimeoutMs,
+  // Preserve the last confirmed projection when a lightweight poll expires.
+  // The slot is still released, so the next poll may recover normally.
 });
 
 function el(tag, options = {}, children = []) {
@@ -1089,6 +1112,14 @@ function renderMissionDetail() {
     holder.replaceChildren(el('div', {className: 'inspector-empty'}, [el('div', {className: 'empty-orb small'}), el('strong', 'Selecciona una misión'), el('p', 'El inspector carga sólo los recibos pertenecientes a este espacio.')]));
     return;
   }
+  if (detail.loading === true) {
+    holder.replaceChildren(el('div', {className: 'inspector-empty'}, [
+      el('div', {className: 'empty-orb small'}),
+      el('strong', 'Abriendo trazabilidad verificable'),
+      el('p', 'La consola está leyendo el estado, los recibos y la entrega sellada de esta misión. No se mostrará actividad estimada mientras esa lectura no esté confirmada.'),
+    ]));
+    return;
+  }
   holder.replaceChildren();
   if (!detail.status?.ok) {
     holder.append(el('div', {className: 'inspector-empty'}, [el('strong', 'No se pudo leer esta misión'), el('p', detail.status?.error?.message || 'La fábrica no devolvió una proyección legible.')]));
@@ -1910,6 +1941,7 @@ function renderOperations() {
     mappings: activeMappings(),
     deliverables: projectDeliverables(),
     selectedMission: state.selectedMission,
+    selectedMissionId: state.selectedMissionId,
     deliveryReconciliation: state.project?.deliveryReconciliation,
     titleForMission: missionId => state.missionTitles.get(missionId) ?? null,
   };
@@ -1996,6 +2028,72 @@ function beginProjectSelection(projectId) {
   return selection;
 }
 
+function ownsSelectedMission(projectId, missionId) {
+  return state.activeProjectId === projectId && state.selectedMissionId === missionId;
+}
+
+function ownsMissionDetailRequest(request) {
+  return missionDetailRequests.owns(request) && ownsSelectedMission(request.projectId, request.missionId);
+}
+
+function isLiveMissionDetailRequest(request) {
+  return ownsMissionDetailRequest(request) && missionDetailRequests.live(request);
+}
+
+function finishMissionDetailRequest(request) {
+  return missionDetailRequests.finish(request);
+}
+
+function cancelMissionDetailRequest() {
+  return missionDetailRequests.cancel();
+}
+
+function beginMissionDetailRequest(projectId, missionId) {
+  return missionDetailRequests.begin({projectId, missionId});
+}
+
+function ownsMissionStatusRequest(request) {
+  return missionStatusRequests.owns(request) && ownsSelectedMission(request.projectId, request.missionId);
+}
+
+function isLiveMissionStatusRequest(request) {
+  return ownsMissionStatusRequest(request) && missionStatusRequests.live(request);
+}
+
+function finishMissionStatusRequest(request) {
+  return missionStatusRequests.finish(request);
+}
+
+function cancelMissionStatusRequest() {
+  return missionStatusRequests.cancel();
+}
+
+function beginMissionStatusRequest(projectId, missionId) {
+  return missionStatusRequests.begin({projectId, missionId});
+}
+
+function applyMissionDetail(detail, {projectId, missionId, detailRequest = null, statusRequest = null} = {}) {
+  if (!ownsSelectedMission(projectId, missionId)
+    || (detailRequest && !ownsMissionDetailRequest(detailRequest))
+    || (statusRequest && !isLiveMissionStatusRequest(statusRequest))) return false;
+  const mission = object(object(detail?.status).data?.mission);
+  // A response must prove it belongs to the selected mission before it can
+  // replace the inspector. Failed reads have no mission payload and remain a
+  // bounded, explicit error for the selected row instead.
+  const missionIdFromDetail = typeof mission.id === 'string' ? mission.id : null;
+  if ((missionIdFromDetail && missionIdFromDetail !== missionId)
+    || (detail?.status?.ok === true && missionIdFromDetail !== missionId)) return false;
+  state.selectedMission = detail;
+  rememberMissionTitleFromDetail(missionId, detail);
+  renderMissions();
+  renderOperations();
+  // Delivery staging is deliberately coupled to every accepted complete
+  // detail, including a completion discovered by the status poll. A terminal
+  // poll must never end before the final product is offered to the operator.
+  if (missionIdFromDetail === missionId && upper(mission.status) === 'COMPLETED') void stageAcceptedMissionDeliveryOnce(missionId);
+  return true;
+}
+
 async function selectProject(projectId, {preserveConversation = false, preserveMission = false} = {}) {
   if (!projectId) return;
   // A manual refresh reloads the same isolated project. Preserve only the
@@ -2005,6 +2103,8 @@ async function selectProject(projectId, {preserveConversation = false, preserveM
   const projectBeforeReload = state.activeProjectId;
   const selectedMissionBeforeReload = state.selectedMissionId;
   const selection = beginProjectSelection(projectId);
+  cancelMissionDetailRequest();
+  cancelMissionStatusRequest();
   stopMessageSpeech();
   state.activeProjectId = projectId;
   state.project = null;
@@ -2020,7 +2120,6 @@ async function selectProject(projectId, {preserveConversation = false, preserveM
   state.selectedMissionId = null;
   state.selectedMissionTab = 'trace';
   if (projectBeforeReload !== projectId) state.missionTitles.clear();
-  state.missionStatusRefresh = null;
   state.projectReadRefresh = null;
   if (!preserveConversation) {
     state.selectedConversationId = null;
@@ -2453,29 +2552,48 @@ async function selectMission(missionId) {
   const projectId = state.activeProjectId;
   if (state.selectedMissionId !== missionId) state.selectedMissionTab = 'trace';
   state.selectedMissionId = missionId;
-  state.selectedMission = null;
+  cancelMissionStatusRequest();
+  const request = beginMissionDetailRequest(projectId, missionId);
+  // Detail reads may invoke the isolated Factory and can take several
+  // seconds. Keep the row selected and make that bounded read visible rather
+  // than leaving the operator with a misleading empty inspector.
+  state.selectedMission = {loading: true, missionId};
   renderMissions();
   renderOperations();
   try {
-    const detail = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId));
-    if (state.activeProjectId !== projectId || state.selectedMissionId !== missionId) return;
-    state.selectedMission = detail;
-    rememberMissionTitleFromDetail(missionId, detail);
-    renderMissions();
-    renderOperations();
-    void stageAcceptedMissionDeliveryOnce(missionId);
-  } catch (error) {
-    if (state.activeProjectId === projectId && state.selectedMissionId === missionId) {
-      state.selectedMission = {status: {ok: false, error: {message: error.message}}};
+    const detail = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId), {
+      signal: request.controller.signal,
+    });
+    if (!isLiveMissionDetailRequest(request)) return;
+    if (!applyMissionDetail(detail, {projectId, missionId, detailRequest: request}) && isLiveMissionDetailRequest(request)) {
+      state.selectedMission = {status: {ok: false, error: {
+        message: 'La consola recibió un detalle que no acredita pertenecer a la misión seleccionada.',
+      }}};
       renderMissions();
       renderOperations();
     }
+  } catch (error) {
+    // A replaced selection intentionally aborts its predecessor. Only the
+    // still-owned request may turn a real read problem into inspector state.
+    if (ownsMissionDetailRequest(request) && (!request.controller.signal.aborted || request.timedOut)) {
+      state.selectedMission = {status: {ok: false, error: {message: request.timedOut
+        ? 'La lectura de esta misión superó 45 segundos. No se muestra actividad estimada; actualiza cuando el runtime local vuelva a responder.'
+        : (error.message || 'La fábrica no devolvió una proyección legible.')}}};
+      renderMissions();
+      renderOperations();
+    }
+  } finally {
+    finishMissionDetailRequest(request);
   }
 }
 
-async function refreshProjectQueueAtConfirmedMissionTick(projectId) {
-  const snapshot = await api('/api/projects/' + encodeURIComponent(projectId));
-  if (state.activeProjectId !== projectId) return false;
+async function refreshProjectQueueAtConfirmedMissionTick(projectId, missionId, statusRequest) {
+  if (!ownsSelectedMission(projectId, missionId) || !isLiveMissionStatusRequest(statusRequest) || missionDetailRequests.current()) return false;
+  const snapshot = await api('/api/projects/' + encodeURIComponent(projectId), {signal: statusRequest.controller.signal});
+  // A project refresh can retain the same project ID while discarding its
+  // runtime projection. Keep this shallow queue read bound to the exact
+  // selected mission and poll generation that started it.
+  if (!ownsSelectedMission(projectId, missionId) || !isLiveMissionStatusRequest(statusRequest) || missionDetailRequests.current()) return false;
   // This is a shallow runtime snapshot only.  It deliberately does not call
   // selectProject(), which would clear a selected mission and make a confirmed
   // route look as if it had disappeared between polling ticks.
@@ -2488,11 +2606,15 @@ async function refreshProjectQueueAtConfirmedMissionTick(projectId) {
   return true;
 }
 
-async function refreshSelectedMissionDetailAtConfirmedTick(projectId, missionId) {
-  const detail = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId));
-  if (state.activeProjectId !== projectId || state.selectedMissionId !== missionId) return null;
-  state.selectedMission = detail;
-  return detail;
+async function refreshSelectedMissionDetailAtConfirmedTick(projectId, missionId, statusRequest) {
+  // The initial selection owns the authoritative detail read. Do not make a
+  // second concurrent read just because a five-second poll happened to fire.
+  if (missionDetailRequests.current() || !ownsSelectedMission(projectId, missionId) || !isLiveMissionStatusRequest(statusRequest)) return null;
+  const detail = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId), {
+    signal: statusRequest.controller.signal,
+  });
+  if (missionDetailRequests.current() || !ownsSelectedMission(projectId, missionId) || !isLiveMissionStatusRequest(statusRequest)) return null;
+  return applyMissionDetail(detail, {projectId, missionId, statusRequest}) ? detail : null;
 }
 
 // The finite overview poll only announces that the local console has fresh
@@ -2507,13 +2629,15 @@ async function refreshSelectedMissionStatus() {
   const missionId = state.selectedMissionId;
   const current = state.selectedMission;
   const currentMission = object(current?.status?.data?.mission);
-  if (!projectId || !missionId || !current || state.missionStatusRefresh
+  if (!projectId || !missionId || !current || missionStatusRequests.current() || missionDetailRequests.current()
     || terminalMissionRefreshState(currentMission)
     || document.visibilityState === 'hidden') return;
-  state.missionStatusRefresh = {projectId, missionId};
+  const request = beginMissionStatusRequest(projectId, missionId);
   try {
-    const update = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId) + '/status');
-    if (state.activeProjectId !== projectId || state.selectedMissionId !== missionId || !state.selectedMission) return;
+    const update = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId) + '/status', {
+      signal: request.controller.signal,
+    });
+    if (!ownsSelectedMission(projectId, missionId) || !state.selectedMission || missionDetailRequests.current() || !isLiveMissionStatusRequest(request)) return;
     const previousStatus = state.selectedMission.status?.data ?? null;
     const nextStatus = update.status?.data ?? null;
     const nextMission = object(nextStatus?.mission);
@@ -2533,10 +2657,10 @@ async function refreshSelectedMissionStatus() {
       // A temporary problem with either read preserves the last confirmed
       // projection; it never overwrites the inspector with guessed activity.
       const [queueResult, detailResult] = await Promise.allSettled([
-        refreshProjectQueueAtConfirmedMissionTick(projectId),
-        refreshSelectedMissionDetailAtConfirmedTick(projectId, missionId),
+        refreshProjectQueueAtConfirmedMissionTick(projectId, missionId, request),
+        refreshSelectedMissionDetailAtConfirmedTick(projectId, missionId, request),
       ]);
-      if (state.activeProjectId !== projectId || state.selectedMissionId !== missionId) return;
+      if (!ownsSelectedMission(projectId, missionId) || missionDetailRequests.current() || !isLiveMissionStatusRequest(request)) return;
       if (detailResult.status === 'fulfilled' && detailResult.value) {
         const refreshedMission = object(detailResult.value.status?.data?.mission);
         if (sourcedProgressForMission(refreshedMission)?.delivery?.availability === 'AVAILABLE') {
@@ -2556,9 +2680,7 @@ async function refreshSelectedMissionStatus() {
     // A temporary status read never replaces the last confirmed trace with a
     // fabricated failure. Manual refresh still exposes persistent problems.
   } finally {
-    if (state.missionStatusRefresh?.projectId === projectId && state.missionStatusRefresh?.missionId === missionId) {
-      state.missionStatusRefresh = null;
-    }
+    finishMissionStatusRequest(request);
   }
 }
 

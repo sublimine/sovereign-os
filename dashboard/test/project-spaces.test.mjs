@@ -20,6 +20,7 @@ import {
 } from '../project-spaces.mjs';
 
 const linkedMissionId = 'mission:12345678-1234-1234-1234-123456789abc';
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 function canonical(value) {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
@@ -893,10 +894,53 @@ test('a verified final delivery returns to exactly one linked conversation witho
         body,
       },
     });
-    const final = await spaces.recordMissionFinalConversationTurn(project.id, {
-      missionId: linkedMissionId,
-      deliveryId: staged.id,
-    });
+    // Freeze the delivery exactly after its event reaches the ledger and
+    // before the new HMAC head is published. A chat read in that real write
+    // window must wait for the project's verified snapshot; it must never
+    // surface a transient integrity failure to the operator.
+    const originalSealMemoryHead = spaces.sealMemoryHead.bind(spaces);
+    let openSealGate = null;
+    const sealGate = new Promise(resolve => { openSealGate = resolve; });
+    let markSealWindow = null;
+    const sealWindow = new Promise(resolve => { markSealWindow = resolve; });
+    let paused = false;
+    spaces.sealMemoryHead = async (projectId, verified, events) => {
+      if (!paused && events.at(-1)?.source === 'verified-mission-delivery') {
+        paused = true;
+        markSealWindow();
+        await sealGate;
+      }
+      return originalSealMemoryHead(projectId, verified, events);
+    };
+    let final;
+    let messages;
+    try {
+      const finalPromise = spaces.recordMissionFinalConversationTurn(project.id, {
+        missionId: linkedMissionId,
+        deliveryId: staged.id,
+      });
+      const reachedSealWindow = await Promise.race([
+        sealWindow.then(() => true),
+        delay(1_000).then(() => false),
+      ]);
+      assert.equal(reachedSealWindow, true, 'the test must reach the ledger/head publication boundary');
+
+      const messagesPromise = spaces.listMessages(project.id, user.conversation.id);
+      const readState = await Promise.race([
+        messagesPromise.then(() => 'settled', () => 'settled'),
+        delay(30).then(() => 'pending'),
+      ]);
+      assert.equal(readState, 'pending', 'a chat read waits for the sealed memory snapshot');
+
+      openSealGate();
+      final = await finalPromise;
+      messages = await messagesPromise;
+    } finally {
+      // Keep a failed assertion from stranding the project lock and masking a
+      // later test failure.
+      openSealGate?.();
+      spaces.sealMemoryHead = originalSealMemoryHead;
+    }
     assert.equal(final.state, 'FINAL_LINKED');
     assert.equal(final.presentation.mode, 'inline-v1');
     assert.equal((await spaces.recordMissionFinalConversationTurn(project.id, {
@@ -905,7 +949,6 @@ test('a verified final delivery returns to exactly one linked conversation witho
     })).idempotent, true);
     assert.deepEqual(await spaces.listPendingServerDeliveryReconciliations(project.id), []);
 
-    const messages = await spaces.listMessages(project.id, user.conversation.id);
     assert.equal(messages.length, 2);
     assert.equal(messages[1].author, 'agent');
     assert.equal(messages[1].source, 'verified-mission-delivery');

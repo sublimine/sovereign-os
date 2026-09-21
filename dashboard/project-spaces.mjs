@@ -2724,25 +2724,32 @@ export class ProjectSpaceService {
     if (!Number.isInteger(limit) || limit < 1 || limit > 200) {
       throw new ProjectSpaceError('El límite de mensajes no es válido.', 'INVALID_MESSAGE_LIMIT');
     }
-    await this.readProject(projectId);
-    const events = await readNdjson(this.projectPaths(projectId).memoryLedger);
-    const verified = await this.verifyMemory(projectId, events);
-    if (!verified.ok) throw new ProjectSpaceError('La memoria del espacio no pasa integridad; no se expondrán mensajes.', 'MEMORY_INTEGRITY_BLOCKED', 409);
-    if (!this.conversationProjection(events).some(conversation => conversation.id === conversationId)) {
-      throw new ProjectSpaceError('La conversación no pertenece a este espacio.', 'CONVERSATION_NOT_FOUND', 404);
-    }
-    return events.filter(event => event.kind === 'conversation.message' && event.conversationId === conversationId).slice(-limit).map(event => {
-      const turn = publicConversationTurn(event);
-      return {
-        id: event.id,
-        at: event.at,
-        author: event.author,
-        source: event.source,
-        text: event.text,
-        memoryEventId: event.id,
-        integrity: event.hash,
-        ...(turn ? {turn} : {}),
-      };
+    // A final delivery appends an event and then atomically publishes the
+    // matching HMAC head while holding this same project lock. Reading between
+    // those two writes would turn a valid in-flight publication into a false
+    // MEMORY_INTEGRITY_BLOCKED response for the chat poller. Return one stable,
+    // verified snapshot instead of exposing that implementation window.
+    return this.withProjectLock(projectId, async () => {
+      await this.readProject(projectId);
+      const events = await readNdjson(this.projectPaths(projectId).memoryLedger);
+      const verified = await this.verifyMemory(projectId, events);
+      if (!verified.ok) throw new ProjectSpaceError('La memoria del espacio no pasa integridad; no se expondrán mensajes.', 'MEMORY_INTEGRITY_BLOCKED', 409);
+      if (!this.conversationProjection(events).some(conversation => conversation.id === conversationId)) {
+        throw new ProjectSpaceError('La conversación no pertenece a este espacio.', 'CONVERSATION_NOT_FOUND', 404);
+      }
+      return events.filter(event => event.kind === 'conversation.message' && event.conversationId === conversationId).slice(-limit).map(event => {
+        const turn = publicConversationTurn(event);
+        return {
+          id: event.id,
+          at: event.at,
+          author: event.author,
+          source: event.source,
+          text: event.text,
+          memoryEventId: event.id,
+          integrity: event.hash,
+          ...(turn ? {turn} : {}),
+        };
+      });
     });
   }
 
