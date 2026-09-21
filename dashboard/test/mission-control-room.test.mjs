@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import {missionControlRoom, missionControlRoomSelectedTab} from '../public/mission-control-room.js';
+import {missionControlRoom, missionControlRoomSelectedTab, missionTechnicalProjection} from '../public/mission-control-room.js';
 
 test('mission control room exposes a bounded live operational summary and ready controls', () => {
   const room = missionControlRoom({
@@ -60,7 +60,7 @@ test('sourced control room distinguishes sealed phase, blocks unavailable tabs, 
   assert.equal(room.tabs.plan.enabled, false);
   assert.match(room.tabs.plan.reason, /no crea un grafo/i);
   assert.equal(room.tabs.evidence.enabled, false);
-  assert.equal(room.tabs.raw.enabled, true);
+  assert.equal(room.tabs.technical.enabled, true);
   assert.equal(room.controls.export.enabled, false);
   assert.equal(room.controls.runtimeActions.enabled, false);
   assert.match(room.controls.runtimeActions.reason, /escalado explícito/i);
@@ -150,6 +150,70 @@ test('control-room tab selection falls back to the live trace when a panel is no
   assert.equal(missionControlRoomSelectedTab(room, 'plan'), 'trace');
   assert.equal(missionControlRoomSelectedTab(room, 'evidence'), 'trace');
   assert.equal(missionControlRoomSelectedTab(room, 'does-not-exist'), 'trace');
+});
+
+test('technical mission projection is finite and never forwards project context or generic report data', () => {
+  const sentinel = 'PRIVATE_CONTEXT_OR_RAW_REPORT_MUST_NOT_RENDER';
+  const projection = missionTechnicalProjection({
+    mission: {
+      status: 'RUNNING',
+      intent: sentinel,
+      policy: {model: 'gpt-5.6-terra', reasoningEffort: 'high', maxNodeAttempts: 4, contextPack: sentinel},
+      hiddenProviderPayload: sentinel,
+    },
+    plan: {finalNodeId: 'node:final', routingRationale: sentinel, privateContext: sentinel},
+    nodes: [{id: 'node:final', title: 'Entrega', status: 'RUNNING', spec: {dependencies: []}, hiddenPrompt: sentinel}],
+    report: {sources: [{url: sentinel}], reviews: [{diagnostic: sentinel}], raw: sentinel},
+    sourcedProgress: {phase: 'ACQUIRING', privateSource: sentinel},
+    detailReady: true,
+    reportReady: true,
+    knownProviderModels: [{id: 'gpt-5.6-terra'}],
+  });
+
+  assert.deepEqual(projection, {
+    schema: 'sublimine.mission-technical-projection.v1',
+    availability: {detail: 'AVAILABLE', report: 'AVAILABLE'},
+    route: 'PLANNED',
+    status: 'RUNNING',
+    policy: {model: 'gpt-5.6-terra', reasoningEffort: 'high', maxNodeAttempts: '4'},
+    topology: {state: 'PUBLISHED', integrity: 'VERIFIED', nodes: 1, finalNodeId: 'node:final'},
+    evidence: {state: 'PUBLISHED', sources: 1, reviews: 1},
+    sourcedRoute: {phase: 'NOT_APPLICABLE'},
+  });
+  assert.doesNotMatch(JSON.stringify(projection), new RegExp(sentinel));
+});
+
+test('technical mission projection admits a policy only from the verified provider catalogue and finite effort set', () => {
+  const sentinel = 'POLICY_FIELD_PASSTHROUGH_MUST_NOT_RENDER';
+  const projection = missionTechnicalProjection({
+    mission: {
+      status: 'RUNNING',
+      policy: {
+        model: sentinel,
+        reasoningEffort: sentinel,
+        maxNodeAttempts: 3,
+      },
+    },
+    knownProviderModels: [{id: 'gpt-5.6-terra'}, {id: 'gpt-6-astra'}],
+    detailReady: true,
+  });
+
+  assert.deepEqual(projection.policy, {
+    model: 'NO PROYECTADO',
+    reasoningEffort: 'NO PROYECTADO',
+    maxNodeAttempts: '3',
+  });
+  assert.doesNotMatch(JSON.stringify(projection), new RegExp(sentinel));
+
+  const verified = missionTechnicalProjection({
+    mission: {status: 'RUNNING', policy: {model: 'gpt-5.6-terra', reasoningEffort: 'ultra'}},
+    knownProviderModels: [{id: 'gpt-5.6-terra'}],
+  });
+  assert.deepEqual(verified.policy, {
+    model: 'gpt-5.6-terra',
+    reasoningEffort: 'ultra',
+    maxNodeAttempts: 'NO PROYECTADO',
+  });
 });
 
 test('control room derives a bounded verified DAG for the visual execution graph', () => {

@@ -94,6 +94,12 @@ const PROJECT_DELIVERY_RECONCILIATION_MAX_DELAY_MS = 60_000;
 const PUBLIC_SOURCED_MAX_INTENT_BYTES = 1_400;
 const PUBLIC_SOURCED_QUERY_MARKER = /(?:[¿?]|\b(?:qué|que|cuál|cual|cuáles|cuales|cómo|como|cuándo|cuando|dónde|donde|quién|quien|which|what|how|when|where)\b)/iu;
 const PUBLIC_SOURCED_ESCALATION_TERMS = /\b(?:archivo|adjunt|documento|contrato|código|codigo|repositorio|proyecto|cliente|memoria|contexto|planifica(?:r|ción|cion)?|desarroll|implement|crea(?:r|ción|cion)?|investig|compar|informe|an[aá]lis(?:is)?|estrateg|jur[ií]dic|legal|ley|m[eé]dic|salud|diagn[oó]st|financ|invers|presupuesto|reclam|privad|confidenc)\b/iu;
+// A question marker alone is not enough to establish a public factual
+// question. In particular, conversational check-ins such as "¿quién eres?"
+// are requests about this assistant, not requests whose answer should be
+// acquired from public sources. Keep this deliberately narrow so ordinary
+// factual questions (including "¿quién es ...?") retain the sourced route.
+const PUBLIC_SOURCED_CONVERSATIONAL_CHECK_IN = /^(?:(?:hola|buenas(?:\s+(?:d[ií]as|tardes|noches))?|hey|saludos)[\s,;:¡!¿?.]*)*(?:(?:qu[ií]en|quien)\s+(?:eres|sois)|(?:qu[eé]|que)\s+(?:eres|puedes|sabes)(?:\s+hacer)?|(?:c[oó]mo|como)\s+(?:est[aá]s|estais|están)|(?:qu[eé]|que)\s+tal|todo\s+bien)[\s,;:¡!¿?.]*$/iu;
 const PROJECT_PUBLIC_SOURCED_ROUTE_BINDING = Object.freeze({
   schema: PROJECT_PUBLIC_SOURCED_ROUTE_BINDING_SCHEMA,
   kind: PROJECT_PUBLIC_SOURCED_ROUTE_KIND,
@@ -129,7 +135,8 @@ function configuredDocumentExtractionRunner(options) {
 function isPublicSourcedQuestion(textValue) {
   if (typeof textValue !== 'string' || Buffer.byteLength(textValue, 'utf8') > PUBLIC_SOURCED_MAX_INTENT_BYTES) return false;
   const normalized = textValue.normalize('NFKC').trim().toLocaleLowerCase('es-ES');
-  if (!normalized || !PUBLIC_SOURCED_QUERY_MARKER.test(normalized) || PUBLIC_SOURCED_ESCALATION_TERMS.test(normalized)) return false;
+  if (!normalized || !PUBLIC_SOURCED_QUERY_MARKER.test(normalized) || PUBLIC_SOURCED_ESCALATION_TERMS.test(normalized)
+    || PUBLIC_SOURCED_CONVERSATIONAL_CHECK_IN.test(normalized)) return false;
   // Several paragraphs or enumerated work products are a reliable ambiguity
   // signal. We intentionally do not try to infer whether a long task could
   // perhaps be simplified into a direct answer.

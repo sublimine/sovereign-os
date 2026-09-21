@@ -4,6 +4,7 @@
 // verified for this browser session.
 
 import {publicSourcedRouteProgress} from './mission-trace.js';
+import {missionTitlePresentation} from './mission-presentation.js';
 
 const terminal = new Set(['COMPLETED', 'CANCELLED', 'FAILED', 'REJECTED']);
 // These are distinct finite public state machines: mission lifecycle, queue,
@@ -32,24 +33,13 @@ function cleanTitle(value) {
   const candidate = text(value, 'Misión sin título').replace(/\s+/g, ' ');
   return candidate.length > 94 ? candidate.slice(0, 91) + '…' : candidate;
 }
-function missionPresentation(mapping, id) {
-  const safe = record(mapping);
-  const direct = typeof safe.originalIntent === 'string' && safe.originalIntent.trim()
-    ? safe.originalIntent
-    : typeof safe.intent === 'string' && safe.intent.trim()
-      ? safe.intent
-      : typeof safe.label === 'string' && safe.label.trim()
-        ? safe.label
-        : null;
-  if (direct) return {title: cleanTitle(direct), route: 'ADMITTED'};
-  const route = record(safe.routeBinding);
-  if (safe.entryMode === 'sourced-response-v1' || route.factoryEntryMode === 'sourced-response-v1') {
-    // This path intentionally withholds the original user prompt from the
-    // project mapping. Name the route from its sealed public contract rather
-    // than replacing that boundary with a misleading empty title.
-    return {title: 'Respuesta pública con fuentes', route: 'SOURCED_PUBLIC'};
-  }
-  return {title: id ? 'Misión sellada sin título público' : 'Misión no verificable', route: 'SEALED'};
+function missionPresentation(mapping, id, titleForMission) {
+  // `titleForMission` is an in-memory callback supplied by app.js. It only
+  // contains titles recovered from a detail the operator already opened; no
+  // server mapping gains a new display field or a path to project context.
+  const cachedIntent = typeof titleForMission === 'function' && id ? titleForMission(id) : null;
+  const presentation = missionTitlePresentation({mapping, cachedIntent});
+  return {title: cleanTitle(presentation.title), route: presentation.route};
 }
 function declarationNodes(selectedMission) {
   const detail = record(selectedMission);
@@ -82,13 +72,14 @@ export function publicOperationsProjection(input = {}) {
   const queueByMission = new Map(list(runtime.queue).map(job => [record(job).missionId, record(job)]));
   const selectedData = record(record(input.selectedMission).status?.data);
   const selected = record(selectedData.mission);
+  const titleForMission = typeof input.titleForMission === 'function' ? input.titleForMission : null;
   const sourcedProgress = publicSourcedRouteProgress(selected.sourcedRouteProgress);
   const missions = mappings.slice(0, 12).map((mapping, index) => {
     const safe = record(mapping);
     const id = typeof safe.missionId === 'string' ? safe.missionId : null;
     const queue = id ? queueByMission.get(id) : null;
     const lifecycle = state(queue?.lifecycle?.status ?? queue?.status ?? (id === selected.id ? selected.status : null));
-    const presentation = missionPresentation(safe, id);
+    const presentation = missionPresentation(safe, id, titleForMission);
     return {
       id,
       position: index,

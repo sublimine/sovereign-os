@@ -150,6 +150,24 @@ test('operations projection names a sourced route from its sealed public contrac
   assert.doesNotMatch(JSON.stringify(projection), /PRIVATE_SOURCE_PROMPT_DO_NOT_RENDER/);
 });
 
+test('operations projection uses an in-memory title only after the selected detail authorized it', () => {
+  const projection = publicOperationsProjection({
+    project: {id: 'project:titles', name: 'Títulos'},
+    runtime: {state: 'ACTIVE', queue: [{missionId: 'mission:sourced', status: 'RUNNING'}]},
+    mappings: [{
+      missionId: 'mission:sourced',
+      entryMode: 'sourced-response-v1',
+      intentHash: 'a'.repeat(64),
+      privateMappingField: 'PRIVATE_MAPPING_DO_NOT_RENDER',
+    }],
+    titleForMission: missionId => missionId === 'mission:sourced' ? '¿Qué debe mostrar un anuncio de coche?' : null,
+  });
+
+  assert.equal(projection.missions[0].title, '¿Qué debe mostrar un anuncio de coche?');
+  assert.equal(projection.missions[0].route, 'SOURCED_PUBLIC');
+  assert.doesNotMatch(JSON.stringify(projection), /PRIVATE_MAPPING_DO_NOT_RENDER/);
+});
+
 test('operations projection converts a valid sourced receipt into finite public checkpoints', () => {
   const projection = publicOperationsProjection({
     project: {id: 'project:receipt', name: 'Recibo'},

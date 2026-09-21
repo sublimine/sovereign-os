@@ -33,6 +33,12 @@ const terminalStates = new Set(['COMPLETED', 'CANCELLED', 'FAILED', 'REJECTED'])
 const terminalNodeStates = new Set(['ACCEPTED', 'COMPLETED', 'FAILED', 'CANCELLED', 'SKIPPED']);
 const codePattern = /^[A-Z_][A-Z0-9_]{0,159}$/;
 const identifierPattern = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,179}$/;
+// A model policy is not free-form status text. The detail projection may be
+// backed by a historical runtime object, so only display a model that also
+// appears in the current independently projected provider catalogue. This
+// prevents an arbitrary field in mission.policy from becoming UI content.
+const modelIdentifierPattern = /^[a-z0-9][a-z0-9._-]{1,79}$/i;
+const reasoningEfforts = new Set(['low', 'medium', 'high', 'xhigh', 'max', 'ultra']);
 
 function knownMissionState(value) {
   const state = upper(value);
@@ -201,6 +207,81 @@ function reviewReturned(report, sourcedProgress) {
   });
 }
 
+function publicCount(value, maximum = 10_000) {
+  return Array.isArray(value) && value.length <= maximum ? value.length : null;
+}
+
+function knownModelIds(value) {
+  const ids = [];
+  for (const item of array(value)) {
+    const candidate = typeof item === 'string' ? item : object(item).id ?? object(item).model;
+    if (typeof candidate !== 'string' || !modelIdentifierPattern.test(candidate) || ids.includes(candidate)) continue;
+    ids.push(candidate);
+    if (ids.length === 64) break;
+  }
+  return Object.freeze(ids);
+}
+
+function publicPolicy(mission, allowedModelIds) {
+  const policy = object(object(mission).policy);
+  const attempts = Number.isSafeInteger(policy.maxNodeAttempts) && policy.maxNodeAttempts >= 0 && policy.maxNodeAttempts <= 10_000
+    ? String(policy.maxNodeAttempts)
+    : 'NO PROYECTADO';
+  const model = typeof policy.model === 'string' && allowedModelIds.includes(policy.model)
+    ? policy.model
+    : 'NO PROYECTADO';
+  const reasoningEffort = typeof policy.reasoningEffort === 'string' && reasoningEfforts.has(policy.reasoningEffort)
+    ? policy.reasoningEffort
+    : 'NO PROYECTADO';
+  return Object.freeze({
+    model,
+    reasoningEffort,
+    maxNodeAttempts: attempts,
+  });
+}
+
+/**
+ * An allow-listed technical card for the mission inspector. It deliberately
+ * replaces the former generic JSON panel: it has no path through which a
+ * project-context pack, provider response, prompt, arbitrary report field, or
+ * future nested value can reach the DOM.
+ */
+export function missionTechnicalProjection({mission, plan, nodes, report, sourcedProgress, isSourcedRoute = false, detailReady = false, reportReady = false, knownProviderModels = []} = {}) {
+  const safeMission = object(mission);
+  const safePlan = object(plan);
+  const sourcedPhase = upper(object(sourcedProgress).phase);
+  const execution = executionGraph(nodes, {isSourcedRoute});
+  const finalNodeId = publicIdentifier(safePlan.finalNodeId);
+  const sourceCount = publicCount(object(report).sources);
+  const reviewCount = publicCount(object(report).reviews);
+  return Object.freeze({
+    schema: 'sublimine.mission-technical-projection.v1',
+    availability: Object.freeze({
+      detail: detailReady === true ? 'AVAILABLE' : 'UNAVAILABLE',
+      report: reportReady === true ? 'AVAILABLE' : 'UNAVAILABLE',
+    }),
+    route: isSourcedRoute ? 'SOURCED_PUBLIC' : 'PLANNED',
+    status: knownMissionState(safeMission.status),
+    policy: publicPolicy(safeMission, knownModelIds(knownProviderModels)),
+    topology: Object.freeze(isSourcedRoute
+      ? {state: 'NOT_APPLICABLE', integrity: 'NOT_APPLICABLE', nodes: 0, finalNodeId: null}
+      : {
+        state: execution.nodes.length ? 'PUBLISHED' : 'NOT_PUBLISHED',
+        integrity: execution.integrity,
+        nodes: execution.nodes.length,
+        finalNodeId,
+      }),
+    evidence: Object.freeze({
+      state: reportReady === true ? 'PUBLISHED' : 'NOT_PUBLISHED',
+      sources: sourceCount,
+      reviews: reviewCount,
+    }),
+    sourcedRoute: Object.freeze(isSourcedRoute
+      ? {phase: sourcedPhases.has(sourcedPhase) ? sourcedPhase : 'UNVERIFIED'}
+      : {phase: 'NOT_APPLICABLE'}),
+  });
+}
+
 /**
  * Build the single mission-level operating model used by the dashboard.
  * Callers pass only project-scoped public projections. The return value is
@@ -262,7 +343,7 @@ export function missionControlRoom({mission, queueJob, nodes, plan, report, sour
       evidence: Object.freeze(reportReady
         ? {enabled: true, reason: ''}
         : {enabled: false, reason: 'El informe público aún no está disponible; la evidencia no se infiere.'}),
-      raw: Object.freeze(detailReady
+      technical: Object.freeze(detailReady
         ? {enabled: true, reason: ''}
         : {enabled: false, reason: 'La proyección de misión aún no está disponible.'}),
     }),

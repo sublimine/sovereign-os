@@ -1,9 +1,10 @@
 import {isProjectPublicSourcedRouteBinding, publicSourcedRouteProgress, renderOperationalTrace} from './mission-trace.js';
-import {missionControlRoom, missionControlRoomSelectedTab} from './mission-control-room.js';
+import {missionControlRoom, missionControlRoomSelectedTab, missionTechnicalProjection} from './mission-control-room.js';
 import {publicOperationsProjection, renderOperationsRoom} from './operations-room.js';
 import {renderOfficeObservatory} from './office-observatory.js';
 import {createLocalUiSessionRecovery} from './local-ui-session.js';
 import {missionSelectionAfterProjectReload} from './project-refresh-selection.js';
+import {missionIntentPresentation, missionTitlePresentation} from './mission-presentation.js';
 
 const state = {
   token: null,
@@ -22,6 +23,10 @@ const state = {
   selectedMissionId: null,
   selectedMission: null,
   selectedMissionTab: 'trace',
+  // Current mission mappings intentionally store hashes, not a recoverable
+  // mandate. Keep presentation titles only in this in-memory, project-scoped
+  // cache after an operator has opened that mission's authorized detail.
+  missionTitles: new Map(),
   missionAction: null,
   missionActionError: null,
   missionStatusRefresh: null,
@@ -51,7 +56,6 @@ const state = {
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const terminalStates = new Set(['COMPLETED', 'CANCELLED', 'FAILED', 'REJECTED']);
-const legacyProjectContextPackMarker = '--- SOVEREIGN_PROJECT_CONTEXT_PACK_V1 ---';
 const exportObjectUrlRetentionMs = 60_000;
 const livePollIntervalMs = 5_000;
 const livePollTimeoutMs = 20_000;
@@ -140,23 +144,6 @@ function sourcedProgressForMission(mission) {
   return sourcedProgressForDetail(mission, selectedReport);
 }
 
-function sourcedRouteSafeProjection(mission, report) {
-  const progress = sourcedProgressForDetail(mission, report);
-  // This is intentionally not a redaction of `detail`: it is a new, finite
-  // display document.  Adding a field to Factory status/report therefore does
-  // not make it appear in the source-route JSON panel by accident.
-  return {
-    schema: 'sublimine.console-sourced-route-projection.v1',
-    route: {
-      entryMode: 'sourced-response-v1',
-      privateContext: 'WITHHELD_NOT_SAMPLED',
-      assets: 'FORBIDDEN',
-      escalation: 'EXPLICIT_NEW_PLANNED_ADMISSION_REQUIRED',
-    },
-    progress: progress ?? {integrity: 'UNVERIFIED'},
-  };
-}
-
 function selectedMissionUsesPublicSourcedRoute(mission = object(state.selectedMission?.status?.data?.mission)) {
   const mapping = activeMappings().find(candidate => candidate.missionId === mission.id) ?? null;
   return mappingUsesPublicSourcedRoute(mapping) || Boolean(sourcedProgressForMission(mission));
@@ -172,32 +159,6 @@ function terminalMissionRefreshState(mission) {
   const progress = sourcedProgressForMission(mission);
   return status === 'NEEDS_DIRECTION' && selectedMissionUsesPublicSourcedRoute(mission)
     && upper(progress?.phase) === 'ESCALATED';
-}
-
-// Older project missions were submitted to the Factory with their recovered
-// context appended to the intent. That payload is execution input, not a UI
-// title. Keep this presentation-only: it never changes the persisted mission.
-function missionIntentPresentation(value) {
-  if (typeof value !== 'string') return {intent: value, legacyContextPack: false};
-  const markerAt = value.indexOf(legacyProjectContextPackMarker);
-  if (markerAt === -1) return {intent: value, legacyContextPack: false};
-  const beforeMarker = value.slice(0, markerAt);
-  const originalIntent = beforeMarker.endsWith('\r\n')
-    ? beforeMarker.slice(0, -2)
-    : beforeMarker.endsWith('\n')
-      ? beforeMarker.slice(0, -1)
-      : beforeMarker;
-  return {intent: originalIntent, legacyContextPack: true};
-}
-
-function redactLegacyContextPacksForDisplay(value, seen = new WeakMap()) {
-  if (typeof value === 'string') return missionIntentPresentation(value).intent;
-  if (!value || typeof value !== 'object') return value;
-  if (seen.has(value)) return seen.get(value);
-  const copy = Array.isArray(value) ? [] : {};
-  seen.set(value, copy);
-  for (const [key, item] of Object.entries(value)) copy[key] = redactLegacyContextPacksForDisplay(item, seen);
-  return copy;
 }
 
 function legacyMissionContextNotice() {
@@ -425,6 +386,18 @@ function findProjectAsset(assetId) { return projectAssets().find(asset => asset.
 function projectDeliverables() { return array(state.deliverables); }
 function findProjectDeliverable(deliveryId) { return projectDeliverables().find(delivery => delivery.id === deliveryId) ?? null; }
 function projectDeliveryInbox() { return array(state.deliveryInbox); }
+
+function rememberMissionTitleFromDetail(missionId, detail) {
+  const mapping = activeMappings().find(candidate => candidate.missionId === missionId) ?? null;
+  if (!mapping) return false;
+  const mission = object(object(detail?.status).data?.mission);
+  if (mission.id !== missionId) return false;
+  const intent = missionIntentPresentation(mission.intent).intent;
+  const presentation = missionTitlePresentation({mapping: {missionId}, cachedIntent: intent});
+  if (presentation.source !== 'DETAIL') return false;
+  state.missionTitles.set(missionId, presentation.title);
+  return true;
+}
 // The home desk is a real shortcut into the conversation composer.  It shares
 // only that draft's asset references; it never creates a second hidden file
 // queue or a parallel project scope.
@@ -667,8 +640,11 @@ function renderMissions() {
   for (const mapping of mappings) {
     const job = queue.find(item => item.missionId === mapping.missionId) ?? null;
     const lifecycle = queueLifecycleState(job);
-    const mappedIntent = missionIntentPresentation(mapping.originalIntent ?? mapping.intent);
-    const listTitle = mappedIntent.intent || ('Misión ' + displayId(mapping.missionId));
+    const presentation = missionTitlePresentation({
+      mapping,
+      cachedIntent: state.missionTitles.get(mapping.missionId) ?? null,
+    });
+    const listTitle = presentation.title;
     const button = el('button', {
       className: 'mission-row' + (mapping.missionId === state.selectedMissionId ? ' active' : ''),
       attrs: {type: 'button'},
@@ -679,7 +655,8 @@ function renderMissions() {
       el('p', 'Modelo: ' + text(mapping.modelPolicy?.model, 'predeterminado') + ' · ' + text(mapping.modelPolicy?.effort, 'predeterminado')),
       el('span', {className: 'mission-queue-status', text: queueExecutionSummary(job), attrs: {title: 'El estado de cola indica quién coordina el trabajo; no sustituye el ciclo real de la misión.'}}),
       array(mapping.assetReferences).length ? el('span', {className: 'mission-attachment-count', text: array(mapping.assetReferences).length + ' archivo(s) sellado(s)'}) : null,
-      mappedIntent.legacyContextPack ? el('span', {className: 'mission-legacy-notice', text: 'Contexto heredado oculto'}) : null,
+      presentation.source === 'WITHHELD' ? el('span', {className: 'mission-legacy-notice', text: 'Abre la misión para ver el mandato público disponible'}) : null,
+      presentation.legacyContextPack ? el('span', {className: 'mission-legacy-notice', text: 'Contexto heredado oculto'}) : null,
       el('span', relativeDate(mapping.at)),
     );
     holder.append(button);
@@ -697,6 +674,66 @@ function detailBlock(title, content) {
 
 function jsonBlock(value) {
   return el('pre', {text: JSON.stringify(value ?? null, null, 2)});
+}
+
+function publicEvidenceLabel(value, fields, fallback) {
+  const safe = object(value);
+  for (const field of fields) {
+    const candidate = safe[field];
+    if (typeof candidate !== 'string') continue;
+    const compact = candidate.replace(/[\r\n\t]+/g, ' ').trim();
+    if (compact) return compact.slice(0, 200);
+  }
+  return fallback;
+}
+
+// Cost is useful only when it is an attested scalar. Do not turn a future
+// nested report field or arbitrary diagnostic text into a budget display.
+function publicCostDisplay(report) {
+  const cost = object(object(report).metrics).cost;
+  if (typeof cost !== 'number' || !Number.isFinite(cost) || cost < 0 || cost > 1_000_000_000_000) {
+    return 'NOT_ATTESTED: el runtime no emitió un recibo de coste verificable.';
+  }
+  return new Intl.NumberFormat('es-ES', {maximumFractionDigits: 6}).format(cost);
+}
+
+// This panel intentionally consumes the finite technical projection, not the
+// selected mission detail. Unlike the old JSON panel it cannot reveal a
+// context pack merely because a future server field happens to be present.
+function renderMissionTechnicalProjection(projection) {
+  const technical = object(projection);
+  const availability = object(technical.availability);
+  const policy = object(technical.policy);
+  const topology = object(technical.topology);
+  const evidence = object(technical.evidence);
+  const route = object(technical.sourcedRoute);
+  const count = value => Number.isSafeInteger(value) ? String(value) : 'NO PROYECTADO';
+  const facts = rows => el('ul', {}, rows.map(([label, value]) => el('li', label + ': ' + value)));
+  return el('div', {className: 'detail-grid mission-technical-projection'}, [
+    detailBlock('Superficie publicada', facts([
+      ['Estado', text(technical.status, 'UNVERIFIED')],
+      ['Ruta', text(technical.route, 'UNVERIFIED')],
+      ['Detalle de misión', text(availability.detail, 'UNAVAILABLE')],
+      ['Informe público', text(availability.report, 'UNAVAILABLE')],
+    ])),
+    detailBlock('Política congelada', facts([
+      ['Modelo', text(policy.model, 'NO PROYECTADO')],
+      ['Razonamiento', text(policy.reasoningEffort, 'NO PROYECTADO')],
+      ['Presupuesto de intentos', text(policy.maxNodeAttempts, 'NO PROYECTADO')],
+    ])),
+    detailBlock('Topología publicada', facts([
+      ['Disponibilidad', text(topology.state, 'NOT_PUBLISHED')],
+      ['Integridad', text(topology.integrity, 'UNVERIFIED')],
+      ['Nodos', count(topology.nodes)],
+      ['Nodo final', text(topology.finalNodeId, 'NO PROYECTADO')],
+    ])),
+    detailBlock('Evidencia publicada', facts([
+      ['Disponibilidad', text(evidence.state, 'NOT_PUBLISHED')],
+      ['Fuentes', count(evidence.sources)],
+      ['Revisiones', count(evidence.reviews)],
+      ['Fase de ruta', text(route.phase, 'NOT_APPLICABLE')],
+    ])),
+  ]);
 }
 
 // The control room is a concise, live-facing complement to the detailed trace.
@@ -827,10 +864,15 @@ function selectedMissionTab(room) {
   return missionControlRoomSelectedTab(room, state.selectedMissionTab || 'trace');
 }
 
-function activateMissionTab(tabId) {
-  if (!state.selectedMission || !tabId) return;
+function activateMissionTab(tabId, {focus = false} = {}) {
+  if (!state.selectedMission || !tabId) return false;
   state.selectedMissionTab = tabId;
   renderMissions();
+  if (focus) {
+    const activeTab = $$('[data-mission-tab]').find(button => button.dataset.missionTab === tabId && !button.disabled);
+    activeTab?.focus();
+  }
+  return true;
 }
 
 const missionActionLabels = {
@@ -1074,6 +1116,17 @@ function renderMissionDetail() {
     detailReady: detail.status?.ok === true,
     reportReady: detail.report?.ok === true,
   });
+  const technicalProjection = missionTechnicalProjection({
+    mission,
+    plan,
+    nodes,
+    report,
+    sourcedProgress: sourcedRouteProgress,
+    isSourcedRoute: publicSourcedRoute,
+    detailReady: detail.status?.ok === true,
+    reportReady: detail.report?.ok === true,
+    knownProviderModels: models(),
+  });
   const attachmentReferences = array(mapping.assetReferences);
   const derivedTextInputs = array(report?.inputs?.files).filter(file => /^assets\/derived\/[a-f0-9]{48}\.txt$/i.test(String(file?.path || '')));
   const derivedInputPreparation = object(report?.inputs?.preparation);
@@ -1091,7 +1144,7 @@ function renderMissionDetail() {
   const panels = {};
   const initialTab = selectedMissionTab(controlRoom);
   state.selectedMissionTab = initialTab;
-  const tabSpecs = [['trace', 'Traza operativa'], ['summary', 'Resumen'], ['plan', 'Plan'], ['evidence', 'Evidencia'], ['raw', publicSourcedRoute ? 'Proyección segura' : 'JSON']];
+  const tabSpecs = [['trace', 'Traza operativa'], ['summary', 'Resumen'], ['plan', 'Plan'], ['evidence', 'Evidencia'], ['technical', 'Ficha técnica']];
   for (const [id, label] of tabSpecs) {
     const availability = controlRoom.tabs[id];
     tabs.append(el('button', {
@@ -1110,25 +1163,27 @@ function renderMissionDetail() {
   const summary = el('div', {className: 'detail-grid'});
   summary.append(
     detailBlock('Target congelado', el('ul', {}, [
-      el('li', 'Modelo: ' + text(pathValue(mission, 'policy.model'), 'no proyectado')),
-      el('li', 'Razonamiento: ' + text(pathValue(mission, 'policy.reasoningEffort'), 'no proyectado')),
-      el('li', 'Presupuesto de intentos: ' + text(pathValue(mission, 'policy.maxNodeAttempts'), 'no proyectado')),
+      el('li', 'Modelo: ' + technicalProjection.policy.model),
+      el('li', 'Razonamiento: ' + technicalProjection.policy.reasoningEffort),
+      el('li', 'Presupuesto de intentos: ' + technicalProjection.policy.maxNodeAttempts),
     ])),
     detailBlock('Estado', el('ul', {}, publicSourcedRoute
       ? [
-        el('li', 'Estado: ' + text(mission.status)),
+        el('li', 'Estado: ' + technicalProjection.status),
         el('li', 'Ruta: respuesta pública con fuentes; sin grafo de nodos.'),
-        el('li', 'Fase: ' + text(sourcedRouteProgress?.phase, 'no proyectada')),
+        el('li', 'Fase: ' + technicalProjection.sourcedRoute.phase),
       ]
       : [
-        el('li', 'Estado: ' + text(mission.status)),
-        el('li', 'Nodos proyectados: ' + array(data.nodes).length),
-        el('li', 'Final: ' + text(plan.finalNodeId, 'no proyectado')),
+        el('li', 'Estado: ' + technicalProjection.status),
+        el('li', 'Nodos proyectados: ' + technicalProjection.topology.nodes),
+        el('li', 'Final: ' + text(technicalProjection.topology.finalNodeId, 'no proyectado')),
       ])),
-    detailBlock('Límite de coste', report?.metrics?.cost === undefined ? 'NOT_ATTESTED: el runtime no emitió un recibo de coste verificable.' : String(report.metrics.cost)),
+    detailBlock('Límite de coste', publicCostDisplay(report)),
     detailBlock('Razonamiento de routing', publicSourcedRoute
       ? 'La ruta acotada no expone prompts ni razonamiento de routing. Sus límites y estado público están en la traza operativa.'
-      : text(plan.routingRationale, 'No proyectado por el runtime.')),
+      : technicalProjection.topology.state === 'PUBLISHED'
+        ? 'La fábrica publicó una topología verificable. El recorrido, los roles y los handoffs confirmados están en Plan y Traza operativa; los mensajes internos no se presentan como evidencia.'
+        : 'La fábrica aún no publicó una topología verificable para explicar el routing.'),
     detailBlock('Archivos sellados', publicSourcedRoute
       ? 'Esta ruta no admite adjuntos y no recibe contexto privado del proyecto.'
       : attachmentReferences.length
@@ -1175,18 +1230,12 @@ function renderMissionDetail() {
     );
   } else {
     evidenceGrid.append(
-      detailBlock('Fuentes', report ? (array(report.sources).length ? el('ul', {}, array(report.sources).map(source => el('li', source.title || source.id || JSON.stringify(source)))) : 'No se registraron fuentes en el informe.') : 'No hay informe legible.'),
-      detailBlock('Revisiones', report ? (array(report.reviews).length ? el('ul', {}, array(report.reviews).map(review => el('li', review.status || review.decision || review.id || JSON.stringify(review)))) : 'No se registraron revisiones en el informe.') : 'No hay informe legible.'),
+      detailBlock('Fuentes', report ? (array(report.sources).length ? el('ul', {}, array(report.sources).map(source => el('li', publicEvidenceLabel(source, ['title', 'id'], 'Fuente pública sin rótulo')))) : 'No se registraron fuentes en el informe.') : 'No hay informe legible.'),
+      detailBlock('Revisiones', report ? (array(report.reviews).length ? el('ul', {}, array(report.reviews).map(review => el('li', publicEvidenceLabel(review, ['status', 'decision', 'id'], 'Revisión pública sin estado')))) : 'No se registraron revisiones en el informe.') : 'No hay informe legible.'),
     );
   }
   panels.evidence.append(evidenceGrid);
-  const publicDetail = publicSourcedRoute
-    ? sourcedRouteSafeProjection(mission, report)
-    : redactLegacyContextPacksForDisplay(detail);
-  panels.raw.append(detailBlock(
-    publicSourcedRoute ? 'Proyección segura de la ruta con fuentes' : legacyContextHidden ? 'Proyección pública · contexto heredado oculto' : 'Proyección completa',
-    jsonBlock(publicDetail),
-  ));
+  panels.technical.append(renderMissionTechnicalProjection(technicalProjection));
   holder.append(...[head, renderMissionControlRoom(controlRoom), controls, finalDelivery, tabs, ...Object.values(panels)].filter(Boolean));
 }
 
@@ -1862,6 +1911,7 @@ function renderOperations() {
     deliverables: projectDeliverables(),
     selectedMission: state.selectedMission,
     deliveryReconciliation: state.project?.deliveryReconciliation,
+    titleForMission: missionId => state.missionTitles.get(missionId) ?? null,
   };
   // Both views are independently derived from the same already-public
   // projection.  The observatory is a read-only visual companion, never a
@@ -1969,6 +2019,7 @@ async function selectProject(projectId, {preserveConversation = false, preserveM
   state.selectedMission = null;
   state.selectedMissionId = null;
   state.selectedMissionTab = 'trace';
+  if (projectBeforeReload !== projectId) state.missionTitles.clear();
   state.missionStatusRefresh = null;
   state.projectReadRefresh = null;
   if (!preserveConversation) {
@@ -2409,6 +2460,7 @@ async function selectMission(missionId) {
     const detail = await api('/api/projects/' + encodeURIComponent(projectId) + '/missions/' + encodeURIComponent(missionId));
     if (state.activeProjectId !== projectId || state.selectedMissionId !== missionId) return;
     state.selectedMission = detail;
+    rememberMissionTitleFromDetail(missionId, detail);
     renderMissions();
     renderOperations();
     void stageAcceptedMissionDeliveryOnce(missionId);
@@ -2932,6 +2984,9 @@ function wireEvents() {
   document.addEventListener('click', event => {
     const operationMission = event.target.closest('[data-operation-mission-id]');
     if (operationMission) {
+      // The Operations card promises traceability. Selection alone used to
+      // redraw the hidden inspector, which looked like a dead button.
+      switchView('missions');
       void selectMission(operationMission.dataset.operationMissionId || '');
       return;
     }
@@ -3019,6 +3074,21 @@ function wireEvents() {
     if (role) { selectRole(role.dataset.roleId); return; }
     const group = event.target.closest('[data-role-group]');
     if (group) { state.roleGroup = group.dataset.roleGroup; renderRoles(); return; }
+  });
+  document.addEventListener('keydown', event => {
+    const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+    const currentTab = target?.closest?.('[data-mission-tab]');
+    if (!currentTab || currentTab.disabled || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const available = $$('[data-mission-tab]').filter(tab => !tab.disabled);
+    const current = available.indexOf(currentTab);
+    if (current < 0 || !available.length) return;
+    let next = current;
+    if (event.key === 'ArrowLeft') next = (current - 1 + available.length) % available.length;
+    if (event.key === 'ArrowRight') next = (current + 1) % available.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = available.length - 1;
+    event.preventDefault();
+    activateMissionTab(available[next].dataset.missionTab || 'trace', {focus: true});
   });
   $('#refresh-button').addEventListener('click', () => refresh());
   $('#open-project').addEventListener('click', openProjectDialog);

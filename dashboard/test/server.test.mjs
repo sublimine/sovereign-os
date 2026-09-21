@@ -1301,7 +1301,7 @@ test('a project refuses a route that cannot carry its private context instead of
   });
 });
 
-test('a bounded public project question uses the sealed source route without sampling project context', async () => {
+test('a fresh car-listing question uses the v2 sealed source route and automatically delivers its completed result', async () => {
   await withServer(async ({origin, calls}) => {
     const headers = {
       'content-type': 'application/json',
@@ -1320,7 +1320,13 @@ test('a bounded public project question uses the sealed source route without sam
     });
     assert.equal(memory.status, 201);
 
-    const mandate = 'Pregunta, cuales son la informacion clave que deberia tener cada anuncio de coche. Es decir kilometraje, ciudad, año etc… cuales son las que deberian verse para el piblico. Aver que.';
+    const mandate = 'Pregunta, cuales son la informacion clave que deberia tener cada anuncio de coche. Es decir kilometraje, ciudad, año etc... cuales son las que deberian verse para el piblico. Aver que.';
+    const messageResponse = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/messages', {
+      method: 'POST', headers,
+      body: JSON.stringify({text: mandate, source: 'typed'}),
+    });
+    assert.equal(messageResponse.status, 201);
+    const message = await messageResponse.json();
     const submitted = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/missions', {
       method: 'POST', headers,
       body: JSON.stringify({
@@ -1328,10 +1334,15 @@ test('a bounded public project question uses the sealed source route without sam
         text: mandate,
         entryMode: 'planned',
         preset: 'adaptive-v2',
+        conversationLink: {
+          conversationId: message.conversation.id,
+          sourceMessageId: message.message.id,
+        },
       }),
     });
     assert.equal(submitted.status, 202);
     const response = await submitted.json();
+    assert.equal(response.conversationLink.state, 'LINKED');
     assert.deepEqual(response.routing, {
       mode: 'PROJECT_PUBLIC_SOURCED_AUTOMATIC_V1',
       context: {mode: 'WITHHELD_NOT_SAMPLED', attached: false},
@@ -1372,7 +1383,76 @@ test('a bounded public project question uses the sealed source route without sam
     assert.equal(Object.hasOwn(mapping, 'contextPackHash'), false);
     assert.equal(Object.hasOwn(mapping, 'selectedMemoryEventIds'), false);
     assert.equal(Object.hasOwn(mapping, 'assetReferences'), false);
-  });
+    const finalMessages = await eventually(async () => {
+      const transcript = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/conversations/' + encodeURIComponent(message.conversation.id) + '/messages');
+      const messages = (await transcript.json()).messages;
+      return messages.length === 2 ? messages : null;
+    });
+    assert.equal(finalMessages[1].author, 'agent');
+    assert.equal(finalMessages[1].source, 'verified-mission-delivery');
+    assert.equal(finalMessages[1].text, deliveredText);
+    assert.equal(calls.some(args => args[0] === 'delivery' && args[1] === missionId), true);
+  }, {missionStatus: 'COMPLETED', deliveryReconciliationInitialDelayMs: 1});
+});
+
+test('a conversational project check-in stays on the planned route and receives the completed delivery', async () => {
+  await withServer(async ({origin, calls}) => {
+    const headers = {
+      'content-type': 'application/json',
+      'x-sovereign-ui-token': 'test-ui-token',
+      origin,
+      'sec-fetch-site': 'same-origin',
+    };
+    const created = await fetch(origin + '/api/projects', {
+      method: 'POST', headers,
+      body: JSON.stringify({name: 'Conversación no investigable'}),
+    });
+    assert.equal(created.status, 201);
+    const project = (await created.json()).project;
+    const prompt = 'Buenas, Quien eres?';
+    const messageResponse = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/messages', {
+      method: 'POST', headers,
+      body: JSON.stringify({text: prompt, source: 'typed'}),
+    });
+    assert.equal(messageResponse.status, 201);
+    const message = await messageResponse.json();
+    const submitted = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/missions', {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        requestId: 'submission:bbbbcdcd-bbbb-4bcd-8bbb-bbbbcdcdcdcd',
+        text: prompt,
+        entryMode: 'planned',
+        preset: 'adaptive-v2',
+        conversationLink: {
+          conversationId: message.conversation.id,
+          sourceMessageId: message.message.id,
+        },
+      }),
+    });
+    assert.equal(submitted.status, 202);
+    const response = await submitted.json();
+    assert.equal(Object.hasOwn(response, 'routing'), false);
+    assert.equal(Object.hasOwn(response.admission, 'routeBinding'), false);
+    assert.equal(response.conversationLink.state, 'LINKED');
+
+    const captured = calls.mandates.find(entry => entry.args[0] === 'submit' && entry.args.includes('--state-dir'));
+    assert.ok(captured);
+    assert.equal(captured.mandate, prompt);
+    assert.equal(captured.args[captured.args.indexOf('--entry-mode') + 1], 'planned');
+    assert.equal(captured.args.includes('--sourced-fallback'), false);
+    assert.equal(captured.args.includes('--sourced-evidence-profile'), false);
+    assert.equal(captured.args.includes('--project-context'), true);
+
+    const finalMessages = await eventually(async () => {
+      const transcript = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/conversations/' + encodeURIComponent(message.conversation.id) + '/messages');
+      const messages = (await transcript.json()).messages;
+      return messages.length === 2 ? messages : null;
+    });
+    assert.equal(finalMessages[1].author, 'agent');
+    assert.equal(finalMessages[1].source, 'verified-mission-delivery');
+    assert.equal(finalMessages[1].text, deliveredText);
+    assert.equal(calls.some(args => args[0] === 'delivery' && args[1] === missionId), true);
+  }, {missionStatus: 'COMPLETED', deliveryReconciliationInitialDelayMs: 1});
 });
 
 test('a prepared legacy admission without private transport cannot silently submit without its project context', async () => {
