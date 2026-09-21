@@ -96,10 +96,13 @@ const PUBLIC_SOURCED_QUERY_MARKER = /(?:[¿?]|\b(?:qué|que|cuál|cual|cuáles|c
 const PUBLIC_SOURCED_ESCALATION_TERMS = /\b(?:archivo|adjunt|documento|contrato|código|codigo|repositorio|proyecto|cliente|memoria|contexto|planifica(?:r|ción|cion)?|desarroll|implement|crea(?:r|ción|cion)?|investig|compar|informe|an[aá]lis(?:is)?|estrateg|jur[ií]dic|legal|ley|m[eé]dic|salud|diagn[oó]st|financ|invers|presupuesto|reclam|privad|confidenc)\b/iu;
 // A question marker alone is not enough to establish a public factual
 // question. In particular, conversational check-ins such as "¿quién eres?"
-// are requests about this assistant, not requests whose answer should be
-// acquired from public sources. Keep this deliberately narrow so ordinary
-// factual questions (including "¿quién es ...?") retain the sourced route.
-const PUBLIC_SOURCED_CONVERSATIONAL_CHECK_IN = /^(?:(?:hola|buenas(?:\s+(?:d[ií]as|tardes|noches))?|hey|saludos)[\s,;:¡!¿?.]*)*(?:(?:qu[ií]en|quien)\s+(?:eres|sois)|(?:qu[eé]|que)\s+(?:eres|puedes|sabes)(?:\s+hacer)?|(?:c[oó]mo|como)\s+(?:est[aá]s|estais|están)|(?:qu[eé]|que)\s+tal|todo\s+bien)[\s,;:¡!¿?.]*$/iu;
+// or "¿me recibes?" are requests about this assistant or its availability,
+// not requests whose answer should be acquired from public sources. Keep this
+// deliberately narrow and anchored: a bare word such as "recibes" may be part
+// of an ordinary factual question, while a whole presence check-in is not.
+// Ordinary factual questions (including "¿quién es ...?") retain the sourced
+// route.
+const PUBLIC_SOURCED_CONVERSATIONAL_CHECK_IN = /^(?:(?:hola|buenas(?:\s+(?:d[ií]as|tardes|noches))?|hey|saludos)[\s,;:¡!¿?.]*)*[\s,;:¡!¿?.]*(?:(?:qu[ií]en|quien)\s+(?:eres|sois)|(?:qu[eé]|que)\s+(?:eres|puedes|sabes)(?:\s+hacer)?|(?:c[oó]mo|como)\s+(?:est[aá]s|estais|están)|(?:qu[eé]|que)\s+tal|todo\s+bien|me\s+(?:recibes|escuchas|oyes|lees)|(?:est[aá]s|estas|sigues)\s+(?:ah[ií]|ahi)|hay\s+alguien(?:\s+(?:ah[ií]|ahi))?)[\s,;:¡!¿?.]*$/iu;
 const PROJECT_PUBLIC_SOURCED_ROUTE_BINDING = Object.freeze({
   schema: PROJECT_PUBLIC_SOURCED_ROUTE_BINDING_SCHEMA,
   kind: PROJECT_PUBLIC_SOURCED_ROUTE_KIND,

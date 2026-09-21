@@ -302,6 +302,10 @@ export function missionControlRoom({mission, queueJob, nodes, plan, report, sour
   const retrySchedule = publicRetrySchedule(queueJob, queueStatus);
   const retryInFlight = publicRetryInFlight(queueJob, queueStatus);
   const sourcedPhase = upper(object(sourcedProgress).phase);
+  // A defer-only sourced escalation is deliberately not a live queue item.
+  // The coordinator may retain WAITING as historical ownership, but presenting
+  // that as active work made an already-closed route look stalled.
+  const explicitSourcedEscalation = isSourcedRoute && sourcedPhase === 'ESCALATED';
   const phase = missionTerminal
     ? Object.freeze({label: 'CICLO DE MISIÓN', value: status})
     : isSourcedRoute && sourcedPhases.has(sourcedPhase)
@@ -317,14 +321,15 @@ export function missionControlRoom({mission, queueJob, nodes, plan, report, sour
   const codes = blockingCodes(safeMission, queueJob);
   const hasPlan = !isSourcedRoute && (publicNodes.length > 0 || Boolean(object(plan).finalNodeId));
   const canRetry = !isSourcedRoute && !missionTerminal && reviewReturned(report, sourcedProgress);
-  const explicitSourcedEscalation = isSourcedRoute && sourcedPhase === 'ESCALATED';
   return Object.freeze({
     schema: 'sublimine.mission-control-room.v1',
     status,
     phase,
     coordination: Object.freeze({
       label: 'COORDINACIÓN',
-      value: queueStatus === 'UNVERIFIED' ? 'NO OBSERVADA' : 'COLA · ' + queueStatus,
+      value: explicitSourcedEscalation
+        ? 'RUTA CERRADA · SIN REEJECUCIÓN'
+        : queueStatus === 'UNVERIFIED' ? 'NO OBSERVADA' : 'COLA · ' + queueStatus,
       ...(retrySchedule ? {retrySchedule} : {}),
       ...(retryInFlight ? {retryInFlight} : {}),
     }),

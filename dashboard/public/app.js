@@ -242,6 +242,16 @@ function queueExecutionSummary(job) {
   return 'Cola · ' + stateValue + attempts;
 }
 
+function missionQueuePresentation(mapping, job) {
+  const pendingCodes = array(object(job).lifecycle?.pendingCodes);
+  if (mappingUsesPublicSourcedRoute(mapping)
+    && upper(object(job).lifecycle?.status) === 'NEEDS_DIRECTION'
+    && pendingCodes.includes('SOURCED_ROUTE_ESCALATION_REQUIRED')) {
+    return 'Ruta pública cerrada · nueva admisión planificada disponible';
+  }
+  return queueExecutionSummary(job);
+}
+
 function queueLifecycleState(job) {
   return text(job?.lifecycle?.status, 'NO OBSERVADO');
 }
@@ -676,7 +686,7 @@ function renderMissions() {
     append(button,
       el('div', {className: 'mission-row-top'}, [el('strong', listTitle), labeledStatusPill('Ciclo', lifecycle)]),
       el('p', 'Modelo: ' + text(mapping.modelPolicy?.model, 'predeterminado') + ' · ' + text(mapping.modelPolicy?.effort, 'predeterminado')),
-      el('span', {className: 'mission-queue-status', text: queueExecutionSummary(job), attrs: {title: 'El estado de cola indica quién coordina el trabajo; no sustituye el ciclo real de la misión.'}}),
+      el('span', {className: 'mission-queue-status', text: missionQueuePresentation(mapping, job), attrs: {title: 'El estado de cola indica quién coordina el trabajo; no sustituye el ciclo real de la misión.'}}),
       array(mapping.assetReferences).length ? el('span', {className: 'mission-attachment-count', text: array(mapping.assetReferences).length + ' archivo(s) sellado(s)'}) : null,
       presentation.source === 'WITHHELD' ? el('span', {className: 'mission-legacy-notice', text: 'Abre la misión para ver el mandato público disponible'}) : null,
       presentation.legacyContextPack ? el('span', {className: 'mission-legacy-notice', text: 'Contexto heredado oculto'}) : null,
@@ -985,6 +995,37 @@ function missionActionButton(mission, action, {disabled = false, disabledReason 
   });
 }
 
+function sourcedRouteRequiresPlannedAdmission(mission) {
+  const progress = sourcedProgressForMission(mission);
+  return upper(mission?.status) === 'NEEDS_DIRECTION'
+    && selectedMissionUsesPublicSourcedRoute(mission)
+    && upper(progress?.phase) === 'ESCALATED';
+}
+
+function sourcedRouteContinuationPanel(mission) {
+  if (!sourcedRouteRequiresPlannedAdmission(mission)) return null;
+  const intent = missionIntentPresentation(mission.intent).intent;
+  return el('section', {className: 'mission-sourced-escalation', attrs: {'aria-label': 'Continuación planificada'}}, [
+    el('div', {}, [
+      el('p', {className: 'eyebrow', text: 'RUTA ACOTADA CERRADA'}),
+      el('h4', 'Abrir una admisión planificada nueva'),
+      el('p', {text: 'Esta entrada no continúa en silencio ni reutiliza contexto privado. Puedes abrir una misión nueva con el mismo mandato, revisar su alcance y confirmar su ejecución; esta evidencia queda intacta.'}),
+    ]),
+    el('button', {
+      className: 'primary-button mission-planned-continuation-button',
+      text: 'Abrir como misión planificada',
+      attrs: {
+        type: 'button',
+        disabled: intent ? undefined : '',
+        title: intent
+          ? 'Preparar una admisión nueva y planificada. No ejecuta nada hasta que la confirmes.'
+          : 'La misión no expone un mandato recuperable para crear una nueva admisión.',
+      },
+      dataset: {missionPlannedContinuationId: mission.id},
+    }),
+  ]);
+}
+
 function missionControlPanel(mission, nodes, room) {
   const status = upper(mission.status);
   const terminal = terminalStates.has(status) || !room.controls.runtimeActions.enabled;
@@ -1046,6 +1087,7 @@ function missionControlPanel(mission, nodes, room) {
       ? room.controls.runtimeActions.reason || 'La misión está en un estado terminal; no se envían pausa, continuación ni cancelación. La descarga sigue disponible.'
       : 'Estos controles solicitan una acción al runtime; el estado no cambia en la interfaz hasta que la fábrica lo confirme.'}),
     controls,
+    sourcedRouteContinuationPanel(mission),
     sourcedDeliveryStatus(mission),
     el('details', {className: 'mission-retry-details'}, [
       el('summary', 'Reintentar una revisión concreta'),
@@ -2345,18 +2387,39 @@ function openProjectIdentityDialog() {
   $('#project-identity-name').select();
 }
 
-function openMissionDialog({prefill = '', assetIds = []} = {}) {
+function openMissionDialog({prefill = '', assetIds = [], entryMode = 'planned', preset = 'adaptive-v2', scopeNotice = null} = {}) {
   if (!activeProject()) { openProjectDialog(); return; }
   $('#mission-form').reset();
   $('#mission-form-error').textContent = '';
   state.missionAssetIds = assetIds.filter(assetId => Boolean(findProjectAsset(assetId)));
-  $('#mission-project-scope').textContent = 'La misión se registrará únicamente en “' + activeProject().name + '”. Su política se congela al admitirla y su raíz de fábrica usa --state-dir privado.';
+  $('#mission-project-scope').textContent = scopeNotice || 'La misión se registrará únicamente en “' + activeProject().name + '”. Su política se congela al admitirla y su raíz de fábrica usa --state-dir privado.';
   $('#mission-text').value = prefill;
   configureModelForms();
+  $('#mission-entry-mode').value = entryMode === 'closed-response-v3' ? 'closed-response-v3' : 'planned';
+  $('#mission-preset').value = preset === 'adaptive-v3' ? 'adaptive-v3' : 'adaptive-v2';
   updateMissionForm();
   renderAssetSelection('mission');
   openDialog('mission-dialog');
   $('#mission-text').focus();
+}
+
+function openPlannedMissionContinuation(missionId) {
+  const selected = object(state.selectedMission?.status?.data?.mission);
+  if (!missionId || selected.id !== missionId || !sourcedRouteRequiresPlannedAdmission(selected)) {
+    toast('La continuación ya no corresponde al estado confirmado de la misión. Actualiza la consola antes de volver a intentarlo.', 'error');
+    return;
+  }
+  const intent = missionIntentPresentation(selected.intent).intent;
+  if (!intent) {
+    toast('No se puede recuperar el mandato exacto de esta misión para abrir una admisión nueva.', 'error');
+    return;
+  }
+  openMissionDialog({
+    prefill: intent,
+    entryMode: 'planned',
+    preset: 'adaptive-v2',
+    scopeNotice: 'Se creará una admisión nueva y planificada en “' + activeProject().name + '”. Podrá usar la memoria actual del espacio, pero no reutilizará fuentes, candidatos, diagnósticos ni adjuntos de la ruta anterior. Revisa el mandato y confirma el registro cuando estés conforme.',
+  });
 }
 
 function openPolicyDialog() {
@@ -3159,6 +3222,11 @@ function wireEvents() {
     const missionDelivery = event.target.closest('[data-mission-delivery-id]');
     if (missionDelivery) {
       if (!missionDelivery.disabled) void requestProjectMissionDelivery(missionDelivery.dataset.missionDeliveryId || '');
+      return;
+    }
+    const plannedContinuation = event.target.closest('[data-mission-planned-continuation-id]');
+    if (plannedContinuation) {
+      if (!plannedContinuation.disabled) openPlannedMissionContinuation(plannedContinuation.dataset.missionPlannedContinuationId || '');
       return;
     }
     const missionAction = event.target.closest('[data-mission-action]');

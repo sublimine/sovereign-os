@@ -1455,6 +1455,74 @@ test('a conversational project check-in stays on the planned route and receives 
   }, {missionStatus: 'COMPLETED', deliveryReconciliationInitialDelayMs: 1});
 });
 
+test('a conversational presence check-in is never silently sent to the public sourced route', async () => {
+  await withServer(async ({origin, calls}) => {
+    const headers = {
+      'content-type': 'application/json',
+      'x-sovereign-ui-token': 'test-ui-token',
+      origin,
+      'sec-fetch-site': 'same-origin',
+    };
+    const created = await fetch(origin + '/api/projects', {
+      method: 'POST', headers,
+      body: JSON.stringify({name: 'Comprobación de presencia'}),
+    });
+    assert.equal(created.status, 201);
+    const project = (await created.json()).project;
+    const prompt = 'ME recibes?';
+    const submitted = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/missions', {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        requestId: 'submission:ccccdcdc-cccc-4ccd-8ccc-ccccdcdcdcdc',
+        text: prompt,
+        entryMode: 'planned',
+        preset: 'adaptive-v2',
+      }),
+    });
+    assert.equal(submitted.status, 202);
+    const response = await submitted.json();
+    assert.equal(Object.hasOwn(response, 'routing'), false);
+    assert.equal(Object.hasOwn(response.admission, 'routeBinding'), false);
+
+    const captured = calls.mandates.find(entry => entry.args[0] === 'submit' && entry.args.includes('--state-dir'));
+    assert.ok(captured);
+    assert.equal(captured.mandate, prompt);
+    assert.equal(captured.args[captured.args.indexOf('--entry-mode') + 1], 'planned');
+    assert.equal(captured.args.includes('--sourced-fallback'), false);
+    assert.equal(captured.args.includes('--project-context'), true);
+  });
+});
+
+test('a presence check-in cannot be forced onto the public sourced route', async () => {
+  await withServer(async ({origin, calls}) => {
+    const headers = {
+      'content-type': 'application/json',
+      'x-sovereign-ui-token': 'test-ui-token',
+      origin,
+      'sec-fetch-site': 'same-origin',
+    };
+    const created = await fetch(origin + '/api/projects', {
+      method: 'POST', headers,
+      body: JSON.stringify({name: 'Límite de ruta pública'}),
+    });
+    assert.equal(created.status, 201);
+    const project = (await created.json()).project;
+    const submitted = await fetch(origin + '/api/projects/' + encodeURIComponent(project.id) + '/missions', {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        requestId: 'submission:ddddcdcd-dddd-4dcd-8ddd-ddddcdcdcdcd',
+        text: '¿ME RECIBES?',
+        entryMode: 'sourced-response-v1',
+        preset: 'adaptive-v2',
+      }),
+    });
+    assert.equal(submitted.status, 409);
+    const response = await submitted.json();
+    assert.equal(response.code, 'PROJECT_PUBLIC_SOURCE_ROUTE_INELIGIBLE');
+    assert.equal(calls.mandates?.length ?? 0, 0);
+  });
+});
+
 test('a prepared legacy admission without private transport cannot silently submit without its project context', async () => {
   await withServer(async ({origin, calls, projectSpaces}) => {
     const headers = {
