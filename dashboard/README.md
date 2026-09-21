@@ -100,6 +100,19 @@ The user service uses the exact Node 24 runtime and can be inspected with:
     systemctl --user status sovereign-console.service
     curl --fail http://127.0.0.1:4177/healthz
 
+To install it from any checkout location, copy
+`dashboard/systemd/sovereign-console.service` to
+`~/.config/systemd/user/sovereign-console.service`, then copy
+`dashboard/systemd/console.env.example` to
+`~/.config/sublimine/console.env`. Set `SUBLIMINE_REPOSITORY_DIR` to the
+absolute path of this checkout, plus the Node and Factory executable paths.
+The unit starts the server by its configured repository path and uses `%h` as
+its working directory; it does not assume a workstation-specific checkout
+layout. Reload the user manager before enabling it:
+
+    systemctl --user daemon-reload
+    systemctl --user enable --now sovereign-console.service
+
 ## Validation
 
     NODE_BIN="${NODE_BIN:-node}"

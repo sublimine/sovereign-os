@@ -6,10 +6,11 @@ After=sovereign-factory.service
 [Service]
 Type=simple
 # Copy console.env.example to %h/.config/sublimine/console.env and set the
-# two absolute executable paths for this host. Nothing here is tied to the
-# workstation that produced the template.
+# repository directory plus the absolute executable paths for this host.
+# The console resolves its own module-relative assets, so its process working
+# directory can stay at the portable user-home specifier below.
 EnvironmentFile=-%h/.config/sublimine/console.env
-WorkingDirectory=%h/openclaw-workspace/sovereign-os
+WorkingDirectory=%h
 Environment=HOME=%h
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
 Environment=XDG_RUNTIME_DIR=/run/user/%U
@@ -20,8 +21,11 @@ Environment=SOVEREIGN_CONSOLE_PORT=4177
 # scratch root.  It is not a general upload directory and is created by
 # systemd with restrictive ownership before the console starts.
 Environment=SUBLIMINE_DOCUMENT_EXTRACTION_RUNTIME_DIR=/run/user/%U/sublimine-document-extraction
-ExecCondition=/usr/bin/env ${SUBLIMINE_NODE_BIN} %h/openclaw-workspace/sovereign-os/dashboard/bin/check-console-service-scope.mjs
-ExecStart=/usr/bin/env ${SUBLIMINE_NODE_BIN} %h/openclaw-workspace/sovereign-os/dashboard/server.mjs
+# Braced substitutions preserve a configured path as one argument, including
+# a repository path containing spaces. EnvironmentFile values are intentionally
+# required: a missing configuration fails closed before the server can start.
+ExecCondition=/usr/bin/env ${SUBLIMINE_NODE_BIN} ${SUBLIMINE_REPOSITORY_DIR}/dashboard/bin/check-console-service-scope.mjs
+ExecStart=/usr/bin/env ${SUBLIMINE_NODE_BIN} ${SUBLIMINE_REPOSITORY_DIR}/dashboard/server.mjs
 Restart=on-failure
 RestartSec=3
 TimeoutStopSec=15
